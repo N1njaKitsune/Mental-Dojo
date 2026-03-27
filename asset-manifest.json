@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/Mental-Dojo/static/css/main.1bf36b20.css",
-    "main.js": "/Mental-Dojo/static/js/main.7adecd58.js",
+    "main.js": "/Mental-Dojo/static/js/main.1182fa75.js",
     "index.html": "/Mental-Dojo/index.html",
     "main.1bf36b20.css.map": "/Mental-Dojo/static/css/main.1bf36b20.css.map",
-    "main.7adecd58.js.map": "/Mental-Dojo/static/js/main.7adecd58.js.map"
+    "main.1182fa75.js.map": "/Mental-Dojo/static/js/main.1182fa75.js.map"
   },
   "entrypoints": [
     "static/css/main.1bf36b20.css",
-    "static/js/main.7adecd58.js"
+    "static/js/main.1182fa75.js"
   ]
 }
