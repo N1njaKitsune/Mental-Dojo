@@ -1,0 +1,2 @@
+*,:after,:before{box-sizing:border-box;margin:0;padding:0}#root,body,html{-webkit-font-smoothing:antialiased;background:#0a0a12;color:#f5f0e8;font-family:Crimson Pro,serif;height:100%;overflow:hidden;width:100%}button{cursor:pointer;font-family:inherit}.cinzel{font-family:Cinzel,serif}@keyframes shiho-pulse{0%,to{opacity:.45}50%{opacity:.9}}@keyframes fade-in{0%{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fade-in .35s ease forwards}
+/*# sourceMappingURL=main.1bf36b20.css.map*/
