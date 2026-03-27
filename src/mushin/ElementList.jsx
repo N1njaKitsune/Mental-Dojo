@@ -5,10 +5,8 @@ export default function ElementList({ go, goHome, params }) {
   const el = ELEMENTS[params.elemId];
   if (!el) return null;
   const t0 = TECHNIQUES[el.techniques[0]];
-
   return (
     <div style={{ width:'100%', height:'100%', display:'flex', flexDirection:'column', position:'relative', overflow:'hidden' }}>
-      {/* Atmospheric bg */}
       <div style={{ position:'absolute', inset:0, background:t0.bg.base, pointerEvents:'none' }}>
         <svg width="100%" height="100%" viewBox="0 0 420 300" preserveAspectRatio="xMidYMid slice" style={{ position:'absolute', inset:0 }}>
           <rect width="420" height="300" fill={t0.bg.base} />
@@ -17,15 +15,11 @@ export default function ElementList({ go, goHome, params }) {
           {t0.pts.map(([x,y],i) => <circle key={i} cx={x} cy={y} r={1+i%2*0.8} fill={t0.color} opacity={0.04+i%3*0.03} />)}
         </svg>
       </div>
-
-      {/* Topbar */}
       <div style={{ ...S.topbar, position:'relative', zIndex:1 }}>
         <button style={S.back} onClick={() => go('breath-home')}>← Breath</button>
         <div style={{ ...S.title, color:`rgba(${el.rgb},0.6)` }}>{el.name} · {el.element}</div>
         <div style={{ width:80 }} />
       </div>
-
-      {/* Content */}
       <div style={{ position:'relative', zIndex:1, flex:1, padding:'16px 20px 20px', display:'flex', flexDirection:'column' }}>
         <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:12 }}>
           <div style={{ width:44, height:44, borderRadius:'50%', background:`rgba(${el.rgb},0.1)`, border:`0.5px solid rgba(${el.rgb},0.3)`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
@@ -36,28 +30,13 @@ export default function ElementList({ go, goHome, params }) {
             <div style={{ fontFamily:'Cinzel, serif', fontSize:8, letterSpacing:'0.2em', color:`rgba(${el.rgb},0.4)`, marginTop:2 }}>{el.element.toUpperCase()} · BREATHING</div>
           </div>
         </div>
-
-        <div style={{ fontSize:12, fontStyle:'italic', color:'rgba(245,240,232,0.5)', lineHeight:1.55, marginBottom:14, maxWidth:480 }}>
-          {el.desc}
-        </div>
-
+        <div style={{ fontSize:12, fontStyle:'italic', color:'rgba(245,240,232,0.5)', lineHeight:1.55, marginBottom:14, maxWidth:480 }}>{el.desc}</div>
         <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
           {el.techniques.map(id => {
             const t = TECHNIQUES[id];
             const dur = t.type === 'cycle' ? t.dur + 's' : '60s';
             return (
-              <div key={id}
-                style={{
-                  display:'flex', alignItems:'center', gap:12,
-                  padding:'11px 14px', borderRadius:8,
-                  border:`0.5px solid ${t.locked ? 'rgba(245,240,232,0.06)' : 'rgba(245,240,232,0.08)'}`,
-                  background:'rgba(245,240,232,0.02)',
-                  cursor: t.locked ? 'default' : 'pointer',
-                  opacity: t.locked ? 0.3 : 1,
-                  transition:'all 0.15s',
-                }}
-                onClick={() => !t.locked && go('technique', { techId: id })}
-              >
+              <div key={id} style={{ display:'flex', alignItems:'center', gap:12, padding:'11px 14px', borderRadius:8, border:`0.5px solid ${t.locked ? 'rgba(245,240,232,0.06)' : 'rgba(245,240,232,0.08)'}`, background:'rgba(245,240,232,0.02)', cursor: t.locked ? 'default' : 'pointer', opacity: t.locked ? 0.3 : 1 }} onClick={() => !t.locked && go('technique', { techId: id })}>
                 <div style={{ width:9, height:9, borderRadius:'50%', background: t.locked ? 'rgba(245,240,232,0.15)' : el.color, flexShrink:0 }} />
                 <div style={{ flex:1 }}>
                   <div style={{ fontFamily:'Cinzel, serif', fontSize:12, letterSpacing:'0.06em', color: t.locked ? 'rgba(245,240,232,0.25)' : el.color }}>{t.name}</div>
@@ -65,10 +44,7 @@ export default function ElementList({ go, goHome, params }) {
                 </div>
                 <div style={{ display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>
                   <span style={{ fontFamily:'Cinzel, serif', fontSize:9, letterSpacing:'0.1em', color:'rgba(245,240,232,0.25)' }}>{dur}</span>
-                  {t.locked
-                    ? <span style={{ fontSize:10, color:'rgba(245,240,232,0.2)' }}>Locked</span>
-                    : <span style={{ fontSize:14, color:`rgba(${el.rgb},0.5)` }}>›</span>
-                  }
+                  {t.locked ? <span style={{ fontSize:10, color:'rgba(245,240,232,0.2)' }}>Locked</span> : <span style={{ fontSize:14, color:`rgba(${el.rgb},0.5)` }}>›</span>}
                 </div>
               </div>
             );
@@ -78,7 +54,6 @@ export default function ElementList({ go, goHome, params }) {
     </div>
   );
 }
-
 function ElementIconLarge({ el }) {
   const s = `rgba(${el.rgb},0.85)`;
   if (el.id === 'kaze') return <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 10 Q8 7 11 10 Q14 13 18 10" stroke={s} strokeWidth="0.85" strokeLinecap="round" /><path d="M6 14 Q9 11 11 14" stroke={`rgba(${el.rgb},0.5)`} strokeWidth="0.7" strokeLinecap="round" /></svg>;
@@ -87,7 +62,6 @@ function ElementIconLarge({ el }) {
   if (el.id === 'hi') return <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3 Q15 8 13 13 Q11 15 9 13 Q7 8 11 3Z" stroke={s} strokeWidth="0.85" /><path d="M7 17 Q9 14 11 17 Q13 14 15 17" stroke={`rgba(${el.rgb},0.5)`} strokeWidth="0.7" strokeLinecap="round" /></svg>;
   return null;
 }
-
 const S = {
   topbar: { height:44, display:'flex', alignItems:'center', padding:'0 20px', borderBottom:'0.5px solid rgba(245,240,232,0.07)', flexShrink:0 },
   back: { fontFamily:'Cinzel, serif', fontSize:10, letterSpacing:'0.12em', color:'rgba(245,240,232,0.35)', background:'none', border:'none', cursor:'pointer', padding:0, width:80 },
