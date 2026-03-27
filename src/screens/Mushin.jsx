@@ -13,7 +13,9 @@ export default function MushinHub({ navigate }) {
     setParams(p);
   }
 
-  const commonProps = { go, goHome: () => navigate('home'), params };
+  function goHome() { navigate('home'); }
+
+  const commonProps = { go, goHome, params };
 
   if (screen === 'breath-home')  return <BreathHome {...commonProps} />;
   if (screen === 'element')      return <ElementList {...commonProps} />;
