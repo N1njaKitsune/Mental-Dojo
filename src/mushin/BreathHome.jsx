@@ -70,5 +70,5 @@ const S = {
   back:   { fontFamily:'Cinzel, serif', fontSize:10, letterSpacing:'0.12em', color:'rgba(245,240,232,0.35)', background:'none', border:'none', cursor:'pointer', padding:0, width:80 },
   title:  { flex:1, textAlign:'center', fontFamily:'Cinzel, serif', fontSize:11, letterSpacing:'0.2em', color:'rgba(245,240,232,0.28)' },
   body:   { flex:1, display:'flex', alignItems:'center', justifyContent:'center', padding:'4px 8px', overflow:'hidden' },
-  svg:    { width:'100%', height:'100%', maxWidth:760, display:'block' },
+  svg:    { width:'100%', height:'auto', maxWidth:760, display:'block' },
 };
