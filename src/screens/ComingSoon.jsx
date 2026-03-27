@@ -5,7 +5,7 @@ export default function ComingSoon({ navigate, params }) {
   return (
     <div style={styles.wrap}>
       <div style={styles.topbar}>
-        <button style={styles.back} onClick={() => navigate('home')}>← Mental Dojo</button>
+        <button style={styles.back} onClick={() => navigate('home')}>â Mental Dojo</button>
         <div style={styles.title}>{d.name || 'Coming Soon'}</div>
         <div style={{ width: 80 }} />
       </div>
