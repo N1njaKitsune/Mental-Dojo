@@ -2,200 +2,96 @@ import React from 'react';
 
 const DISCIPLINES = [
   {
-    id: 'metsuke',
-    kanji: '目付',
-    name: 'Metsuke',
-    subtitle: 'The Reading Mind',
-    color: '#8DB8D4',
-    rgb: '141,184,212',
-    bg: '#080E14',
-    mantra: '"The untrained eye sees. The ninja\'s eye reads."',
-    desc: 'Perception · Comprehension · Intake',
-    live: false,
+    kanji: '目付', name: 'Metsuke', sub: 'The Reading Mind',
+    tags: 'Perception · Comprehension · Intake',
+    quote: '"The untrained eye sees. The ninja\'s eye reads."',
+    desc: 'Metsuke is the art of soft perception — training the eye to take in everything without fixing on any single point. In the Ninja School, it develops situational awareness, pattern recognition, and the ability to read a room before acting. A ninja who cannot read cannot respond.',
+    color: '#B8A898', live: false,
   },
   {
-    id: 'mushin',
-    kanji: '無心',
-    name: 'Mushin',
-    subtitle: 'The Still Mind',
-    color: '#7AB89A',
-    rgb: '122,184,154',
-    bg: '#060E0A',
-    mantra: '"The untrained mind is full of noise. The ninja\'s mind is full of space."',
-    desc: 'Breath · Focus · Regulation',
-    live: true,
+    kanji: '無心', name: 'Mushin', sub: 'The Still Mind',
+    tags: 'Breath · Focus · Regulation',
+    quote: '"The untrained mind is full of noise. The ninja\'s mind is full of space."',
+    desc: 'Mushin is the state of no-mind — where thought does not obstruct action. Through breath and regulation, students learn to quiet internal noise, reset under pressure, and return to baseline before entering any challenge. The still mind is not empty. It is clear.',
+    color: '#7AB89A', live: true,
   },
   {
-    id: 'tachi',
-    kanji: '太刀',
-    name: 'Tachi',
-    subtitle: 'The Striking Mind',
-    color: '#D4826A',
-    rgb: '212,130,106',
-    bg: '#100806',
-    mantra: '"The untrained mind rushes or freezes. The ninja\'s mind is always ready."',
-    desc: 'Strategy · Speed · Output',
-    live: false,
+    kanji: '太刀', name: 'Tachi', sub: 'The Striking Mind',
+    tags: 'Strategy · Speed · Output',
+    quote: '"The untrained mind rushes or freezes. The ninja\'s mind is always ready."',
+    desc: 'Tachi trains the mind to act with precision and intent — decisive, fast, and without hesitation. Where Metsuke reads and Mushin regulates, Tachi executes. Students learn to channel focus into output, and to strike — physically, mentally, or strategically — at exactly the right moment.',
+    color: '#C8906A', live: false,
   },
 ];
 
-export default function Home({ navigate }) {
+export default function Home({ go }) {
   return (
-    <div style={styles.wrap}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div style={styles.monWrap}>
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-            <circle cx="18" cy="18" r="16" stroke="rgba(200,146,42,0.35)" strokeWidth="0.75" />
-            <circle cx="18" cy="18" r="4" fill="rgba(200,146,42,0.7)" />
-            <circle cx="18" cy="18" r="9" fill="none" stroke="rgba(200,146,42,0.4)" strokeWidth="0.75" />
-            {[0, 120, 240].map(deg => {
-              const rad = (deg - 90) * Math.PI / 180;
-              const x1 = 18 + 9 * Math.cos(rad);
-              const y1 = 18 + 9 * Math.sin(rad);
-              const x2 = 18 + 15 * Math.cos(rad);
-              const y2 = 18 + 15 * Math.sin(rad);
-              return <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(200,146,42,0.45)" strokeWidth="0.75" />;
-            })}
-            {[0, 120, 240].map(deg => {
-              const rad = (deg - 90) * Math.PI / 180;
-              const cx = 18 + 15 * Math.cos(rad);
-              const cy = 18 + 15 * Math.sin(rad);
-              return <circle key={deg} cx={cx} cy={cy} r="1.5" fill="rgba(200,146,42,0.55)" />;
-            })}
+    <div style={S.wrap}>
+      <div style={S.header}>
+        <div style={S.logoMark}>
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="14" stroke="rgba(200,180,140,0.5)" strokeWidth="0.75"/>
+            <circle cx="16" cy="16" r="9" stroke="rgba(200,180,140,0.3)" strokeWidth="0.5"/>
+            <circle cx="16" cy="16" r="3" fill="rgba(200,180,140,0.6)"/>
+            <line x1="16" y1="2" x2="16" y2="8" stroke="rgba(200,180,140,0.4)" strokeWidth="0.75"/>
+            <line x1="16" y1="24" x2="16" y2="30" stroke="rgba(200,180,140,0.4)" strokeWidth="0.75"/>
+            <line x1="2" y1="16" x2="8" y2="16" stroke="rgba(200,180,140,0.4)" strokeWidth="0.75"/>
+            <line x1="24" y1="16" x2="30" y2="16" stroke="rgba(200,180,140,0.4)" strokeWidth="0.75"/>
           </svg>
         </div>
-        <div>
-          <div style={styles.title}>THE MENTAL DOJO</div>
-          <div style={styles.subtitle}>Where the mind becomes a weapon</div>
+        <div style={S.headerText}>
+          <div style={S.logoTitle}>The Mental Dojo</div>
+          <div style={S.logoSub}>Where the mind becomes a weapon</div>
         </div>
       </div>
 
-      <div style={styles.rule} />
-
-      {/* Intro */}
-      <div style={styles.intro}>
-        A ninja's greatest weapon is their mind — trained in three ways.
-        Read clearly. Strike decisively. Be still.
+      <div style={S.tagline}>
+        A ninja's greatest weapon is their mind — trained in three ways. Read clearly. Strike decisively. Be still.
       </div>
 
-      {/* Three discipline cards */}
-      <div style={styles.cards}>
+      <div style={S.grid}>
         {DISCIPLINES.map(d => (
-          <DisciplineCard
-            key={d.id}
-            d={d}
-            onClick={() => {
-              if (d.live) navigate(d.id);
-              else navigate('coming-soon', { discipline: d });
-            }}
-          />
+          <div key={d.name} style={{ ...S.card, borderColor: `${d.color}22` }}>
+            <div style={S.cardInner}>
+              <div style={S.kanji(d.color)}>{d.kanji}</div>
+              <div style={S.disciplineName(d.color)}>{d.name.toUpperCase()}</div>
+              <div style={S.disciplineSub}>{d.sub.toUpperCase()}</div>
+              <div style={S.rule(d.color)} />
+              <div style={S.tags}>{d.tags}</div>
+              <div style={S.quote}>{d.quote}</div>
+              <div style={S.desc}>{d.desc}</div>
+              <div style={S.spacer} />
+              {d.live
+                ? <button style={{ ...S.btn, borderColor: `${d.color}66`, color: d.color }} onClick={() => go('mushin')}>Enter</button>
+                : <div style={S.coming}>Coming Soon</div>
+              }
+            </div>
+          </div>
         ))}
       </div>
     </div>
   );
 }
 
-function DisciplineCard({ d, onClick }) {
-  const [hover, setHover] = React.useState(false);
-  return (
-    <div
-      style={{
-        ...styles.card,
-        borderColor: hover ? d.color + '40' : 'rgba(245,240,232,0.07)',
-        background: hover ? `rgba(${d.rgb},0.06)` : 'rgba(245,240,232,0.02)',
-        transform: hover ? 'scale(1.01)' : 'scale(1)',
-      }}
-      onClick={onClick}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
-      {/* Subtle bg glow */}
-      <div style={{
-        position: 'absolute', inset: 0, borderRadius: 12,
-        background: `radial-gradient(ellipse at 30% 50%, rgba(${d.rgb},0.1) 0%, transparent 70%)`,
-        opacity: hover ? 1 : 0.5, pointerEvents: 'none', transition: 'opacity 0.3s',
-      }} />
-
-      <div style={{ position: 'relative', zIndex: 1, padding: '18px 16px 16px' }}>
-        {/* Kanji */}
-        <div style={{ fontFamily: 'Cinzel, serif', fontSize: 28, fontWeight: 700, color: d.color, marginBottom: 2, letterSpacing: '0.02em' }}>
-          {d.kanji}
-        </div>
-        {/* English name */}
-        <div style={{ fontFamily: 'Cinzel, serif', fontSize: 14, fontWeight: 700, color: d.color, letterSpacing: '0.06em', marginBottom: 2 }}>
-          {d.name}
-        </div>
-        <div style={{ fontFamily: 'Cinzel, serif', fontSize: 8, letterSpacing: '0.18em', color: `rgba(${d.rgb},0.5)`, marginBottom: 10, textTransform: 'uppercase' }}>
-          {d.subtitle}
-        </div>
-
-        {/* Rule */}
-        <div style={{ width: 32, height: 1, background: `linear-gradient(90deg,${d.color},transparent)`, marginBottom: 10 }} />
-
-        {/* Desc */}
-        <div style={{ fontSize: 11, fontStyle: 'italic', color: 'rgba(245,240,232,0.55)', lineHeight: 1.6, marginBottom: 8 }}>
-          {d.desc}
-        </div>
-
-        {/* Mantra */}
-        <div style={{ fontSize: 10, color: 'rgba(245,240,232,0.3)', lineHeight: 1.5, marginBottom: 12 }}>
-          {d.mantra}
-        </div>
-
-        {/* Status */}
-        <div style={{
-          display: 'inline-block',
-          fontFamily: 'Cinzel, serif', fontSize: 8, letterSpacing: '0.18em',
-          padding: '4px 10px', borderRadius: 20,
-          border: `0.5px solid ${d.live ? d.color + '55' : 'rgba(245,240,232,0.1)'}`,
-          color: d.live ? d.color : 'rgba(245,240,232,0.3)',
-          background: d.live ? `rgba(${d.rgb},0.08)` : 'transparent',
-        }}>
-          {d.live ? 'Enter' : 'Coming Soon'}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const styles = {
-  wrap: {
-    width: '100%', height: '100%', background: '#0A0A12',
-    display: 'flex', flexDirection: 'column',
-    padding: '0 0 12px',
-  },
-  header: {
-    height: 52, display: 'flex', alignItems: 'center', gap: 14,
-    padding: '0 20px',
-    borderBottom: '0.5px solid rgba(245,240,232,0.07)',
-    flexShrink: 0,
-  },
-  monWrap: { flexShrink: 0 },
-  title: {
-    fontFamily: 'Cinzel, serif', fontSize: 14, fontWeight: 700,
-    letterSpacing: '0.12em', color: '#F5F0E8', lineHeight: 1,
-  },
-  subtitle: {
-    fontSize: 10, fontStyle: 'italic', color: 'rgba(245,240,232,0.38)',
-    marginTop: 3, letterSpacing: '0.04em',
-  },
-  rule: {
-    height: 1,
-    background: 'linear-gradient(90deg,transparent,rgba(200,146,42,0.25),transparent)',
-  },
-  intro: {
-    textAlign: 'center', fontSize: 12, fontStyle: 'italic',
-    color: 'rgba(245,240,232,0.4)', lineHeight: 1.65,
-    padding: '14px 28px 12px',
-  },
-  cards: {
-    flex: 1, display: 'flex', gap: 8, padding: '0 16px 0',
-    overflow: 'hidden',
-  },
-  card: {
-    flex: 1, borderRadius: 12, border: '0.5px solid',
-    position: 'relative', overflow: 'hidden', cursor: 'pointer',
-    transition: 'all 0.2s ease',
-  },
+const S = {
+  wrap: { width: '100%', height: '100%', background: '#0A0A12', display: 'flex', flexDirection: 'column', overflow: 'hidden' },
+  header: { display: 'flex', alignItems: 'center', gap: 12, padding: '10px 20px', borderBottom: '0.5px solid rgba(245,240,232,0.07)', flexShrink: 0 },
+  logoMark: { flexShrink: 0 },
+  headerText: { display: 'flex', flexDirection: 'column', gap: 1 },
+  logoTitle: { fontFamily: 'Cinzel, serif', fontSize: 14, fontWeight: 700, letterSpacing: '0.08em', color: 'rgba(200,180,140,0.85)' },
+  logoSub: { fontFamily: 'Cinzel, serif', fontSize: 8, letterSpacing: '0.15em', color: 'rgba(245,240,232,0.3)' },
+  tagline: { textAlign: 'center', fontFamily: 'Crimson Pro, serif', fontSize: 12, fontStyle: 'italic', color: 'rgba(245,240,232,0.35)', padding: '8px 40px', borderBottom: '0.5px solid rgba(245,240,232,0.05)', flexShrink: 0 },
+  grid: { flex: 1, display: 'flex', gap: 0, overflow: 'hidden' },
+  card: { flex: 1, borderRight: '0.5px solid rgba(245,240,232,0.07)', display: 'flex', flexDirection: 'column', overflow: 'hidden' },
+  cardInner: { flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '20px 18px 18px', overflow: 'auto' },
+  kanji: color => ({ fontSize: 44, lineHeight: 1, color, marginBottom: 6, fontWeight: 300 }),
+  disciplineName: color => ({ fontFamily: 'Cinzel, serif', fontSize: 13, fontWeight: 700, letterSpacing: '0.18em', color, marginBottom: 3 }),
+  disciplineSub: { fontFamily: 'Cinzel, serif', fontSize: 7.5, letterSpacing: '0.2em', color: 'rgba(245,240,232,0.35)', marginBottom: 10 },
+  rule: color => ({ width: 28, height: 1, background: `linear-gradient(90deg, transparent, ${color}, transparent)`, marginBottom: 10 }),
+  tags: { fontFamily: 'Cinzel, serif', fontSize: 8, letterSpacing: '0.1em', color: 'rgba(245,240,232,0.28)', fontStyle: 'italic', marginBottom: 10 },
+  quote: { fontSize: 11, fontStyle: 'italic', color: 'rgba(245,240,232,0.45)', lineHeight: 1.55, marginBottom: 10, maxWidth: 260 },
+  desc: { fontSize: 10.5, color: 'rgba(245,240,232,0.38)', lineHeight: 1.65, maxWidth: 270, marginBottom: 14 },
+  spacer: { flex: 1 },
+  btn: { background: 'none', border: '0.5px solid', borderRadius: 20, padding: '5px 20px', fontFamily: 'Cinzel, serif', fontSize: 8.5, letterSpacing: '0.2em', cursor: 'pointer', transition: 'opacity 0.15s' },
+  coming: { fontFamily: 'Cinzel, serif', fontSize: 7.5, letterSpacing: '0.18em', color: 'rgba(245,240,232,0.2)', border: '0.5px solid rgba(245,240,232,0.1)', borderRadius: 20, padding: '4px 14px' },
 };
