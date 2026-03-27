@@ -149,7 +149,7 @@ function ShihoGate({ mode, onComplete, onEnd }) {
           <canvas ref={canvasRef} width={160} height={160} style={{ position:'absolute', top:0, left:0, width:160, height:160 }} />
         </div>
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', marginTop:8 }}>
-          <div style={{ fontFamily:'Cinzel,serif', fontSize:30, fontWeight:700, color:'~C8D8E8', lineHeight:1 }}>{cdNum}</div>
+          <div style={{ fontFamily:'Cinzel,serif', fontSize:30, fontWeight:700, color:'#C8D8E8', lineHeight:1 }}>{cdNum}</div>
           <div style={{ fontFamily:'Cinzel,serif', fontSize:7, letterSpacing:'0.18em', color:'rgba(200,216,232,0.35)', marginTop:2 }}>{phLbl}</div>
         </div>
       </div>
