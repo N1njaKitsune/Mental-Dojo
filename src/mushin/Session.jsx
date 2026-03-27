@@ -115,13 +115,13 @@ function ShihoGate({ mode, onComplete, onEnd }) {
   }, [running, tick]);
 
   return (
-    <div style={{ flex:1, display:'flex', flexDirection:'row', background:'#080C10', position:'relative', overflow:'hidden' }}>
+    <div style={{ flex:1, display:'flex', flexDirection:'row', alignItems:'stretch', background:'#080C10', position:'relative', overflow:'hidden' }}>
       {/* Left info panel */}
       <div style={{ width:220, flexShrink:0, display:'flex', flexDirection:'column', justifyContent:'center', padding:'16px 20px', borderRight:'0.5px solid rgba(200,216,232,0.06)' }}>
         <div style={{ fontFamily:'Cinzel,serif', fontSize:8, letterSpacing:'0.25em', color:'rgba(200,216,232,0.3)', marginBottom:8 }}>
           {mode === 'open' ? 'Opening Ritual' : 'Closing Ritual'}
         </div>
-        <div style={{ fontFamily:'Cinzel,serif', fontSize:24, fontWeight:700, color:'#C8D8E8', letterSpacing:'0.1em', marginBottom:6 }}>Shiho</div>
+        <div style={{ fontFamily:'Cinzel,serif', fontSize:24, fontWeight:700, color:)#C8D8E8', letterSpacing:'0.1em', marginBottom:6 }}>Shiho</div>
         <div style={{ fontSize:11, fontStyle:'italic', color:'rgba(245,240,232,0.4)', lineHeight:1.55, marginBottom:10 }}>
           {mode === 'open' ? SHIHO.cue : SHIHO.closeCue}
         </div>
@@ -167,7 +167,7 @@ function CheckIn({ selectedState, onSelect, onContinue, onEnd }) {
     clear:   <svg width="22" height="22" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="9" stroke="#7AB89A" strokeWidth="0.85"/><circle cx="13" cy="13" r="5" stroke="#7AB89A" strokeWidth="0.6" opacity="0.5"/><circle cx="13" cy="13" r="2" fill="#7AB89A" opacity="0.8"/></svg>,
   };
   return (
-    <div style={{ flex:1, display:'flex', flexDirection:'row', background:'#0A0A12', position:'relative', overflow:'hidden' }}>
+    <div style={{ flex:1, display:'flex', flexDirection:'row', alignItems:'stretch', background:'#0A0A12', position:'relative', overflow:'hidden' }}>
       {/* Left */}
       <div style={{ width:200, flexShrink:0, display:'flex', flexDirection:'column', justifyContent:'center', padding:'16px 20px', borderRight:'0.5px solid rgba(245,240,232,0.06)' }}>
         <div style={{ fontFamily:'Cinzel,serif', fontSize:14, letterSpacing:'0.06em', marginBottom:6 }}>How are you arriving today?</div>
@@ -182,7 +182,7 @@ function CheckIn({ selectedState, onSelect, onContinue, onEnd }) {
               <div key={s.id} style={{ display:'flex', alignItems:'center', gap:10, cursor:'pointer', padding:'10px 12px', borderRadius:10, border:`0.5px solid ${sel ? s.color : 'rgba(245,240,232,0.07)'}`, background: sel ? `rgba(${s.rgb},0.08)` : 'rgba(245,240,232,0.02)', transition:'all 0.2s' }} onClick={() => onSelect(s.id)}>
                 <div style={{ width:36, height:36, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, background:`rgba(${s.rgb},${sel?'0.18':'0.07'})`, border:`1px solid rgba(${s.rgb},${sel?'0.4':'0.15'})` }}>{icons[s.id]}</div>
                 <div>
-                  <div style={{ fontFamily:'Cinzel,serif', fontSize:11, letterSpacing:'0.08em', color: sel ? s.color : 'rgba(245,240,232,0.55)', marginBottom:2 }}>{s.word}</div>
+                  <div style={{ fontFamily:'Cinzel,serif', fontSize:11, letterSpacing:'0.08em', color: sel ? s.color : 'rgba(245,240,232,0.55)', marginBottom2 }}>{s.word}</div>
                   <div style={{ fontSize:9, fontStyle:'italic', color:'rgba(245,240,232,0.32)', lineHeight:1.3 }}>{s.desc}</div>
                 </div>
               </div>
@@ -190,7 +190,7 @@ function CheckIn({ selectedState, onSelect, onContinue, onEnd }) {
           })}
         </div>
         <div style={{ display:'flex', justifyContent:'flex-end' }}>
-          <button style={{ padding:'8px 24px', borderRadius:8, border:'0.5px solid rgba(122,184,154,0.4)', background:'transparent', fontFamily:'Cinzel,serif', fontSize:10, letterSpacing:'0.2em', color:'#7AB89A', cursor: selectedState ? 'pointer' : 'default', opacity: selectedState ? 1 : 0.2 }} onClick={() => selectedState && onContinue()}>Continue ↓</button>
+          <button style={{ padding:'8px 24px', borderRadius:8, border:'0.5px solid rgba(122,184,154,0.4)', background:'transparent', fontFamily:'Cinzel,serif', fontSize:10, letterSpacing:'0.2em', color:'rgba(122,184,154,0.8)', cursor: selectedState ? 'pointer' : 'default', opacity: selectedState ? 1 : 0.2 }} onClick={() => selectedState && onContinue()}>Continue ↓</button>
         </div>
       </div>
       <EndBtn onEnd={onEnd} />
@@ -203,12 +203,12 @@ function Sequence({ selectedState, sessionCount, sequence, onCountChange, onTogg
   const st = STATES.find(x => x.id === selectedState);
   if (!st) return null;
   return (
-    <div style={{ flex:1, display:'flex', flexDirection:'row', background:'#0A0A12', position:'relative', overflow:'hidden' }}>
+    <div style={{ flex:1, display:'flex', flexDirection:'row', alignItems:'stretch', background:'#0A0A12', position:'relative', overflow:'hidden' }}>
       {/* Left info */}
       <div style={{ width:200, flexShrink:0, display:'flex', flexDirection:'column', justifyContent:'center', padding:'16px 20px', borderRight:'0.5px solid rgba(245,240,232,0.06)' }}>
         <div style={{ fontSize:11, fontStyle:'italic', color:'rgba(245,240,232,0.65)', lineHeight:1.55, marginBottom:8 }}>{st.msg}</div>
         <div style={{ fontSize:9, color:'rgba(245,240,232,0.32)', lineHeight:1.5 }}>
-          Choose 1–{st.sequence.length} techniques. Shiho opens and closes automatically.
+          Choose 1-–{st.sequence.length} techniques. Shiho opens and closes automatically.
         </div>
       </div>
       {/* Right */}
@@ -219,7 +219,7 @@ function Sequence({ selectedState, sessionCount, sequence, onCountChange, onTogg
             return (
               <div key={id} style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', padding:'10px 6px', borderRadius:10, border:`0.5px solid ${active ? t.color : 'rgba(245,240,232,0.07)'}`, background: active ? `rgba(${t.rgb},0.07)` : 'rgba(245,240,232,0.02)', cursor:'pointer', opacity: active ? 1 : 0.28, position:'relative' }} onClick={() => onToggle(i)}>
                 <div style={{ position:'absolute', top:4, right:6, fontFamily:'Cinzel,serif', fontSize:7, color:'rgba(245,240,232,0.18)' }}>{i+1}</div>
-                <div style={{ width:28, height:28, borderRadius:'50%', border:`0.5px solid rgba(${t.rgb},${active?'0.5':'0.15'})`, background:`rgba(${t.rgb},${active?'0.12':'0.04'})`, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:4 }}>
+                <div style={{ width:28, height:28, borderRadius:'50%', border:`0.5px solid rgba(${t.rgb},${active?'0.5':'0.15'})`, background:`rgba(${t.rgb},${active?'0.12':'0.04'})`, display:'flex', alignItems:'center', justifyContent:'center', marginBottom 4}}>
                   <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke={t.color} strokeWidth="0.8" opacity={active?'0.8':'0.3'}/><circle cx="7" cy="7" r="2" fill={t.color} opacity={active?'0.7':'0.2'}/></svg>
                 </div>
                 <div style={{ fontFamily:'Cinzel,serif', fontSize:8, textAlign:'center', color: active ? t.color : 'rgba(245,240,232,0.2)', lineHeight:1.2 }}>{t.name}</div>
@@ -228,14 +228,14 @@ function Sequence({ selectedState, sessionCount, sequence, onCountChange, onTogg
             );
           })}
         </div>
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'align-between' }}>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
             <div style={{ fontFamily:'Cinzel,serif', fontSize:9, letterSpacing:'0.15em', color:'rgba(245,240,232,0.26)' }}>Techniques</div>
             <button style={S2.cntBtn} onClick={() => onCountChange(Math.max(1, sessionCount-1))}>−</button>
             <div style={{ fontFamily:'Cinzel,serif', fontSize:14, minWidth:16, textAlign:'center' }}>{sessionCount}</div>
             <button style={S2.cntBtn} onClick={() => onCountChange(Math.min(st.sequence.length, sessionCount+1))}>+</button>
           </div>
-          <button style={{ padding:'8px 24px', borderRadius:8, border:'0.5px solid rgba(122,184,154,0.4)', background:'transparent', fontFamily:'Cinzel,serif', fontSize:10, letterSpacing:'0.2em', color:'#7AB89A', cursor:'pointer' }} onClick={onBegin}>Begin ↓</button>
+          <button style={{ padding:'8px 24px', borderRadius:8, border:'0.5px solid rgba(122,184,154,0.4)', background:'transparent', fontFamily:'Cinzel,serif', fontSize:10, letterSpacing:'0.2em', color:'rgba(122,184,154,0.8)', cursor:'pointer' }} onClick={onBegin}>Begin ↓</button>
         </div>
       </div>
       <EndBtn onEnd={onEnd} />
@@ -328,13 +328,13 @@ function Runner({ sequence, techIndex, onComplete, onEnd }) {
           })}
           <div style={{ height:'0.5px', background:'rgba(245,240,232,0.05)', margin:'8px 0' }} />
           <div style={{ fontFamily:'Cinzel,serif', fontSize:7, letterSpacing:'0.2em', color:'rgba(245,240,232,0.2)', marginBottom:4 }}>Now breathing</div>
-          <div style={{ fontFamily:'Cinzel,serif', fontSize:13, fontWeight:700, color:t.color, marginBottom3, lineHeight:1.1 }}>{t.name}</div>
+          <div style={{ fontFamily:'Cinzel,serif', fontSize:13, fontWeight:700, color:t.color, marginBottom 3, lineHeight:1.1 }}>{t.name}</div>
           <div style={{ fontSize:9, fontStyle:'italic', color:'rgba(245,240,232,0.4)', lineHeight:1.5 }}>{t.cue}</div>
         </div>
         <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'8px 4px' }}>
           <div style={{ fontFamily:'Cinzel,serif', fontSize:9, letterSpacing:'0.22em', minHeight:13, textAlign:'center', marginBottom:6, textTransform:'uppercase', color:t.color }}>{phLbl}</div>
           <div style={{ position:'relative', width:180, height:180 }}>
-            <canvas ref={canvasRef} width={180} height={180} style={{ position:'absolute', top:0, left:0, width:180, height:180 }} />
+            <canvas ref={canvasRef} width={180} height={180} style={{ position: 'absolute', top:0, left:0, width:180, height:180 }} />
           </div>
           <div style={{ display:'flex', flexDirection:'column', alignItems:'center', marginTop:6 }}>
             <div style={{ fontFamily:'Cinzel,serif', fontSize:24, fontWeight:700, color:t.color, lineHeight:1 }}>{cdNum}</div>
@@ -346,7 +346,7 @@ function Runner({ sequence, techIndex, onComplete, onEnd }) {
             {t.type === 'cycle' ? 'Progress' : 'Phases'}
           </div>
           {t.type === 'cycle' && totalCycles && Array.from({length:Math.min(totalCycles,10)},(_,i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:4, marginBottom:3 }}>
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:4, marginBottom 3 }}>
               <div style={{ width:5, height:5, borderRadius:'50%', background: i < donePips ? t.color : 'rgba(245,240,232,0.08)', transition:'background 0.35s' }} />
               <div style={{ fontFamily:'Cinzel,serif', fontSize:7, color: i < donePips ? 'rgba(245,240,232,0.5)' : 'rgba(245,240,232,0.18)' }}>Breath {i+1}</div>
             </div>
@@ -358,7 +358,7 @@ function Runner({ sequence, techIndex, onComplete, onEnd }) {
         </div>
       </div>
       {transitioning && nextT && (
-        <div style={{ position: 'absolute', inset:0, zIndex:8, background:`${nextT.bg.base}CC`, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center' }}>
+        <div style={{ position:'absolute', inset:0, zIndex:8, background:`${nextT.bg.base}CC`, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center' }}>
           <div style={{ fontFamily:'Cinzel,serif', fontSize:9, letterSpacing:'0.2em', color:'rgba(245,240,232,0.3)', marginBottom:8 }}>Next</div>
           <div style={{ fontFamily:'Cinzel,serif', fontSize:18, fontWeight:700, color:nextT.color, letterSpacing:'0.06em' }}>{nextT.name}</div>
         </div>
@@ -368,12 +368,12 @@ function Runner({ sequence, techIndex, onComplete, onEnd }) {
   );
 }
 
-/* ── SUMMARY — landscape row ── */
+/* ── SUMMARY o— landscape row ── */
 function Summary({ sequence, elapsed, techsDone, onReturn }) {
   const xp = 10 + techsDone * 10;
   const elements = [...new Set(sequence.slice(0, techsDone).map(id => TECHNIQUES[id].elem))].length;
   return (
-    <div style={{ flex:1, display:'flex', flexDirection:'row', background:'#0A0A12' }}>
+    <div style={{ flex:1, display:'flex', flexDirection:'row', alignItems:'stretch', background:'#0A0A12' }}>
       {/* Left */}
       <div style={{ width:220, flexShrink:0, display:'flex', flexDirection:'column', justifyContent:'center', padding:'20px 24px', borderRight:'0.5px solid rgba(245,240,232,0.06)' }}>
         <div style={{ fontFamily:'Cinzel,serif', fontSize:9, letterSpacing:'0.25em', color:'rgba(245,240,232,0.28)', marginBottom:10 }}>Session Complete</div>
