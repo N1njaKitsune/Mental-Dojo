@@ -24,7 +24,8 @@ const DISCIPLINES = [
   },
 ];
 
-export default function Home({ go }) {
+export default function Home({ navigate }) {
+  const go = navigate;
   return (
     <div style={S.wrap}>
       <div style={S.header}>
