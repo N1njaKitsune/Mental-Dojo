@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nendō · StudentApp v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+
+/* ═══ RESET + BODY ═══ */
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#020204; display:flex; flex-direction:column;
+  align-items:center; justify-content:flex-start;
+  min-height:100vh; padding:24px 24px 56px; gap:20px;
+  font-family:'Crimson Pro',serif; color:#F5F0E8;
+}
+
+/* ── Device toggle ── */
+.device-toggle { display:flex; gap:8px; z-index:50; }
+.device-toggle button {
+  background:rgba(200,176,106,0.08); border:0.5px solid rgba(200,176,106,0.22);
+  color:rgba(245,240,232,0.4); padding:5px 14px; cursor:pointer;
+  font-size:10px; border-radius:4px; font-family:'Cinzel',serif;
+  letter-spacing:0.1em; transition:all 0.2s;
+}
+.device-toggle button.active {
+  background:rgba(200,176,106,0.18); color:rgba(200,176,106,0.92);
+  border-color:rgba(200,176,106,0.42);
+}
+
+/* ── Frame ── */
+.frame {
+  position:relative; overflow:hidden; border-radius:4px;
+  box-shadow:0 0 0 1.5px rgba(245,240,232,0.06), 0 28px 80px rgba(0,0,0,0.85);
+  background:#050508; flex-shrink:0;
+}
+.frame.iphone { width:844px; height:390px; }
+.frame.ipad   { width:1194px; height:834px; }
+
+/* ── Particle canvas ── */
+#particle-canvas { position:absolute; inset:0; z-index:8; pointer-events:none; }
+
+/* ── Screens ── */
+.screen {
+  position:absolute; inset:0;
+  opacity:0; pointer-events:none;
+  transition:opacity 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.screen.active { opacity:1; pointer-events:auto; }
+
+/* ── Shared bg layers ── */
+.hero {
+  position:absolute; inset:0; z-index:1;
+  background-size:cover; background-position:center;
+}
+.env-vignette {
+  position:absolute; inset:0; z-index:3;
+  background:radial-gradient(ellipse at center, transparent 15%, rgba(3,2,5,0.65) 100%);
+  pointer-events:none;
+}
+.env-texture {
+  position:absolute; inset:0; z-index:4; opacity:0.012;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' fill='%23f5f0e8' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.ui-layer { position:absolute; inset:0; z-index:20; }
+
+/* ── Shared nav bar ── */
+.nav-bar {
+  position:absolute; bottom:0; left:0; right:0; height:32px;
+  display:flex; align-items:center; padding:0 16px;
+  background:rgba(4,4,8,0.48); backdrop-filter:blur(14px);
+  border-top:0.5px solid rgba(245,240,232,0.04); z-index:30;
+}
+.nav-back {
+  font-family:'Cinzel',serif; font-size:9px; letter-spacing:0.12em;
+  color:rgba(245,240,232,0.28); cursor:pointer; width:90px;
+  transition:color 0.2s; white-space:nowrap; background:none; border:none;
+}
+.nav-back:hover { color:rgba(245,240,232,0.58); }
+.nav-back.disabled { opacity:0.2; pointer-events:none; }
+.nav-title {
+  flex:1; text-align:center; font-family:'Cinzel',serif;
+  font-size:9px; letter-spacing:0.18em;
+  color:rgba(245,240,232,0.28); text-transform:uppercase;
+}
+.nav-right {
+  width:90px; text-align:right; font-family:'Cinzel',serif;
+  font-size:9px; letter-spacing:0.1em; color:rgba(245,240,232,0.2);
+}
+
+/* ══════════════════════════════════════════
+   SCREEN 1 — ENTRY
+══════════════════════════════════════════ */
+.entry-env-layer {
+  position:absolute; inset:0;
+  background-size:cover; background-position:center bottom;
+}
+.entry-sky   { background-image:url('../assets/environment/L0-sky.jpg');         z-index:1; }
+.entry-village{ background-image:url('../assets/environment/L2-village.png');    z-index:2; background-size:contain; background-repeat:no-repeat; background-position:bottom center; }
+.entry-dojo  { background-image:url('../assets/environment/L3-dojo-frame.png'); z-index:3; background-size:contain; background-repeat:no-repeat; background-position:bottom center; }
+.entry-floor { background-image:url('../assets/environment/L4-floor.jpg');       z-index:4; background-size:cover; background-position:bottom center; opacity:0.6; }
+.entry-lantern{ background-image:url('../assets/environment/L5-lantern.png');    z-index:5; background-size:contain; background-repeat:no-repeat; background-position:bottom center; opacity:0.85; }
+.entry-fog {
+  position:absolute; inset:0; z-index:6;
+  background:linear-gradient(180deg, rgba(4,3,8,0.22) 0%, transparent 40%, rgba(4,3,8,0.55) 100%);
+  pointer-events:none;
+}
+.entry-texture {
+  position:absolute; inset:0; z-index:7; opacity:0.014; pointer-events:none;
+  background-image:url('../assets/environment/L6-paper-texture.jpg');
+  background-size:300px; mix-blend-mode:overlay;
+}
+.entry-ui {
+  position:absolute; inset:0; z-index:20;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0;
+}
+.entry-logo-kanji {
+  font-family:serif; font-size:10px; letter-spacing:0.6em;
+  color:rgba(200,176,106,0.45); text-transform:uppercase; margin-bottom:4px;
+}
+.entry-school {
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.5em;
+  color:rgba(245,240,232,0.2); text-transform:uppercase; margin-bottom:28px;
+}
+.entry-greeting {
+  font-family:'Crimson Pro',serif; font-size:11px; font-style:italic;
+  color:rgba(245,240,232,0.28); margin-bottom:4px;
+}
+.entry-name {
+  font-family:'Cinzel',serif; font-size:20px; font-weight:700;
+  letter-spacing:0.12em; color:rgba(245,240,232,0.9);
+  text-shadow:0 0 40px rgba(200,176,106,0.18); margin-bottom:28px;
+}
+.entry-btn {
+  font-family:'Cinzel',serif; font-size:9px; letter-spacing:0.28em;
+  padding:10px 34px; border-radius:4px;
+  border:0.5px solid rgba(200,176,106,0.38); background:rgba(200,176,106,0.06);
+  color:rgba(200,176,106,0.82); cursor:pointer;
+  transition:all 0.35s cubic-bezier(0.22,0.61,0.36,1);
+}
+.entry-btn:hover {
+  border-color:rgba(200,176,106,0.65); background:rgba(200,176,106,0.13);
+  color:rgba(200,176,106,1); box-shadow:0 0 24px rgba(200,176,106,0.12);
+}
+
+/* ══════════════════════════════════════════
+   SCREEN 2 — STUDENT PROFILE
+══════════════════════════════════════════ */
+.hero-profile { background-image:url('../assets/backgrounds/bg-student-profile.webp'); }
+
+.aura-canvas {
+  position:absolute; inset:0; z-index:0; pointer-events:none;
+}
+
+.profile-layout {
+  position:absolute; inset:0; z-index:10;
+  display:flex; align-items:stretch;
+}
+
+/* Left column: identity */
+.col-left {
+  flex:0 0 170px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:20px 14px 36px; text-align:center;
+  border-right:0.5px solid rgba(245,240,232,0.04);
+}
+.id-name {
+  font-family:'Cinzel',serif; font-size:14px; font-weight:600;
+  letter-spacing:0.07em; color:rgba(245,240,232,0.92);
+  text-shadow:0 0 20px rgba(245,240,232,0.08); margin-bottom:3px;
+}
+.id-aura {
+  font-family:'Crimson Pro',serif; font-size:10px; font-weight:300; font-style:italic;
+  color:rgba(210,178,90,0.72); margin-bottom:14px;
+}
+.id-belt-row {
+  display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:3px;
+}
+.belt-bar {
+  width:64px; height:11px; border-radius:3px; overflow:hidden; position:relative;
+}
+.belt-bar-fill { width:100%; height:100%; }
+.belt-bar-stripe {
+  position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); height:35%;
+}
+.id-belt-name {
+  font-family:'Cinzel',serif; font-size:10px; font-weight:600;
+  letter-spacing:0.05em; color:rgba(245,240,232,0.75);
+}
+.id-belt-tier {
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.13em;
+  text-transform:uppercase; color:rgba(245,240,232,0.28); margin-bottom:12px;
+}
+.id-stats { display:flex; gap:14px; justify-content:center; }
+.id-stat { display:flex; align-items:baseline; gap:4px; }
+.id-stat .val {
+  font-family:'Cinzel',serif; font-size:12px; font-weight:600;
+  color:rgba(245,240,232,0.72);
+}
+.id-stat .lbl {
+  font-family:'Crimson Pro',serif; font-size:8.5px; font-weight:300; font-style:italic;
+  color:rgba(245,240,232,0.32);
+}
+
+/* Center column: avatar */
+.col-center {
+  flex:1; display:flex; align-items:flex-end; justify-content:center;
+  position:relative; min-width:0;
+}
+.char-wrap {
+  position:relative; z-index:2;
+  width:124px; height:295px; margin-bottom:10px;
+  display:flex; align-items:flex-end; justify-content:center;
+  overflow:visible;
+}
+.avatar-svg { width:100%; height:100%; overflow:visible; }
+.surge-label {
+  position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.18em;
+  text-transform:uppercase; white-space:nowrap;
+  opacity:0; transition:opacity 0.4s, color 0.4s;
+  pointer-events:none; z-index:5;
+}
+
+/* Right column: nav pills */
+.col-right {
+  flex:0 0 220px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:9px; padding:16px 8px 36px;
+  border-left:0.5px solid rgba(245,240,232,0.04);
+}
+.nav-pill {
+  width:180px; padding:10px 13px; border-radius:10px;
+  background:rgba(245,240,232,0.03); border:1px solid rgba(245,240,232,0.07);
+  backdrop-filter:blur(12px); display:flex; align-items:center; gap:10px;
+  cursor:pointer; transition:all 0.3s; position:relative;
+}
+.nav-pill:hover {
+  background:rgba(245,240,232,0.06); border-color:rgba(245,240,232,0.14);
+  transform:translateX(3px);
+}
+.nav-pill.locked { opacity:0.35; cursor:default; pointer-events:none; }
+.pill-icon {
+  width:28px; height:28px; border-radius:7px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(245,240,232,0.05); flex-shrink:0;
+}
+.pill-icon svg { width:16px; height:16px; }
+.pill-text { display:flex; flex-direction:column; gap:1px; }
+.pill-title {
+  font-family:'Cinzel',serif; font-size:10px; letter-spacing:0.05em;
+  color:rgba(245,240,232,0.82);
+}
+.pill-sub {
+  font-family:'Crimson Pro',serif; font-size:9px; font-weight:300; font-style:italic;
+  color:rgba(245,240,232,0.32);
+}
+.pill-lock {
+  position:absolute; right:12px; top:50%; transform:translateY(-50%);
+  font-size:10px; opacity:0.3;
+}
+
+/* ══════════════════════════════════════════
+   SCREEN 3 — NENDŌ MDH
+══════════════════════════════════════════ */
+.hero-nendo { background-image:url('../assets/backgrounds/bg-home-hub.webp'); }
+
+.mdh-layout {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  height:calc(100% - 32px); gap:8px; position:relative; z-index:5;
+}
+.mdh-tag {
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.45em;
+  color:rgba(200,176,106,0.4); text-transform:uppercase; margin-bottom:2px;
+}
+.mdh-title {
+  font-family:'Cinzel',serif; font-size:18px; font-weight:700; letter-spacing:0.12em;
+  color:rgba(245,240,232,0.88); text-shadow:0 0 40px rgba(200,176,106,0.2);
+  margin-bottom:16px;
+}
+.mdh-doors { display:flex; gap:14px; align-items:stretch; }
+.mdh-door {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:6px; padding:16px 18px; border-radius:6px; cursor:pointer; min-width:120px;
+  border:0.5px solid rgba(245,240,232,0.07); background:rgba(245,240,232,0.02);
+  transition:all 0.35s cubic-bezier(0.22,0.61,0.36,1); position:relative;
+}
+.mdh-door.active:hover {
+  background:rgba(200,176,106,0.06); border-color:rgba(200,176,106,0.3);
+  transform:translateY(-3px); box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.mdh-door.locked { opacity:0.35; cursor:default; pointer-events:none; }
+.mdh-door-kanji {
+  font-family:serif; font-size:22px; color:rgba(245,240,232,0.5);
+  transition:color 0.3s;
+}
+.mdh-door.active .mdh-door-kanji { color:rgba(200,176,106,0.8); }
+.mdh-door-name {
+  font-family:'Cinzel',serif; font-size:9px; letter-spacing:0.18em;
+  text-transform:uppercase; color:rgba(245,240,232,0.45);
+}
+.mdh-door.active .mdh-door-name { color:rgba(200,176,106,0.75); }
+.mdh-door-desc {
+  font-family:'Crimson Pro',serif; font-size:9px; font-style:italic;
+  color:rgba(245,240,232,0.22); text-align:center; max-width:108px; line-height:1.4;
+}
+.mdh-door-lock {
+  font-size:9px; color:rgba(245,240,232,0.2); letter-spacing:0.12em;
+  font-family:'Cinzel',serif;
+}
+.mdh-door-glow {
+  position:absolute; inset:0; border-radius:6px; pointer-events:none;
+  box-shadow:0 0 30px rgba(200,176,106,0.0);
+  transition:box-shadow 0.4s;
+}
+.mdh-door.active:hover .mdh-door-glow { box-shadow:0 0 30px rgba(200,176,106,0.12); }
+
+/* ══════════════════════════════════════════
+   SCREEN 4 — MUSHIN HOME
+══════════════════════════════════════════ */
+.hero-mushin { background-image:url('../assets/backgrounds/bg-breath-home.webp'); }
+
+.mushin-kanji-bg {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-54%);
+  font-family:serif; font-size:70px; line-height:1;
+  color:rgba(200,176,106,0.07); pointer-events:none; user-select:none; z-index:0;
+}
+.mushin-home-layout {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  height:calc(100% - 32px); padding:0 24px; text-align:center; position:relative; z-index:5;
+}
+.mushin-tag {
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:0.35em;
+  color:rgba(200,176,106,0.5); text-transform:uppercase; margin-bottom:5px;
+}
+.mushin-title {
+  font-family:'Cinzel',serif; font-size:22px; font-weight:700;
+  letter-spacing:0.1em; color:rgba(245,240,232,0.88);
+  text-shadow:0 0 48px rgba(200,176,106,0.22); margin-bottom:3px;
+}
+.mushin-subtitle {
+  font-family:'Crimson Pro',serif; font-size:10px; font-style:italic;
+  color:rgba(245,240,232,0.28); margin-bottom:16px;
+}
+.mushin-mandala-svg { width:52px; height:52px; opacity:0.38; margin-bottom:16px; }
+.mushin-sep {
+  width:72px; height:0.5px;
+  background:linear-gradient(90deg, transparent, rgba(200,176,106,0.32), transparent);
+  margin-bottom:16px;
+}
+.mushin-btns { display:flex; flex-direction:column; gap:7px; align-items:center; }
+.mushin-btn-primary {
+  font-family:'Cinzel',serif; font-size:9px; letter-spacing:0.2em;
+  padding:8px 28px; border-radius:4px;
+  border:0.5px solid rgba(200,176,106,0.35); background:rgba(200,176,106,0.06);
+  color:rgba(200,176,106,0.82); cursor:pointer;
+  transition:all 0.3s cubic-bezier(0.22,0.61,0.36,1);
+}
+.mushin-btn-primary:hover {
+  border-color:rgba(200,176,106,0.6); background:rgba(200,176,106,0.13);
+  color:rgba(200,176,106,1); box-shadow:0 0 20px rgba(200,176,106,0.1);
+}
+.mushin-btn-secondary {
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:0.14em;
+  color:rgba(245,240,232,0.22); cursor:pointer; background:none; border:none;
+  transition:color 0.2s;
+}
+.mushin-btn-secondary:hover { color:rgba(245,240,232,0.44); }
+
+/* ══════════════════════════════════════════
+   SCREEN 5 — SHIHO / CHECK-IN / SESSION (combined)
+══════════════════════════════════════════ */
+.hero-shiho { background-image:url('../assets/backgrounds/bg-shiho.webp'); }
+
+/* --- Ritual phase --- */
+.shiho-ritual-ui {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  height:calc(100% - 32px); gap:0; position:relative; z-index:5;
+  transition:opacity 0.5s ease;
+}
+.shiho-top-label {
+  position:absolute; top:14px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+}
+.shiho-kanji-sm { font-family:serif; font-size:12px; color:rgba(200,176,106,0.55); }
+.shiho-word-sm  { font-family:'Cinzel',serif; font-size:8px; letter-spacing:0.25em; color:rgba(200,176,106,0.35); text-transform:uppercase; }
+.shiho-mandala-wrap {
+  position:relative; display:flex; align-items:center; justify-content:center;
+}
+.shiho-mandala-svg { display:block; filter:drop-shadow(0 0 18px rgba(180,155,90,0.12)); }
+.shiho-ring-progress {
+  stroke-dasharray:565; stroke-dashoffset:565;
+  transform-origin:center; transform:rotate(-90deg);
+  transition:stroke-dashoffset 0.25s linear;
+}
+.shiho-centre-kanji {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  font-family:serif; font-size:26px; color:rgba(245,240,232,0.75);
+  text-shadow:0 0 28px rgba(200,176,106,0.45); pointer-events:none;
+  transition:opacity 0.45s ease;
+}
+.shiho-cue {
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:0.17em;
+  text-transform:uppercase; color:rgba(245,240,232,0.32);
+  margin-top:13px; text-align:center; min-height:13px; max-width:360px; line-height:1.4;
+}
+.shiho-mantra {
+  font-family:'Crimson Pro',serif; font-size:9px; font-style:italic;
+  color:rgba(245,240,232,0.16); text-align:center; margin-top:4px;
+}
+.shiho-begin-btn {
+  margin-top:14px; padding:7px 22px;
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:0.2em;
+  color:rgba(200,176,106,0.72); background:rgba(8,7,4,0.38);
+  border:0.5px solid rgba(200,176,106,0.3); border-radius:4px;
+  cursor:pointer; backdrop-filter:blur(12px);
+  opacity:0; transform:translateY(6px);
+  transition:opacity 0.8s ease, transform 0.8s ease, background 0.25s, border-color 0.25s;
+  pointer-events:none;
+}
+.shiho-begin-btn.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+.shiho-begin-btn.visible:hover {
+  background:rgba(200,176,106,0.1); border-color:rgba(200,176,106,0.52);
+  color:rgba(200,176,106,0.95);
+}
+
+/* --- Check-in phase --- */
+.shiho-checkin-ui {
+  display:none; flex-direction:column; align-items:center; justify-content:center;
+  height:calc(100% - 32px); padding:0 24px; gap:13px;
+  position:relative; z-index:5;
+}
+.shiho-checkin-ui.show { display:flex; }
+.checkin-heading {
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:0.3em;
+  color:rgba(245,240,232,0.25); text-transform:uppercase;
+}
+.checkin-sub {
+  font-family:'Crimson Pro',serif; font-size:11px; font-style:italic;
+  color:rgba(245,240,232,0.32); margin-top:-6px;
+}
+.checkin-cards { display:flex; gap:9px; align-items:stretch; }
+.checkin-card {
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+  gap:5px; padding:11px 12px; border-radius:6px; cursor:pointer;
+  border:0.5px solid rgba(245,240,232,0.08); background:rgba(245,240,232,0.02);
+  transition:all 0.3s cubic-bezier(0.22,0.61,0.36,1); min-width:82px;
+}
+.checkin-card:hover { border-color:rgba(245,240,232,0.18); background:rgba(245,240,232,0.04); }
+.checkin-card.selected {
+  border-color:var(--state-color);
+  background:rgba(var(--state-rgb),0.07);
+}
+.checkin-card-icon {
+  width:36px; height:36px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; border:0.5px solid rgba(245,240,232,0.1);
+  background:rgba(245,240,232,0.03); transition:all 0.3s; flex-shrink:0;
+}
+.checkin-card.selected .checkin-card-icon {
+  border-color:var(--state-color); background:rgba(var(--state-rgb),0.12);
+}
+.checkin-card-name {
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:0.14em;
+  color:rgba(245,240,232,0.42); text-transform:uppercase; transition:color 0.3s;
+}
+.checkin-card.selected .checkin-card-name { color:var(--state-color); }
+.checkin-card-desc {
+  font-family:'Crimson Pro',serif; font-size:8px; font-style:italic;
+  color:rgba(245,240,232,0.2); text-align:center; line-height:1.35; max-width:82px;
+}
+.checkin-suggestion {
+  font-family:'Crimson Pro',serif; font-size:9px; font-style:italic;
+  color:rgba(200,176,106,0.45); text-align:center; min-height:14px;
+}
+.checkin-continue {
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:0.2em;
+  padding:7px 22px; border-radius:4px;
+  border:0.5px solid rgba(122,184,154,0.3); background:rgba(122,184,154,0.04);
+  color:rgba(122,184,154,0.72); cursor:pointer;
+  opacity:0; transition:all 0.4s ease; pointer-events:none;
+}
+.checkin-continue.visible { opacity:1; pointer-events:auto; }
+.checkin-continue.visible:hover {
+  border-color:rgba(122,184,154,0.55); background:rgba(122,184,154,0.09);
+  color:rgba(122,184,154,0.95);
+}
+
+/* --- Session phase --- */
+.shiho-session-ui {
+  display:none; align-items:stretch;
+  height:calc(100% - 32px);
+  position:relative; z-index:5;
+}
+.shiho-session-ui.show { display:flex; }
+
+/* ══════════════════════════════════════════
+   SESSION RUNNER (shared styles for both runners)
+══════════════════════════════════════════ */
+.runner-layout { display:flex; align-items:stretch; height:100%; }
+.runner-left {
+  width:185px; flex-shrink:0; display:flex; flex-direction:column;
+  justify-content:center; padding:14px 15px 14px 20px;
+  border-right:0.5px solid rgba(245,240,232,0.05);
+}
+.runner-micro-label {
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.22em;
+  color:rgba(245,240,232,0.18); margin-bottom:5px; text-transform:uppercase;
+}
+.runner-tech-name {
+  font-family:'Cinzel',serif; font-size:14px; font-weight:700;
+  letter-spacing:0.05em; margin-bottom:3px; line-height:1.15;
+  color:rgba(245,240,232,0.88);
+}
+.runner-tech-real { font-size:9px; font-style:italic; color:rgba(245,240,232,0.28); margin-bottom:7px; }
+.runner-elem-badge {
+  display:inline-block; padding:2px 8px; border-radius:10px;
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.12em;
+  margin-bottom:9px; border:0.5px solid transparent;
+}
+.runner-cue { font-size:9px; font-style:italic; color:rgba(245,240,232,0.32); line-height:1.58; margin-bottom:9px; }
+.runner-word { font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.2em; color:rgba(245,240,232,0.18); }
+.runner-centre {
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; padding:8px 4px; position:relative;
+}
+.runner-phase-label {
+  font-family:'Cinzel',serif; font-size:9px; letter-spacing:0.22em;
+  text-transform:uppercase; margin-bottom:8px; min-height:14px; transition:color 0.35s;
+}
+.runner-countdown {
+  font-family:'Cinzel',serif; font-size:28px; font-weight:700; line-height:1; margin-top:8px;
+  color:rgba(245,240,232,0.82);
+}
+.runner-phase-sub {
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.18em;
+  color:rgba(245,240,232,0.28); margin-top:3px;
+}
+.runner-end {
+  position:absolute; bottom:10px; right:14px; z-index:10;
+  background:none; border:0.5px solid rgba(245,240,232,0.1); border-radius:5px;
+  padding:4px 12px; font-family:'Cinzel',serif; font-size:8px; letter-spacing:0.12em;
+  color:rgba(245,240,232,0.25); cursor:pointer; transition:all 0.25s;
+}
+.runner-end:hover { border-color:rgba(245,240,232,0.28); color:rgba(245,240,232,0.48); }
+.runner-right {
+  width:110px; flex-shrink:0; display:flex; flex-direction:column;
+  justify-content:center; padding:12px 14px;
+  border-left:0.5px solid rgba(245,240,232,0.05);
+}
+.runner-pips-label {
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.15em;
+  color:rgba(245,240,232,0.2); margin-bottom:5px;
+}
+.runner-pips { display:flex; flex-direction:column; gap:3px; }
+.runner-pip { display:flex; align-items:center; gap:5px; }
+.runner-pip-dot { width:5px; height:5px; border-radius:50%; transition:background 0.4s, box-shadow 0.4s; }
+.runner-pip-text { font-family:'Cinzel',serif; font-size:7px; color:rgba(245,240,232,0.28); transition:color 0.4s; }
+.runner-pip.done .runner-pip-text { color:rgba(245,240,232,0.52); }
+.runner-overall-lbl {
+  font-family:'Cinzel',serif; font-size:7px; color:rgba(245,240,232,0.18);
+  margin-top:8px; margin-bottom:3px;
+}
+.runner-progress-bar { width:100%; height:2px; background:rgba(245,240,232,0.06); border-radius:2px; overflow:hidden; }
+.runner-progress-fill { height:100%; border-radius:2px; width:0%; transition:width 0.5s linear; }
+
+/* ══════════════════════════════════════════
+   SCREEN 6 — SESSION COMPLETE
+══════════════════════════════════════════ */
+.hero-complete { background-image:url('../assets/backgrounds/bg-session-complete.webp'); }
+
+.complete-layout { display:flex; align-items:stretch; height:calc(100% - 32px); }
+.complete-left {
+  width:255px; flex-shrink:0; display:flex; flex-direction:column;
+  justify-content:center; padding:24px 26px;
+  border-right:0.5px solid rgba(245,240,232,0.06);
+}
+.complete-tag {
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.3em;
+  color:rgba(245,240,232,0.22); text-transform:uppercase; margin-bottom:10px;
+}
+.complete-word {
+  font-family:'Cinzel',serif; font-size:28px; font-weight:700;
+  letter-spacing:0.08em; margin-bottom:8px;
+}
+.complete-quote {
+  font-size:10px; font-style:italic; color:rgba(245,240,232,0.32); line-height:1.68;
+}
+.complete-right {
+  flex:1; display:flex; flex-direction:column;
+  justify-content:center; padding:20px 22px; gap:12px;
+}
+.complete-stats { display:flex; flex-wrap:wrap; gap:7px; }
+.complete-stat {
+  flex:1; min-width:80px; padding:9px 11px;
+  border:0.5px solid rgba(245,240,232,0.07); border-radius:5px;
+  background:rgba(245,240,232,0.02); text-align:center;
+}
+.complete-stat-val {
+  font-family:'Cinzel',serif; font-size:18px; font-weight:700; color:rgba(245,240,232,0.78);
+}
+.complete-stat-lbl {
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.14em;
+  color:rgba(245,240,232,0.25); margin-top:3px; text-transform:uppercase;
+}
+.complete-xp {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:5px;
+  border:0.5px solid rgba(122,184,154,0.2); background:rgba(122,184,154,0.04);
+}
+.complete-xp-badge {
+  font-family:'Cinzel',serif; font-size:15px; font-weight:700;
+  color:rgba(122,184,154,0.85); letter-spacing:0.05em;
+  animation:xpFloat 0.6s ease-out 0.4s both;
+}
+@keyframes xpFloat {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.complete-xp-label {
+  font-family:'Cinzel',serif; font-size:7.5px; letter-spacing:0.14em;
+  color:rgba(245,240,232,0.28); text-transform:uppercase;
+}
+.complete-return {
+  align-self:flex-start;
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:0.2em;
+  padding:8px 22px; border-radius:4px;
+  border:0.5px solid rgba(200,176,106,0.3); background:rgba(200,176,106,0.04);
+  color:rgba(200,176,106,0.72); cursor:pointer; transition:all 0.3s;
+}
+.complete-return:hover {
+  border-color:rgba(200,176,106,0.55); background:rgba(200,176,106,0.09);
+  color:rgba(200,176,106,0.95);
+}
+
+/* ══════════════════════════════════════════
+   SCREEN 7 — TECHNIQUES LIBRARY
+══════════════════════════════════════════ */
+.hero-library { background-image:url('../assets/backgrounds/bg-session-shell.webp'); }
+
+.library-layout {
+  display:flex; flex-direction:column;
+  height:calc(100% - 32px); position:relative; z-index:5;
+}
+.library-header {
+  display:flex; align-items:center; gap:0;
+  border-bottom:0.5px solid rgba(245,240,232,0.06);
+  flex-shrink:0;
+}
+.library-tab {
+  flex:1; padding:9px 4px; text-align:center; cursor:pointer;
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:0.15em;
+  color:rgba(245,240,232,0.25); border-bottom:1.5px solid transparent;
+  transition:all 0.25s; text-transform:uppercase; background:none; border-top:none; border-left:none; border-right:none;
+}
+.library-tab:hover { color:rgba(245,240,232,0.45); }
+.library-tab.active {
+  color:var(--tab-color, rgba(200,176,106,0.85));
+  border-bottom-color:var(--tab-color, rgba(200,176,106,0.5));
+}
+.library-content {
+  flex:1; display:flex; align-items:stretch; overflow:hidden;
+}
+.library-list {
+  flex:1; display:flex; flex-direction:column; gap:0; overflow-y:auto; padding:8px 0;
+}
+.library-list::-webkit-scrollbar { width:2px; }
+.library-list::-webkit-scrollbar-track { background:transparent; }
+.library-list::-webkit-scrollbar-thumb { background:rgba(245,240,232,0.1); }
+.library-item {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 20px; cursor:pointer;
+  border-bottom:0.5px solid rgba(245,240,232,0.04);
+  transition:all 0.2s;
+}
+.library-item:hover { background:rgba(245,240,232,0.03); }
+.library-item-kanji {
+  font-family:serif; font-size:18px; color:var(--lib-color,rgba(245,240,232,0.4));
+  width:28px; text-align:center; flex-shrink:0;
+}
+.library-item-info { flex:1; min-width:0; }
+.library-item-name {
+  font-family:'Cinzel',serif; font-size:9px; letter-spacing:0.1em;
+  color:rgba(245,240,232,0.72); margin-bottom:2px;
+}
+.library-item-real {
+  font-family:'Crimson Pro',serif; font-size:8.5px; font-style:italic;
+  color:rgba(245,240,232,0.28);
+}
+.library-item-meta {
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:0.1em;
+  color:rgba(245,240,232,0.2); flex-shrink:0; text-align:right;
+}
+
+/* ══════════════════════════════════════════
+   SCREEN 8 — LIBRARY RUNNER
+══════════════════════════════════════════ */
+.hero-lib-runner { background-size:cover; background-position:center; }
+
+/* ══════════════════════════════════════════
+   iPAD OVERRIDES
+══════════════════════════════════════════ */
+.frame.ipad .entry-name            { font-size:28px; }
+.frame.ipad .entry-btn             { font-size:12px; padding:14px 48px; }
+
+.frame.ipad .col-left              { flex:0 0 240px; padding:40px 20px 40px 30px; }
+.frame.ipad .id-name               { font-size:20px; }
+.frame.ipad .id-aura               { font-size:13px; }
+.frame.ipad .col-right             { flex:0 0 280px; gap:12px; }
+.frame.ipad .nav-pill              { width:240px; padding:14px 17px; }
+.frame.ipad .pill-title            { font-size:13px; }
+.frame.ipad .pill-sub              { font-size:11px; }
+.frame.ipad .char-wrap             { width:160px; height:380px; }
+
+.frame.ipad .mdh-title             { font-size:28px; }
+.frame.ipad .mdh-door              { min-width:170px; padding:22px 26px; }
+.frame.ipad .mdh-door-kanji        { font-size:32px; }
+.frame.ipad .mdh-door-name         { font-size:12px; }
+.frame.ipad .mdh-door-desc         { font-size:12px; max-width:150px; }
+
+.frame.ipad .mushin-title          { font-size:32px; }
+.frame.ipad .mushin-mandala-svg    { width:78px; height:78px; }
+.frame.ipad .mushin-btn-primary    { font-size:12px; padding:12px 40px; }
+
+.frame.ipad .shiho-centre-kanji    { font-size:44px; }
+.frame.ipad .shiho-cue             { font-size:12px; margin-top:20px; max-width:520px; }
+.frame.ipad .checkin-card          { min-width:130px; padding:15px 17px; }
+.frame.ipad .checkin-card-icon     { width:54px; height:54px; font-size:22px; }
+.frame.ipad .checkin-card-name     { font-size:11px; }
+
+.frame.ipad .runner-left           { width:260px; padding:20px 22px 20px 30px; }
+.frame.ipad .runner-tech-name      { font-size:20px; }
+.frame.ipad .runner-cue            { font-size:13px; }
+.frame.ipad .runner-countdown      { font-size:42px; }
+.frame.ipad .runner-right          { width:150px; }
+
+.frame.ipad .complete-left         { width:350px; padding:34px 38px; }
+.frame.ipad .complete-word         { font-size:44px; }
+.frame.ipad .complete-quote        { font-size:14px; }
+.frame.ipad .complete-stat-val     { font-size:26px; }
+
+.frame.ipad .library-tab           { font-size:12px; padding:13px 6px; }
+.frame.ipad .library-item          { padding:14px 28px; gap:14px; }
+.frame.ipad .library-item-kanji    { font-size:24px; }
+.frame.ipad .library-item-name     { font-size:13px; }
+.frame.ipad .library-item-real     { font-size:12px; }
+
+.frame.ipad .nav-bar               { height:48px; padding:0 28px; }
+.frame.ipad .nav-back,
+.frame.ipad .nav-title,
+.frame.ipad .nav-right             { font-size:12px; }
+.frame.ipad .nav-back,
+.frame.ipad .nav-right             { width:120px; }
+
+</style>
+</head>
+<body>
+
+<div class="device-toggle">
+  <button id="btn-iphone" class="active" onclick="setDevice('iphone')">iPhone</button>
+  <button id="btn-ipad"              onclick="setDevice('ipad')">iPad</button>
+</div>
+
+<div class="frame iphone" id="frame">
+
+  <!-- Shared particle canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+
+  <!-- ══════════════════════════════
+       SCREEN 1 · ENTRY
+  ══════════════════════════════ -->
+  <div class="screen active" id="screen-entry">
+    <div class="entry-env-layer entry-sky"></div>
+    <div class="entry-env-layer entry-village"></div>
+    <div class="entry-env-layer entry-dojo"></div>
+    <div class="entry-env-layer entry-floor"></div>
+    <div class="entry-env-layer entry-lantern"></div>
+    <div class="entry-fog"></div>
+    <div class="entry-texture"></div>
+    <div class="entry-ui">
+      <div class="entry-logo-kanji">練道</div>
+      <div class="entry-school">Ninja School</div>
+      <div class="entry-greeting">Welcome back,</div>
+      <div class="entry-name">Kaito Tanaka</div>
+      <button class="entry-btn" onclick="setScreen('screen-profile')">Enter the Dojo →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 2 · STUDENT PROFILE
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-profile">
+    <div class="hero hero-profile"></div>
+    <div class="env-vignette" style="background:radial-gradient(ellipse at 50% 80%, transparent 20%, rgba(3,2,5,0.6) 100%)"></div>
+    <!-- Aura canvas — full frame, z-index:0 sits behind layout -->
+    <canvas id="aura-canvas" class="aura-canvas"></canvas>
+    <div class="profile-layout">
+      <!-- LEFT -->
+      <div class="col-left">
+        <div class="id-name">Kaito Tanaka</div>
+        <div class="id-aura">Stage 2 · Hikari</div>
+        <div class="id-belt-row">
+          <div class="belt-bar">
+            <div class="belt-bar-fill" style="background:#2E7D22;"></div>
+            <div class="belt-bar-stripe" style="background:#888888;"></div>
+          </div>
+          <div class="id-belt-name">Shin Mori</div>
+        </div>
+        <div class="id-belt-tier">Chokyu — Intermediate</div>
+        <div class="id-stats">
+          <div class="id-stat"><div class="val">80%</div><div class="lbl">attend.</div></div>
+          <div class="id-stat"><div class="val">3wk</div><div class="lbl">grading</div></div>
+        </div>
+      </div>
+      <!-- CENTER: avatar + aura -->
+      <div class="col-center">
+        <div class="char-wrap">
+          <div class="surge-label" id="surge-label"></div>
+          <svg id="avatar-male" class="avatar-svg" viewBox="0 0 130 285" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="giShadeLR" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="rgba(0,0,0,0.20)"/>
+                <stop offset="40%"  stop-color="rgba(0,0,0,0)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,0.10)"/>
+              </linearGradient>
+            </defs>
+            <ellipse cx="63" cy="283" rx="44" ry="4" fill="rgba(0,0,0,0.30)"/>
+            <path d="M32,264 L28,277 Q27,281 31,281 L45,282 Q48,282 48,279 L46,265 Z" fill="rgba(22,26,42,0.90)" stroke="rgba(245,240,232,0.18)" stroke-width="0.6"/>
+            <path d="M29,277 Q28,281 32,281 L45,282 Q47,282 47,279 L45,277 Q38,279 29,277 Z" fill="rgba(10,12,22,0.82)"/>
+            <path d="M35,256 Q33,260 32,264 L46,265 Q46,261 44,256 Z" fill="rgba(18,22,36,0.72)" stroke="rgba(245,240,232,0.10)" stroke-width="0.4"/>
+            <path d="M80,268 L77,279 Q76,283 80,283 L95,283 Q98,283 97,280 L93,270 Z" fill="rgba(24,28,46,0.94)" stroke="rgba(245,240,232,0.22)" stroke-width="0.7"/>
+            <path d="M78,279 Q77,283 81,283 L95,283 Q97,283 96,280 L94,279 Q87,281 78,279 Z" fill="rgba(10,12,22,0.84)"/>
+            <path d="M81,256 Q80,262 80,268 L93,270 Q94,264 93,257 Z" fill="rgba(18,22,36,0.74)" stroke="rgba(245,240,232,0.12)" stroke-width="0.4"/>
+            <path d="M43,200 Q39,224 37,248 L32,264 L46,265 L49,246 Q51,222 50,200 Z" fill="rgba(16,20,34,0.85)" stroke="rgba(245,240,232,0.17)" stroke-width="0.6"/>
+            <path d="M40,224 Q44,220 48,223" stroke="rgba(245,240,232,0.12)" stroke-width="1.0" fill="none" stroke-linecap="round"/>
+            <path d="M76,200 Q80,226 82,250 L80,268 L93,270 L92,246 Q90,222 86,200 Z" fill="rgba(18,22,38,0.90)" stroke="rgba(245,240,232,0.20)" stroke-width="0.7"/>
+            <path d="M82,226 Q86,221 91,225" stroke="rgba(245,240,232,0.14)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+            <path d="M34,118 Q24,142 22,164 Q20,178 23,192 L31,192 Q28,177 30,164 Q32,144 39,122 Z" fill="rgba(16,20,34,0.87)" stroke="rgba(245,240,232,0.17)" stroke-width="0.5"/>
+            <path d="M22,184 Q22,192 23,192 L31,192 Q32,186 31,184 Z" fill="rgba(8,10,20,0.82)" stroke="rgba(245,240,232,0.17)" stroke-width="0.5"/>
+            <path d="M22,192 Q19,198 20,205 Q22,210 27,209 Q31,207 31,203 L31,192 Z" fill="rgba(208,172,135,0.82)" stroke="rgba(152,118,84,0.42)" stroke-width="0.6"/>
+            <path d="M37,113 Q31,128 30,146 L28,204 Q28,215 43,215 L85,215 Q98,215 97,204 L94,146 Q92,128 87,113 Z" fill="rgba(16,20,34,0.93)" stroke="rgba(245,240,232,0.24)" stroke-width="0.7"/>
+            <path d="M37,113 Q31,128 30,146 L30,172 Q38,172 44,167 L44,113 Z" fill="rgba(0,0,0,0.16)"/>
+            <path d="M45,130 Q62,127 80,130" stroke="rgba(245,240,232,0.10)" stroke-width="0.6" fill="none" stroke-linecap="round"/>
+            <path d="M44,148 Q62,145 81,148" stroke="rgba(245,240,232,0.07)" stroke-width="0.5" fill="none" stroke-linecap="round"/>
+            <path d="M62,113 Q62,140 62,172" stroke="rgba(0,0,0,0.20)" stroke-width="0.8" fill="none"/>
+            <rect x="30" y="184" width="65" height="3" rx="1" fill="rgba(0,0,0,0.22)"/>
+            <rect id="char-belt" x="30" y="171" width="65" height="13" rx="2" fill="#2E7D22" opacity="0.92"/>
+            <rect x="30" y="171" width="65" height="3.5" rx="2" fill="rgba(255,255,255,0.09)"/>
+            <rect id="char-belt-stripe" x="30" y="175.5" width="65" height="4" rx="1" fill="#888888" opacity="0.80"/>
+            <path d="M52,169 Q49,172 49,177 Q49,183 54,184 L62,184 Q62,179 62,172 Z" fill="rgba(6,9,18,0.68)"/>
+            <path d="M72,169 Q75,172 75,177 Q75,183 70,184 L62,184 Q62,179 62,172 Z" fill="rgba(6,9,18,0.58)"/>
+            <rect x="54" y="169" width="16" height="16" rx="2.2" fill="rgba(9,12,24,0.88)" stroke="rgba(245,240,232,0.24)" stroke-width="0.8"/>
+            <path d="M54,176 L70,176" stroke="rgba(245,240,232,0.14)" stroke-width="0.6" fill="none"/>
+            <path id="char-belt-tail-l" d="M55,185 Q52,197 50,210 Q49,215 51,216" stroke="rgba(245,240,232,0.22)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path id="char-belt-tail-r" d="M69,185 Q72,199 74,212 Q75,217 73,217" stroke="rgba(245,240,232,0.22)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M52,113 L44,171 L62,178" fill="none" stroke="rgba(245,240,232,0.27)" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M76,113 L82,171 L62,178" fill="none" stroke="rgba(245,240,232,0.27)" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M52,113 L62,143 L76,113 Z" fill="rgba(208,172,135,0.18)"/>
+            <path d="M91,118 Q100,140 102,164 Q104,180 101,194 L93,194 Q96,178 94,164 Q92,140 86,120 Z" fill="rgba(16,20,34,0.87)" stroke="rgba(245,240,232,0.20)" stroke-width="0.5"/>
+            <path d="M100,184 Q101,194 101,194 L93,194 Q93,186 94,184 Z" fill="rgba(8,10,20,0.82)" stroke="rgba(245,240,232,0.17)" stroke-width="0.5"/>
+            <path d="M101,194 Q104,200 103,207 Q101,212 96,211 Q93,210 93,206 L93,194 Z" fill="rgba(208,172,135,0.82)" stroke="rgba(152,118,84,0.42)" stroke-width="0.6"/>
+            <path d="M37,113 Q28,109 24,115 Q21,121 30,123" fill="rgba(16,20,34,0.90)" stroke="rgba(245,240,232,0.27)" stroke-width="0.6"/>
+            <path d="M87,113 Q96,109 100,115 Q103,121 94,123" fill="rgba(16,20,34,0.90)" stroke="rgba(245,240,232,0.27)" stroke-width="0.6"/>
+            <path d="M52,92 Q51,107 53,113 L73,113 Q75,107 74,92 Z" fill="rgba(212,176,138,0.62)" stroke="rgba(158,124,90,0.24)" stroke-width="0.5"/>
+            <ellipse cx="34" cy="64" rx="3.5" ry="4.5" fill="rgba(200,162,124,0.52)" stroke="rgba(156,120,84,0.26)" stroke-width="0.4"/>
+            <ellipse cx="90" cy="64" rx="3.5" ry="4.5" fill="rgba(200,162,124,0.52)" stroke="rgba(156,120,84,0.26)" stroke-width="0.4"/>
+            <path d="M34,60 Q34,36 62,28 Q90,36 90,60 Q90,82 62,97 Q36,83 34,60 Z" fill="rgba(218,182,142,0.95)" stroke="rgba(155,120,84,0.32)" stroke-width="0.6"/>
+            <path d="M48,87 Q62,97 76,87 Q80,93 62,98 Q46,93 48,87 Z" fill="rgba(0,0,0,0.11)"/>
+            <path d="M50,36 Q64,30 78,38 Q80,44 76,42 Q64,36 50,42 Z" fill="rgba(245,240,232,0.10)"/>
+            <path d="M32,58 Q30,36 44,22 Q54,12 62,10 Q70,12 80,22 Q94,36 92,58 Q88,40 62,36 Q36,40 32,58 Z" fill="rgba(18,10,4,0.94)" stroke="rgba(46,26,8,0.52)" stroke-width="0.5"/>
+            <polygon points="34,56  15,30  40,44"  fill="rgba(22,13,5,0.95)"/>
+            <polygon points="40,42  26,12  52,30"  fill="rgba(22,13,5,0.95)"/>
+            <polygon points="50,30  42,2   62,22"  fill="rgba(22,13,5,0.95)"/>
+            <polygon points="58,26  62,-6  73,22"  fill="rgba(22,13,5,0.95)"/>
+            <polygon points="70,25  83,2   80,28"  fill="rgba(22,13,5,0.95)"/>
+            <polygon points="80,34  97,10  86,40"  fill="rgba(22,13,5,0.95)"/>
+            <polygon points="88,48  110,30 92,56"  fill="rgba(22,13,5,0.95)"/>
+            <path d="M52,22 Q62,16 72,22" stroke="rgba(82,56,28,0.55)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+            <ellipse cx="49" cy="60" rx="7.5" ry="8.2" fill="rgba(238,232,224,0.97)" stroke="rgba(16,8,4,0.90)" stroke-width="0.7"/>
+            <ellipse cx="49" cy="61" rx="5.8" ry="6.6" fill="rgba(78,48,16,0.97)"/>
+            <ellipse cx="49" cy="61" rx="3.2" ry="3.8" fill="rgba(5,3,1,0.99)"/>
+            <ellipse cx="46.5" cy="57.5" rx="2.3" ry="2.9" fill="rgba(245,240,232,0.95)"/>
+            <path d="M41,54 Q49,50 57,54" stroke="rgba(10,5,2,0.98)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+            <ellipse cx="75" cy="60" rx="7.5" ry="8.2" fill="rgba(238,232,224,0.97)" stroke="rgba(16,8,4,0.90)" stroke-width="0.7"/>
+            <ellipse cx="75" cy="61" rx="5.8" ry="6.6" fill="rgba(78,48,16,0.97)"/>
+            <ellipse cx="75" cy="61" rx="3.2" ry="3.8" fill="rgba(5,3,1,0.99)"/>
+            <ellipse cx="72.5" cy="57.5" rx="2.3" ry="2.9" fill="rgba(245,240,232,0.95)"/>
+            <path d="M67,54 Q75,50 83,54" stroke="rgba(10,5,2,0.98)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+            <path d="M41,51 Q49,47 57,50" stroke="rgba(16,8,2,0.97)" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+            <path d="M67,50 Q75,47 83,51" stroke="rgba(16,8,2,0.97)" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+            <path d="M58,73 Q62,78 66,73" stroke="rgba(160,122,86,0.34)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+            <path d="M55,83 Q62,88 70,83" stroke="rgba(160,94,72,0.56)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+            <ellipse cx="40" cy="74" rx="6" ry="3.5" fill="rgba(212,132,110,0.12)"/>
+            <rect x="39" y="76" width="9" height="5" rx="1" fill="rgba(240,226,206,0.86)" stroke="rgba(196,170,142,0.50)" stroke-width="0.4"/>
+          </svg>
+        </div>
+      </div>
+      <!-- RIGHT: nav -->
+      <div class="col-right">
+        <div class="nav-pill" onclick="setScreen('screen-nendo')">
+          <div class="pill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="rgba(200,176,106,0.7)" stroke-width="1.4" stroke-linecap="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <div class="pill-text">
+            <div class="pill-title">Nendō</div>
+            <div class="pill-sub">Enter the curriculum</div>
+          </div>
+        </div>
+        <div class="nav-pill locked">
+          <div class="pill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.4)" stroke-width="1.4" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/>
+            </svg>
+          </div>
+          <div class="pill-text">
+            <div class="pill-title">Training Log</div>
+            <div class="pill-sub">Coming soon</div>
+          </div>
+          <div class="pill-lock">🔒</div>
+        </div>
+        <div class="nav-pill locked">
+          <div class="pill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.4)" stroke-width="1.4" stroke-linecap="round">
+              <circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 8 0v2"/>
+            </svg>
+          </div>
+          <div class="pill-text">
+            <div class="pill-title">Profile</div>
+            <div class="pill-sub">Coming soon</div>
+          </div>
+          <div class="pill-lock">🔒</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-bar">
+      <button class="nav-back" onclick="setScreen('screen-entry')">← Exit</button>
+      <div class="nav-title" style="color:rgba(200,176,106,0.3)">Student Profile</div>
+      <div class="nav-right"></div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════
+       SCREEN 3 · NENDŌ MDH
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-nendo">
+    <div class="hero hero-nendo"></div>
+    <div class="env-vignette"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+      <div class="mdh-layout">
+        <div class="mdh-tag">Nendō · 練道</div>
+        <div class="mdh-title">Choose Your Path</div>
+        <div class="mdh-doors">
+          <!-- Metsuke — locked -->
+          <div class="mdh-door locked">
+            <div class="mdh-door-glow"></div>
+            <div class="mdh-door-kanji">目付</div>
+            <div class="mdh-door-name">Metsuke</div>
+            <div class="mdh-door-desc">Focus &amp; awareness training</div>
+            <div class="mdh-door-lock">Coming Soon</div>
+          </div>
+          <!-- Mushin — active -->
+          <div class="mdh-door active" onclick="setScreen('screen-mushin-home')">
+            <div class="mdh-door-glow"></div>
+            <div class="mdh-door-kanji">無心</div>
+            <div class="mdh-door-name">Mushin</div>
+            <div class="mdh-door-desc">Breathing &amp; mindfulness</div>
+          </div>
+          <!-- Tachi — locked -->
+          <div class="mdh-door locked">
+            <div class="mdh-door-glow"></div>
+            <div class="mdh-door-kanji">太刀</div>
+            <div class="mdh-door-name">Tachi</div>
+            <div class="mdh-door-desc">Technique &amp; kata</div>
+            <div class="mdh-door-lock">Coming Soon</div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button class="nav-back" onclick="setScreen('screen-profile')">← Profile</button>
+        <div class="nav-title" style="color:rgba(200,176,106,0.32)">Nendō</div>
+        <div class="nav-right"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 4 · MUSHIN HOME
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-mushin-home">
+    <div class="hero hero-mushin"></div>
+    <div class="env-vignette"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+      <div class="mushin-kanji-bg">無心</div>
+      <div class="mushin-home-layout">
+        <div class="mushin-tag">Mushin · 無心</div>
+        <div class="mushin-title">The Still Mind</div>
+        <div class="mushin-subtitle">Breathe. Focus. Enter presence.</div>
+        <svg class="mushin-mandala-svg" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="46" stroke="rgba(200,176,106,0.5)" stroke-width="0.5"/>
+          <circle cx="50" cy="50" r="30" stroke="rgba(200,176,106,0.3)" stroke-width="0.4"/>
+          <circle cx="50" cy="50" r="13" stroke="rgba(200,176,106,0.4)" stroke-width="0.4"/>
+          <line x1="50" y1="4"  x2="50" y2="96" stroke="rgba(200,176,106,0.22)" stroke-width="0.4"/>
+          <line x1="4"  y1="50" x2="96" y2="50" stroke="rgba(200,176,106,0.22)" stroke-width="0.4"/>
+          <line x1="15" y1="15" x2="85" y2="85" stroke="rgba(200,176,106,0.12)" stroke-width="0.3"/>
+          <line x1="85" y1="15" x2="15" y2="85" stroke="rgba(200,176,106,0.12)" stroke-width="0.3"/>
+          <circle cx="50" cy="50" r="2.5" fill="rgba(200,176,106,0.55)"/>
+        </svg>
+        <div class="mushin-sep"></div>
+        <div class="mushin-btns">
+          <button class="mushin-btn-primary" onclick="enterShihoScreen()">▶ Start Session</button>
+          <button class="mushin-btn-secondary" onclick="setScreen('screen-library')">Breathing Techniques →</button>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button class="nav-back" onclick="setScreen('screen-nendo')">← Nendō</button>
+        <div class="nav-title" style="color:rgba(200,176,106,0.32)">Mushin</div>
+        <div class="nav-right"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 5 · SHIHO / CHECK-IN / SESSION
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-shiho">
+    <div class="hero hero-shiho"></div>
+    <div class="env-vignette"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+
+      <!-- PHASE A: RITUAL -->
+      <div class="shiho-ritual-ui" id="shiho-ritual-ui">
+        <div class="shiho-top-label">
+          <div class="shiho-kanji-sm">四方</div>
+          <div class="shiho-word-sm">Shiho</div>
+        </div>
+        <div class="shiho-mandala-wrap">
+          <svg class="shiho-mandala-svg" width="158" height="158" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="92" fill="none" stroke="rgba(200,176,106,0.07)" stroke-width="0.5"/>
+            <line x1="100" y1="100" x2="100" y2="12"  stroke="rgba(200,176,106,0.14)" stroke-width="0.6"/>
+            <line x1="100" y1="100" x2="188" y2="100" stroke="rgba(200,176,106,0.14)" stroke-width="0.6"/>
+            <line x1="100" y1="100" x2="100" y2="188" stroke="rgba(200,176,106,0.14)" stroke-width="0.6"/>
+            <line x1="100" y1="100" x2="12"  y2="100" stroke="rgba(200,176,106,0.14)" stroke-width="0.6"/>
+            <line x1="100" y1="100" x2="165" y2="35"  stroke="rgba(200,176,106,0.07)" stroke-width="0.4"/>
+            <line x1="100" y1="100" x2="165" y2="165" stroke="rgba(200,176,106,0.07)" stroke-width="0.4"/>
+            <line x1="100" y1="100" x2="35"  y2="165" stroke="rgba(200,176,106,0.07)" stroke-width="0.4"/>
+            <line x1="100" y1="100" x2="35"  y2="35"  stroke="rgba(200,176,106,0.07)" stroke-width="0.4"/>
+            <line x1="100" y1="8"   x2="100" y2="18"  stroke="rgba(200,176,106,0.75)" stroke-width="1"/>
+            <line x1="192" y1="100" x2="182" y2="100" stroke="rgba(200,176,106,0.75)" stroke-width="1"/>
+            <line x1="100" y1="192" x2="100" y2="182" stroke="rgba(200,176,106,0.75)" stroke-width="1"/>
+            <line x1="8"   y1="100" x2="18"  y2="100" stroke="rgba(200,176,106,0.75)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="52" fill="none" stroke="rgba(200,176,106,0.1)" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="4"  fill="rgba(200,176,106,0.35)"/>
+            <circle cx="100" cy="100" r="90" fill="none"
+              stroke="rgba(200,176,106,0.45)" stroke-width="1.5"
+              id="shiho-ring" class="shiho-ring-progress" stroke-linecap="round"/>
+          </svg>
+          <div class="shiho-centre-kanji" id="shiho-kanji">無</div>
+        </div>
+        <div class="shiho-cue"    id="shiho-cue">Settle into stillness.</div>
+        <div class="shiho-mantra" id="shiho-mantra">The dojo is always here.</div>
+        <button class="shiho-begin-btn" id="shiho-begin-btn" onclick="startShiho()">Begin Shiho</button>
+      </div>
+
+      <!-- PHASE B: CHECK-IN -->
+      <div class="shiho-checkin-ui" id="shiho-checkin-ui">
+        <div class="checkin-heading">How are you arriving today?</div>
+        <div class="checkin-sub">Choose your state for this session.</div>
+        <div class="checkin-cards" id="checkin-cards-session"></div>
+        <div class="checkin-suggestion" id="checkin-suggestion"></div>
+        <button class="checkin-continue" id="checkin-continue-session" onclick="enterSessionPhase()">Begin Session →</button>
+      </div>
+
+      <!-- PHASE C: SESSION -->
+      <div class="shiho-session-ui" id="shiho-session-ui">
+        <div class="runner-layout">
+          <div class="runner-left">
+            <div class="runner-micro-label">Now Breathing</div>
+            <div class="runner-tech-name" id="s-name">—</div>
+            <div class="runner-tech-real" id="s-real">—</div>
+            <div class="runner-elem-badge" id="s-badge">—</div>
+            <div class="runner-cue" id="s-cue">—</div>
+            <div class="runner-word" id="s-word">—</div>
+          </div>
+          <div class="runner-centre">
+            <div class="runner-phase-label" id="s-phase">—</div>
+            <canvas id="breath-canvas" width="180" height="180" style="width:180px;height:180px"></canvas>
+            <div class="runner-countdown" id="s-countdown">—</div>
+            <div class="runner-phase-sub"  id="s-phase-sub">—</div>
+            <button class="runner-end" onclick="endSessionToComplete()">✕ End</button>
+          </div>
+          <div class="runner-right">
+            <div class="runner-pips-label">Progress</div>
+            <div class="runner-pips" id="s-pips"></div>
+            <div class="runner-overall-lbl">Overall</div>
+            <div class="runner-progress-bar">
+              <div class="runner-progress-fill" id="s-bar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shared nav bar — updated by JS -->
+      <div class="nav-bar" id="shiho-nav">
+        <button class="nav-back" id="shiho-nav-back" onclick="shihoNavBack()">← Mushin</button>
+        <div class="nav-title" id="shiho-nav-title" style="color:rgba(200,176,106,0.32)">四方 Shiho</div>
+        <div class="nav-right" id="shiho-nav-right"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 6 · SESSION COMPLETE
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-complete">
+    <div class="hero hero-complete"></div>
+    <div class="env-vignette"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+      <div class="complete-layout">
+        <div class="complete-left">
+          <div class="complete-tag">Session Complete</div>
+          <div class="complete-word" id="c-word">Present</div>
+          <div class="complete-quote" id="c-quote">The breath is always there. You found it.</div>
+        </div>
+        <div class="complete-right">
+          <div class="complete-stats">
+            <div class="complete-stat">
+              <div class="complete-stat-val" id="c-duration">—</div>
+              <div class="complete-stat-lbl">Duration</div>
+            </div>
+            <div class="complete-stat">
+              <div class="complete-stat-val" id="c-cycles">—</div>
+              <div class="complete-stat-lbl">Cycles</div>
+            </div>
+            <div class="complete-stat">
+              <div class="complete-stat-val" id="c-elem">—</div>
+              <div class="complete-stat-lbl">Element</div>
+            </div>
+          </div>
+          <div class="complete-xp">
+            <div class="complete-xp-badge" id="c-xp">+12 XP</div>
+            <div class="complete-xp-label">Aura energy gained</div>
+          </div>
+          <button class="complete-return" onclick="setScreen('screen-mushin-home')">Return to Mushin →</button>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button class="nav-back" onclick="setScreen('screen-mushin-home')">← Mushin</button>
+        <div class="nav-title" style="color:rgba(122,184,154,0.35)">Complete</div>
+        <div class="nav-right"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 7 · TECHNIQUES LIBRARY
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-library">
+    <div class="hero hero-library"></div>
+    <div class="env-vignette"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+      <div class="library-layout">
+        <div class="library-header">
+          <button class="library-tab active" id="lib-tab-kaze" data-elem="kaze" style="--tab-color:rgba(141,184,212,0.85)" onclick="selectLibTab('kaze')">Kaze 風</button>
+          <button class="library-tab"        id="lib-tab-hi"   data-elem="hi"   style="--tab-color:rgba(212,130,106,0.85)" onclick="selectLibTab('hi')">Hi 火</button>
+          <button class="library-tab"        id="lib-tab-mizu" data-elem="mizu" style="--tab-color:rgba(106,156,200,0.85)" onclick="selectLibTab('mizu')">Mizu 水</button>
+          <button class="library-tab"        id="lib-tab-chi"  data-elem="chi"  style="--tab-color:rgba(200,164,106,0.85)" onclick="selectLibTab('chi')">Chi 地</button>
+        </div>
+        <div class="library-content">
+          <div class="library-list" id="library-list"></div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button class="nav-back" onclick="setScreen('screen-mushin-home')">← Mushin</button>
+        <div class="nav-title" id="lib-nav-title" style="color:rgba(141,184,212,0.4)">Kaze · Air</div>
+        <div class="nav-right"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 8 · LIBRARY RUNNER
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-lib-runner">
+    <div class="hero hero-lib-runner" id="lib-runner-hero"></div>
+    <div class="env-vignette" style="background:radial-gradient(ellipse at center, transparent 12%, rgba(2,1,3,0.62) 100%)"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+      <div class="runner-layout" style="height:calc(100% - 32px)">
+        <div class="runner-left">
+          <div class="runner-micro-label">Now Breathing</div>
+          <div class="runner-tech-name" id="lr-name">—</div>
+          <div class="runner-tech-real" id="lr-real">—</div>
+          <div class="runner-elem-badge" id="lr-badge">—</div>
+          <div class="runner-cue" id="lr-cue">—</div>
+          <div class="runner-word" id="lr-word">—</div>
+        </div>
+        <div class="runner-centre">
+          <div class="runner-phase-label" id="lr-phase">—</div>
+          <canvas id="lib-breath-canvas" width="180" height="180" style="width:180px;height:180px"></canvas>
+          <div class="runner-countdown" id="lr-countdown">—</div>
+          <div class="runner-phase-sub"  id="lr-phase-sub">—</div>
+          <button class="runner-end" onclick="endLibSession()">✕ End</button>
+        </div>
+        <div class="runner-right">
+          <div class="runner-pips-label">Progress</div>
+          <div class="runner-pips" id="lr-pips"></div>
+          <div class="runner-overall-lbl">Overall</div>
+          <div class="runner-progress-bar">
+            <div class="runner-progress-fill" id="lr-bar"></div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button class="nav-back" onclick="endLibSession()">← Back</button>
+        <div class="nav-title" id="lr-nav-title" style="color:rgba(245,240,232,0.28)">Technique</div>
+        <div class="nav-right" id="lr-clock">—:——</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /frame -->
+
+<script>
+'use strict';
+
+/* ══════════════════════════════════════════════════════
+   DATA
+══════════════════════════════════════════════════════ */
+const ELEMENTS = {
+  kaze: { id:'kaze', name:'Kaze', kanji:'風', element:'Air',   color:'#8DB8D4', rgb:'141,184,212', bg:'../assets/backgrounds/bg-runner-kaze.webp', techniques:['cloud','raven','lantern'] },
+  hi:   { id:'hi',   name:'Hi',   kanji:'火', element:'Fire',  color:'#D4826A', rgb:'212,130,106', bg:'../assets/backgrounds/bg-runner-hi.webp',   techniques:['phoenix','dragon','bellows'] },
+  mizu: { id:'mizu', name:'Mizu', kanji:'水', element:'Water', color:'#6A9CC8', rgb:'106,156,200', bg:'../assets/backgrounds/bg-runner-mizu.webp', techniques:['wave','tide'] },
+  chi:  { id:'chi',  name:'Chi',  kanji:'地', element:'Earth', color:'#C8A46A', rgb:'200,164,106', bg:'../assets/backgrounds/bg-runner-chi.webp',  techniques:['warrior','stone','mountain'] },
+};
+const TECHNIQUES = {
+  cloud:    { id:'cloud',    name:'Cloud Breathing',  real:'Diaphragmatic',    elem:'kaze', inhale:4,hold:0,exhale:4,endHold:0, cycles:7,  word:'Settled',  cue:'"Fill the belly like a cloud getting bigger."' },
+  raven:    { id:'raven',    name:"Raven's Breath",   real:'Lengthened Exhale',elem:'kaze', inhale:4,hold:0,exhale:6,endHold:0, cycles:6,  word:'Calm',     cue:'"Let the breath glide out for longer."' },
+  lantern:  { id:'lantern',  name:'Lantern Breathing',real:'4-7-8 Breath',     elem:'kaze', inhale:4,hold:5,exhale:6,endHold:0, cycles:5,  word:'Still',    cue:'"Light the lantern, keep it glowing, let it fade."' },
+  phoenix:  { id:'phoenix',  name:'Phoenix Breath',   real:'Kapalabhati',      elem:'hi',   inhale:2,hold:0,exhale:2,endHold:0, cycles:10, word:'Ignited',  cue:'"Short, sharp bursts. The inhale follows naturally."' },
+  dragon:   { id:'dragon',   name:'Dragon Breath',    real:'Bhastrika',        elem:'hi',   inhale:2,hold:0,exhale:2,endHold:0, cycles:10, word:'Fierce',   cue:'"Strong in, strong out. Like a dragon."' },
+  bellows:  { id:'bellows',  name:'Bellows Breath',   real:'Wim Hof adapted',  elem:'hi',   inhale:2,hold:0,exhale:2,endHold:0, cycles:10, word:'Charged',  cue:'"Fill up, release. Build energy."' },
+  wave:     { id:'wave',     name:'Wave Breathing',   real:'Intercostal',      elem:'mizu', inhale:4,hold:0,exhale:5,endHold:0, cycles:7,  word:'Open',     cue:'"Send the breath into the sides and back."' },
+  tide:     { id:'tide',     name:'Tide Breathing',   real:'Alternate Nostril',elem:'mizu', inhale:4,hold:0,exhale:4,endHold:0, cycles:7,  word:'Balanced', cue:'"The breath flows side to side like the tide."' },
+  warrior:  { id:'warrior',  name:"Warrior's Breath", real:'Bhramari',         elem:'chi',  inhale:4,hold:0,exhale:6,endHold:0, cycles:6,  word:'Rooted',   cue:'"Hum steadily as you breathe out."' },
+  stone:    { id:'stone',    name:'Stone Breathing',  real:'Ujjayi',           elem:'chi',  inhale:4,hold:0,exhale:5,endHold:0, cycles:7,  word:'Solid',    cue:'"Breathe like stone — strong, slow, steady."' },
+  mountain: { id:'mountain', name:'Mountain Breathing',real:'Resonance',       elem:'chi',  inhale:3,hold:0,exhale:3,endHold:0, cycles:8,  word:'Steady',   cue:'"Steady, patient, unmoving."' },
+};
+const STATES = [
+  { id:'scattered', name:'Scattered', emoji:'🌀', color:'#C88A6A', rgb:'200,138,106', desc:'Mind jumping everywhere', suggest:'hi'   },
+  { id:'flat',      name:'Flat',      emoji:'〰',  color:'#8AB4C8', rgb:'138,180,200', desc:'Low energy, dull',        suggest:'kaze' },
+  { id:'clear',     name:'Clear',     emoji:'○',  color:'#7AB89A', rgb:'122,184,154', desc:'Alert and ready',         suggest:'chi'  },
+  { id:'stormy',    name:'Stormy',    emoji:'⚡', color:'#C87A9A', rgb:'200,122,154', desc:'Tense or overwhelmed',    suggest:'mizu' },
+];
+const SHIHO_PHASES = [
+  { kanji:'北', dir:'North',  cue:'Face North. Breathe up — draw from the mountain.' },
+  { kanji:'東', dir:'East',   cue:'Turn East. Breathe in the rising light.' },
+  { kanji:'南', dir:'South',  cue:'Face South. Draw in warmth and openness.' },
+  { kanji:'西', dir:'West',   cue:'Turn West. Release everything into stillness.' },
+  { kanji:'中', dir:'Centre', cue:'Return to centre. You are here. You are ready.' },
+];
+const SHIHO_PHASE_DURATION = 8000;
+
+/* ══════════════════════════════════════════════════════
+   PARTICLE SYSTEM
+══════════════════════════════════════════════════════ */
+const pCanvas = document.getElementById('particle-canvas');
+const pCtx    = pCanvas.getContext('2d');
+let particles  = [];
+let pElemColor = { r:200, g:175, b:106 };
+
+function resizeParticleCanvas() {
+  const f = document.getElementById('frame');
+  pCanvas.width  = f.offsetWidth;
+  pCanvas.height = f.offsetHeight;
+}
+
+class Particle {
+  constructor() { this.reset(true); }
+  reset(scatter) {
+    this.x = Math.random() * pCanvas.width;
+    this.y = scatter ? Math.random() * pCanvas.height : pCanvas.height + 10;
+    this.size      = Math.random() * 1.4 + 0.4;
+    this.baseSpeedY = -(Math.random() * 0.18 + 0.04);
+    this.speedX    = (Math.random() - 0.5) * 0.08;
+    this.maxOp     = Math.random() * 0.13 + 0.03;
+    this.opacity   = this.maxOp;
+    this.life      = scatter ? Math.random() * 600 : 0;
+    this.maxLife   = Math.random() * 600 + 250;
+    this.phase     = Math.random() * Math.PI * 2;
+    this.drift     = Math.random() * 0.2 + 0.06;
+    this.tinted    = Math.random() > 0.5;
+  }
+  update() {
+    this.life++;
+    const bf = runnerActive ? 1 - runnerLungScale * 0.5 : 1;
+    this.x += this.speedX + Math.sin(this.life * 0.006 + this.phase) * this.drift * 0.08;
+    this.y += this.baseSpeedY * bf;
+    const lr = this.life / this.maxLife;
+    if      (lr < 0.15) this.opacity = this.maxOp * (lr / 0.15);
+    else if (lr > 0.8)  this.opacity = this.maxOp * (1 - (lr - 0.8) / 0.2);
+    else                this.opacity = this.maxOp;
+    this.renderOp = this.opacity * (runnerActive ? 1 + runnerLungScale * 0.35 : 1);
+    if (this.life >= this.maxLife || this.y < -10) this.reset(false);
+  }
+  draw() {
+    const r = this.tinted ? pElemColor.r : 248;
+    const g = this.tinted ? pElemColor.g : 240;
+    const b = this.tinted ? pElemColor.b : 228;
+    pCtx.beginPath(); pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    pCtx.fillStyle = `rgba(${r},${g},${b},${this.renderOp})`; pCtx.fill();
+    if (this.size > 1) {
+      pCtx.beginPath(); pCtx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+      pCtx.fillStyle = `rgba(${r},${g},${b},${this.renderOp * 0.1})`; pCtx.fill();
+    }
+  }
+}
+(function initParticles() {
+  resizeParticleCanvas();
+  for (let i = 0; i < 30; i++) particles.push(new Particle());
+  function tick() {
+    pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+function setElemColor(rgb) {
+  const [r, g, b] = rgb.split(',').map(Number);
+  pElemColor = { r, g, b };
+}
+
+/* ══════════════════════════════════════════════════════
+   SCREEN NAVIGATION
+══════════════════════════════════════════════════════ */
+function setScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const s = document.getElementById(id);
+  if (s) s.classList.add('active');
+  // Start/stop aura based on screen
+  if (id === 'screen-profile') {
+    setTimeout(() => { sizeCanvas(); startAura(1, 60); }, 80);
+  } else {
+    if (_animFrame) { cancelAnimationFrame(_animFrame); _animFrame = null; }
+  }
+}
+
+function setDevice(d) {
+  const frame = document.getElementById('frame');
+  frame.classList.toggle('iphone', d === 'iphone');
+  frame.classList.toggle('ipad',   d === 'ipad');
+  document.getElementById('btn-iphone').classList.toggle('active', d === 'iphone');
+  document.getElementById('btn-ipad').classList.toggle('active',   d === 'ipad');
+  ['breath-canvas','lib-breath-canvas'].forEach(id => {
+    const bc = document.getElementById(id);
+    if (!bc) return;
+    const sz = d === 'ipad' ? 260 : 180;
+    bc.width = sz; bc.height = sz;
+    bc.style.width = sz + 'px'; bc.style.height = sz + 'px';
+  });
+  setTimeout(resizeParticleCanvas, 60);
+  if (document.getElementById('screen-profile').classList.contains('active')) {
+    setTimeout(() => { sizeCanvas(); startAura(1, 60); }, 80);
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   SHIHO COMBINED SCREEN — phase management
+══════════════════════════════════════════════════════ */
+let shihoScreenPhase = 'ritual'; // 'ritual' | 'checkin' | 'session'
+let shihoRunning     = false;
+let shihoPhaseIndex  = -1;
+let shihoPhaseTimer  = null;
+let shihoProgressTimer = null;
+let selectedState    = null;
+
+function enterShihoScreen() {
+  shihoScreenPhase = 'ritual';
+  resetShihoUI();
+  setScreen('screen-shiho');
+  updateShihoNav();
+  setTimeout(() => {
+    document.getElementById('shiho-begin-btn').classList.add('visible');
+  }, 600);
+}
+
+function resetShihoUI() {
+  shihoRunning = false; shihoPhaseIndex = -1;
+  clearTimeout(shihoPhaseTimer); clearInterval(shihoProgressTimer);
+  document.getElementById('shiho-ring').style.strokeDashoffset = '565';
+  document.getElementById('shiho-kanji').textContent   = '無';
+  document.getElementById('shiho-cue').textContent     = 'Settle into stillness.';
+  document.getElementById('shiho-mantra').textContent  = 'The dojo is always here.';
+  document.getElementById('shiho-begin-btn').classList.remove('visible');
+  document.getElementById('shiho-ritual-ui').style.display  = 'flex';
+  document.getElementById('shiho-checkin-ui').classList.remove('show');
+  document.getElementById('shiho-session-ui').classList.remove('show');
+  selectedState = null;
+}
+
+function updateShihoNav() {
+  const back  = document.getElementById('shiho-nav-back');
+  const title = document.getElementById('shiho-nav-title');
+  const right = document.getElementById('shiho-nav-right');
+  if (shihoScreenPhase === 'ritual') {
+    back.textContent  = '← Mushin'; back.classList.remove('disabled');
+    title.textContent = '四方 Shiho'; title.style.color = 'rgba(200,176,106,0.32)';
+    right.textContent = '';
+  } else if (shihoScreenPhase === 'checkin') {
+    back.textContent  = '← Mushin'; back.classList.remove('disabled');
+    title.textContent = 'Check In'; title.style.color = 'rgba(150,130,190,0.35)';
+    right.textContent = '';
+  } else if (shihoScreenPhase === 'session') {
+    back.textContent  = '✕ End'; back.classList.remove('disabled');
+    title.textContent = runnerTech ? runnerTech.name : 'Session';
+    title.style.color = `rgba(${ELEMENTS[selectedElement]?.rgb || '200,176,106'},0.4)`;
+    right.textContent = '—:——';
+  }
+}
+
+function shihoNavBack() {
+  if (shihoScreenPhase === 'session') {
+    endSessionToComplete();
+  } else {
+    if (shihoRunning) { clearTimeout(shihoPhaseTimer); clearInterval(shihoProgressTimer); }
+    setScreen('screen-mushin-home');
+  }
+}
+
+function startShiho() {
+  shihoRunning = true;
+  document.getElementById('shiho-begin-btn').classList.remove('visible');
+  shihoPhaseIndex = 0;
+  const totalMs   = SHIHO_PHASE_DURATION * SHIHO_PHASES.length;
+  const startedAt = Date.now();
+  shihoProgressTimer = setInterval(() => {
+    const frac = Math.min((Date.now() - startedAt) / totalMs, 1);
+    document.getElementById('shiho-ring').style.strokeDashoffset = 565 * (1 - frac);
+    if (frac >= 1) clearInterval(shihoProgressTimer);
+  }, 80);
+  runShihoPhase();
+}
+
+function runShihoPhase() {
+  if (shihoPhaseIndex >= SHIHO_PHASES.length) {
+    document.getElementById('shiho-kanji').textContent = '●';
+    document.getElementById('shiho-cue').textContent   = 'Shiho is complete. You are present.';
+    document.getElementById('shiho-mantra').textContent= '';
+    document.getElementById('shiho-nav-right').textContent = '✓';
+    // Auto-transition to check-in after a moment
+    setTimeout(enterCheckinPhase, 1200);
+    return;
+  }
+  const phase = SHIHO_PHASES[shihoPhaseIndex];
+  document.getElementById('shiho-kanji').textContent  = phase.kanji;
+  document.getElementById('shiho-cue').textContent    = phase.cue;
+  document.getElementById('shiho-mantra').textContent = `${phase.dir} · ${shihoPhaseIndex + 1} of ${SHIHO_PHASES.length}`;
+  shihoPhaseTimer = setTimeout(() => { shihoPhaseIndex++; runShihoPhase(); }, SHIHO_PHASE_DURATION);
+}
+
+function enterCheckinPhase() {
+  shihoScreenPhase = 'checkin';
+  document.getElementById('shiho-ritual-ui').style.display = 'none';
+  document.getElementById('shiho-checkin-ui').classList.add('show');
+  updateShihoNav();
+}
+
+function enterSessionPhase() {
+  if (!selectedState) return;
+  // Pick suggested element from state
+  const st  = STATES.find(s => s.id === selectedState);
+  const elemId = st ? st.suggest : 'kaze';
+  const el     = ELEMENTS[elemId];
+  selectedElement   = elemId;
+  selectedTechnique = el.techniques[0]; // default first technique
+
+  shihoScreenPhase = 'session';
+  document.getElementById('shiho-checkin-ui').classList.remove('show');
+  document.getElementById('shiho-session-ui').classList.add('show');
+  updateShihoNav();
+  setElemColor(el.rgb);
+  startSessionInShiho();
+}
+
+/* ══════════════════════════════════════════════════════
+   CHECK-IN BUILD (session path)
+══════════════════════════════════════════════════════ */
+(function buildCheckinSession() {
+  const container = document.getElementById('checkin-cards-session');
+  STATES.forEach(st => {
+    const card = document.createElement('div');
+    card.className = 'checkin-card';
+    card.style.setProperty('--state-color', st.color);
+    card.style.setProperty('--state-rgb',   st.rgb);
+    card.innerHTML = `
+      <div class="checkin-card-icon">${st.emoji}</div>
+      <div class="checkin-card-name">${st.name}</div>
+      <div class="checkin-card-desc">${st.desc}</div>
+    `;
+    card.addEventListener('click', () => {
+      document.querySelectorAll('#checkin-cards-session .checkin-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedState = st.id;
+      const el = ELEMENTS[st.suggest];
+      document.getElementById('checkin-suggestion').textContent = `Suggested: ${el.name} · ${el.element}`;
+      document.getElementById('checkin-continue-session').classList.add('visible');
+    });
+    container.appendChild(card);
+  });
+})();
+
+/* ══════════════════════════════════════════════════════
+   SESSION RUNNER — shared state
+══════════════════════════════════════════════════════ */
+let selectedElement   = null;
+let selectedTechnique = null;
+let runnerActive      = false;
+let runnerTech        = null;
+let runnerPhase       = 'inhale';
+let runnerPhaseSeconds = 4;
+let runnerPhaseElapsed = 0;
+let runnerCycleCount  = 0;
+let runnerTotalCycles = 0;
+let runnerStartTime   = 0;
+let runnerAnimFrame   = null;
+let runnerLastTick    = 0;
+let runnerLungScale   = 0;
+let runnerClockInterval = null;
+let activeBreathCanvas = null; // set per context
+
+/* ══════════════════════════════════════════════════════
+   BREATHING ORB
+══════════════════════════════════════════════════════ */
+function drawBreathOrb(lungs) {
+  if (!activeBreathCanvas) return;
+  const bc  = activeBreathCanvas;
+  const bCtx = bc.getContext('2d');
+  const w = bc.width, h = bc.height, cx = w/2, cy = h/2;
+  bCtx.clearRect(0, 0, w, h);
+  const minR = w * 0.14, maxR = w * 0.37;
+  const r    = minR + lungs * (maxR - minR);
+  const el   = selectedElement ? ELEMENTS[selectedElement] : null;
+  const rgb  = el ? el.rgb : '200,176,106';
+  for (let i = 3; i >= 1; i--) {
+    const gr  = r + i * (w * 0.06);
+    const grd = bCtx.createRadialGradient(cx, cy, r * 0.8, cx, cy, gr);
+    grd.addColorStop(0, `rgba(${rgb},${0.07 - i * 0.018})`);
+    grd.addColorStop(1, `rgba(${rgb},0)`);
+    bCtx.beginPath(); bCtx.arc(cx, cy, gr, 0, Math.PI * 2);
+    bCtx.fillStyle = grd; bCtx.fill();
+  }
+  const grd = bCtx.createRadialGradient(cx - r*0.18, cy - r*0.2, r*0.04, cx, cy, r);
+  grd.addColorStop(0,    `rgba(${rgb},${0.55 + lungs * 0.22})`);
+  grd.addColorStop(0.55, `rgba(${rgb},${0.2  + lungs * 0.14})`);
+  grd.addColorStop(1,    `rgba(${rgb},0.04)`);
+  bCtx.beginPath(); bCtx.arc(cx, cy, r, 0, Math.PI * 2);
+  bCtx.fillStyle = grd; bCtx.fill();
+  const hR = r * 0.3;
+  const hGrd = bCtx.createRadialGradient(cx - r*0.24, cy - r*0.26, 1, cx - r*0.18, cy - r*0.2, hR);
+  hGrd.addColorStop(0, `rgba(255,252,248,${0.32 + lungs * 0.12})`);
+  hGrd.addColorStop(1, 'rgba(255,252,248,0)');
+  bCtx.beginPath(); bCtx.arc(cx - r*0.18, cy - r*0.2, hR, 0, Math.PI * 2);
+  bCtx.fillStyle = hGrd; bCtx.fill();
+}
+
+/* ══════════════════════════════════════════════════════
+   SESSION IN SHIHO — start, animate, advance
+══════════════════════════════════════════════════════ */
+function buildPips(total, pipsContainerId, elemId) {
+  const el  = ELEMENTS[elemId];
+  const rgb = el.rgb;
+  const container = document.getElementById(pipsContainerId);
+  container.innerHTML = '';
+  for (let i = 0; i < Math.min(total, 12); i++) {
+    const pip = document.createElement('div');
+    pip.className = 'runner-pip';
+    pip.id = pipsContainerId + '-pip-' + i;
+    pip.innerHTML = `<div class="runner-pip-dot" id="${pipsContainerId}-pdot-${i}" style="background:rgba(${rgb},0.22)"></div><div class="runner-pip-text">${i + 1}</div>`;
+    container.appendChild(pip);
+  }
+}
+function updatePips(done, pipsContainerId, elemId) {
+  const el  = ELEMENTS[elemId];
+  for (let i = 0; i < runnerTotalCycles; i++) {
+    const dot = document.getElementById(pipsContainerId + '-pdot-' + i);
+    const pip = document.getElementById(pipsContainerId + '-pip-' + i);
+    if (!dot) continue;
+    if (i < done) {
+      dot.style.background = el.color;
+      dot.style.boxShadow  = `0 0 6px rgba(${el.rgb},0.5)`;
+      if (pip) pip.classList.add('done');
+    } else if (i === done) {
+      dot.style.background = `rgba(${el.rgb},0.55)`;
+      dot.style.boxShadow  = `0 0 4px rgba(${el.rgb},0.3)`;
+      if (pip) pip.classList.remove('done');
+    } else {
+      dot.style.background = `rgba(${el.rgb},0.22)`;
+      dot.style.boxShadow  = 'none';
+      if (pip) pip.classList.remove('done');
+    }
+  }
+}
+
+function startSessionInShiho() {
+  activeBreathCanvas = document.getElementById('breath-canvas');
+  const tech = TECHNIQUES[selectedTechnique];
+  const el   = ELEMENTS[tech.elem];
+  runnerTech         = tech;
+  runnerActive       = true;
+  runnerCycleCount   = 0;
+  runnerTotalCycles  = tech.cycles;
+  runnerPhase        = 'inhale';
+  runnerPhaseSeconds = tech.inhale;
+  runnerPhaseElapsed = 0;
+  runnerLungScale    = 0;
+  runnerStartTime    = Date.now();
+  document.getElementById('s-name').textContent = tech.name;
+  document.getElementById('s-real').textContent = tech.real;
+  document.getElementById('s-cue').textContent  = tech.cue;
+  document.getElementById('s-word').textContent = '— ' + tech.word;
+  const badge = document.getElementById('s-badge');
+  badge.textContent   = el.name + ' · ' + el.element;
+  badge.style.color   = el.color;
+  badge.style.borderColor = `rgba(${el.rgb},0.3)`;
+  badge.style.background  = `rgba(${el.rgb},0.08)`;
+  document.getElementById('s-bar').style.background = el.color;
+  buildPips(tech.cycles, 's-pips', tech.elem);
+  updatePips(0, 's-pips', tech.elem);
+  updateProgress('s-bar');
+  updateShihoNav();
+  if (runnerAnimFrame) cancelAnimationFrame(runnerAnimFrame);
+  runnerLastTick = performance.now();
+  runnerAnimate(runnerLastTick, 's-phase', 's-countdown', 's-phase-sub', 's-pips', 's-bar', () => endSessionToComplete());
+  clearInterval(runnerClockInterval);
+  runnerClockInterval = setInterval(() => {
+    const right = document.getElementById('shiho-nav-right');
+    if (right) right.textContent = elapsedClock();
+  }, 1000);
+}
+
+function runnerAnimate(now, phaseId, countId, subId, pipsId, barId, onComplete) {
+  if (!runnerActive) return;
+  const dt = (now - runnerLastTick) / 1000;
+  runnerLastTick = now;
+  runnerPhaseElapsed += dt;
+  const frac        = Math.min(runnerPhaseElapsed / runnerPhaseSeconds, 1);
+  const secondsLeft = Math.max(Math.ceil(runnerPhaseSeconds - runnerPhaseElapsed), 0);
+  switch (runnerPhase) {
+    case 'inhale':  runnerLungScale = frac;     break;
+    case 'hold':    runnerLungScale = 1;         break;
+    case 'exhale':  runnerLungScale = 1 - frac;  break;
+    case 'endHold': runnerLungScale = 0;         break;
+  }
+  document.getElementById(countId).textContent = secondsLeft || '·';
+  const plEl = document.getElementById(phaseId);
+  plEl.textContent = phaseLabel(runnerPhase);
+  plEl.style.color = phaseColor();
+  document.getElementById(subId).textContent = phaseSubtext();
+  drawBreathOrb(runnerLungScale);
+  if (frac >= 1) {
+    advancePhase(pipsId, barId, onComplete);
+    if (!runnerActive) return;
+  }
+  runnerAnimFrame = requestAnimationFrame(ts => runnerAnimate(ts, phaseId, countId, subId, pipsId, barId, onComplete));
+}
+
+function advancePhase(pipsId, barId, onComplete) {
+  const t = runnerTech;
+  const phases = [
+    { phase:'inhale',  dur:t.inhale  },
+    { phase:'hold',    dur:t.hold    },
+    { phase:'exhale',  dur:t.exhale  },
+    { phase:'endHold', dur:t.endHold },
+  ].filter(p => p.dur > 0);
+  const idx = phases.findIndex(p => p.phase === runnerPhase);
+  if (idx < phases.length - 1) {
+    const next = phases[idx + 1];
+    runnerPhase        = next.phase;
+    runnerPhaseSeconds = next.dur;
+    runnerPhaseElapsed = 0;
+  } else {
+    runnerCycleCount++;
+    updatePips(runnerCycleCount, pipsId, runnerTech.elem);
+    updateProgress(barId);
+    if (runnerCycleCount >= runnerTotalCycles) {
+      endRunner(onComplete); return;
+    }
+    runnerPhase        = 'inhale';
+    runnerPhaseSeconds = t.inhale;
+    runnerPhaseElapsed = 0;
+  }
+}
+
+function endRunner(onComplete) {
+  runnerActive = false;
+  if (runnerAnimFrame) cancelAnimationFrame(runnerAnimFrame);
+  clearInterval(runnerClockInterval);
+  if (onComplete) onComplete();
+}
+
+function phaseLabel(ph)  { return {inhale:'Inhale',hold:'Hold',exhale:'Exhale',endHold:'Hold'}[ph] || '—'; }
+function phaseColor() {
+  const el = selectedElement ? ELEMENTS[selectedElement] : null;
+  if (runnerPhase === 'hold' || runnerPhase === 'endHold') return 'rgba(245,240,232,0.45)';
+  return el ? el.color : '#C8B06A';
+}
+function phaseSubtext() {
+  const t = runnerTech; if (!t) return '';
+  if (runnerPhase === 'inhale')  return `Breathe in for ${t.inhale}s`;
+  if (runnerPhase === 'hold')    return `Hold for ${t.hold}s`;
+  if (runnerPhase === 'exhale')  return `Breathe out for ${t.exhale}s`;
+  if (runnerPhase === 'endHold') return `Hold for ${t.endHold}s`;
+  return '';
+}
+function updateProgress(barId) {
+  const pct = runnerTotalCycles > 0 ? (runnerCycleCount / runnerTotalCycles) * 100 : 0;
+  const bar = document.getElementById(barId);
+  if (bar) bar.style.width = pct + '%';
+}
+function elapsedClock() {
+  const elapsed = Math.floor((Date.now() - runnerStartTime) / 1000);
+  return String(Math.floor(elapsed / 60)).padStart(2,'0') + ':' + String(elapsed % 60).padStart(2,'0');
+}
+
+function endSessionToComplete() {
+  const elapsed = elapsedClock();
+  const tech = runnerTech || TECHNIQUES['cloud'];
+  const el   = ELEMENTS[selectedElement] || ELEMENTS.kaze;
+  endRunner(null);
+  shihoScreenPhase = 'ritual';
+
+  const cWord = document.getElementById('c-word');
+  cWord.textContent  = tech.word;
+  cWord.style.color  = el.color;
+  cWord.style.textShadow = `0 0 32px rgba(${el.rgb},0.35)`;
+  document.getElementById('c-quote').textContent    = tech.cue.replace(/"/g,'');
+  document.getElementById('c-duration').textContent = elapsed;
+  document.getElementById('c-cycles').textContent   = runnerCycleCount;
+  document.getElementById('c-elem').textContent     = el.kanji;
+  const xpVal = 8 + runnerCycleCount * 2;
+  document.getElementById('c-xp').textContent = '+' + xpVal + ' XP';
+  setScreen('screen-complete');
+}
+
+
+/* ══════════════════════════════════════════════════════
+   TECHNIQUES LIBRARY
+══════════════════════════════════════════════════════ */
+let activeLibElem = 'kaze';
+
+function selectLibTab(elemId) {
+  activeLibElem = elemId;
+  document.querySelectorAll('.library-tab').forEach(t => t.classList.remove('active'));
+  const tab = document.getElementById('lib-tab-' + elemId);
+  if (tab) tab.classList.add('active');
+  const el = ELEMENTS[elemId];
+  const navTitle = document.getElementById('lib-nav-title');
+  navTitle.textContent = el.name + ' · ' + el.element;
+  navTitle.style.color = `rgba(${el.rgb},0.45)`;
+  buildLibraryList(elemId);
+}
+
+function buildLibraryList(elemId) {
+  const el   = ELEMENTS[elemId];
+  const list = document.getElementById('library-list');
+  list.innerHTML = '';
+  el.techniques.forEach(tid => {
+    const t   = TECHNIQUES[tid];
+    const dur = (t.inhale + t.hold + t.exhale + t.endHold) * t.cycles;
+    const row = document.createElement('div');
+    row.className = 'library-item';
+    row.style.setProperty('--lib-color', el.color);
+    row.innerHTML = `
+      <div class="library-item-kanji">${el.kanji}</div>
+      <div class="library-item-info">
+        <div class="library-item-name">${t.name}</div>
+        <div class="library-item-real">${t.real}</div>
+      </div>
+      <div class="library-item-meta">${Math.round(dur / 60)}m · ${t.cycles} cycles</div>
+    `;
+    row.addEventListener('click', () => startLibRunner(elemId, tid));
+    list.appendChild(row);
+  });
+}
+
+// Init library on first load
+buildLibraryList('kaze');
+
+/* ══════════════════════════════════════════════════════
+   LIBRARY RUNNER
+══════════════════════════════════════════════════════ */
+function startLibRunner(elemId, techId) {
+  selectedElement   = elemId;
+  selectedTechnique = techId;
+  const el   = ELEMENTS[elemId];
+  const tech = TECHNIQUES[techId];
+  setElemColor(el.rgb);
+
+  activeBreathCanvas = document.getElementById('lib-breath-canvas');
+  document.getElementById('lib-runner-hero').style.backgroundImage = `url('${el.bg}')`;
+
+  runnerTech         = tech;
+  runnerActive       = true;
+  runnerCycleCount   = 0;
+  runnerTotalCycles  = tech.cycles;
+  runnerPhase        = 'inhale';
+  runnerPhaseSeconds = tech.inhale;
+  runnerPhaseElapsed = 0;
+  runnerLungScale    = 0;
+  runnerStartTime    = Date.now();
+
+  document.getElementById('lr-name').textContent = tech.name;
+  document.getElementById('lr-real').textContent = tech.real;
+  document.getElementById('lr-cue').textContent  = tech.cue;
+  document.getElementById('lr-word').textContent = '— ' + tech.word;
+  const badge = document.getElementById('lr-badge');
+  badge.textContent   = el.name + ' · ' + el.element;
+  badge.style.color   = el.color;
+  badge.style.borderColor = `rgba(${el.rgb},0.3)`;
+  badge.style.background  = `rgba(${el.rgb},0.08)`;
+  const lnt = document.getElementById('lr-nav-title');
+  lnt.textContent = tech.name;
+  lnt.style.color = `rgba(${el.rgb},0.42)`;
+  document.getElementById('lr-bar').style.background = el.color;
+
+  buildPips(tech.cycles, 'lr-pips', elemId);
+  updatePips(0, 'lr-pips', elemId);
+  updateProgress('lr-bar');
+  drawBreathOrb(0);
+
+  if (runnerAnimFrame) cancelAnimationFrame(runnerAnimFrame);
+  runnerLastTick = performance.now();
+  runnerAnimate(runnerLastTick, 'lr-phase', 'lr-countdown', 'lr-phase-sub', 'lr-pips', 'lr-bar', () => {
+    // Session complete → return to library
+    setTimeout(() => setScreen('screen-library'), 600);
+  });
+
+  clearInterval(runnerClockInterval);
+  runnerClockInterval = setInterval(() => {
+    const cl = document.getElementById('lr-clock');
+    if (cl) cl.textContent = elapsedClock();
+  }, 1000);
+
+  setScreen('screen-lib-runner');
+}
+
+function endLibSession() {
+  endRunner(null);
+  setScreen('screen-library');
+  // Restore current tab
+  selectLibTab(activeLibElem);
+}
+
+/* ══════════════════════════════════════════════════════
+   AURA SYSTEM — from StudentProfile v4.0
+══════════════════════════════════════════════════════ */
+var AURA_STAGES = [
+  { name:'Tomoshibi', rgb:[250,246,238] },
+  { name:'Hikari',    rgb:[245,237,208] },
+  { name:'Kogane',    rgb:[240,208,96]  },
+  { name:'Kohaku',    rgb:[232,184,48]  },
+  { name:'Kagayaki',  rgb:[216,144,24]  },
+  { name:'Moeru',     rgb:[200,108,8]   },
+  { name:'Akane',     rgb:[192,80,32]   },
+  { name:'Honoo',     rgb:[168,48,24]   },
+  { name:'Homura',    rgb:[168,50,30]   },
+  { name:'Shinku',    rgb:[160,64,64]   },
+  { name:'Kurenai',   rgb:[160,64,112]  },
+  { name:'Tasogare',  rgb:[144,80,176]  },
+  { name:'—',         rgb:[176,96,255]  },
+];
+function auraDensity(xp, stageIndex) {
+  var adj = 20 + xp * 0.80;
+  var raw = 1 - Math.pow(1 - adj / 100, 2);
+  return stageIndex === 0 ? 0.15 + raw * 0.85 : 0.25 + raw * 0.75;
+}
+var SIL_BASE = [
+  {x:99,y:55},{x:82,y:65},{x:68,y:85},{x:57,y:128},{x:50,y:175},
+  {x:54,y:222},{x:65,y:278},{x:78,y:320},{x:99,y:328},
+  {x:120,y:320},{x:133,y:278},{x:144,y:222},{x:148,y:175},
+  {x:141,y:128},{x:130,y:85},{x:116,y:65},
+];
+var SIL_CX = 99, SIL_CY = 219, SIL_SCALE_IPAD = 160 / 124;
+var LAYERS = [
+  { scale:1.08, blur:8,   maxOp:0.18, threshold:0.00 },
+  { scale:1.25, blur:18,  maxOp:0.20, threshold:0.10 },
+  { scale:1.48, blur:32,  maxOp:0.15, threshold:0.30 },
+  { scale:1.78, blur:58,  maxOp:0.13, threshold:0.50 },
+  { scale:2.10, blur:85,  maxOp:0.09, threshold:0.55 },
+  { scale:2.60, blur:110, maxOp:0.05, threshold:0.45 },
+];
+var NOISE_PHASES = SIL_BASE.map(function() {
+  return { px:Math.random()*Math.PI*2, py:Math.random()*Math.PI*2,
+           fx:0.35+Math.random()*0.55, fy:0.30+Math.random()*0.50 };
+});
+var NOISE_AMP_BASE = 2.0;
+var _animFrame = null, _animStage = 1, _animXP = 60, _lastTs = 0, _lastRenderTs = 0;
+var _tr = { active:false, startTs:0, fromStage:0, toStage:1, switched:false };
+var TR_TOTAL=1400, TR_CONTRACT=300, TR_BURST=600, TR_SWITCH=600;
+var Q_REDUCED=0, Q_STANDARD=1, Q_ENHANCED=2;
+var _quality = Q_STANDARD, _dpr = Math.min(window.devicePixelRatio||1,2);
+function _autoDetectQuality() {
+  var cores = navigator.hardwareConcurrency||2, retina = _dpr>=2;
+  if (cores<=2) return Q_REDUCED;
+  if (cores>=4 && retina) return Q_ENHANCED;
+  return Q_STANDARD;
+}
+var MAX_MOTES=18;
+var _motePool=(function(){var p=[];for(var i=0;i<MAX_MOTES;i++)p.push({alive:false,x:0,y:0,vx:0,vy:0,life:0,maxLife:1,size:1,phase:0});return p;}());
+function _targetMoteCount(density,surge){if(_quality===Q_REDUCED)return 0;if(density<0.38)return 0;var cap=(_quality===Q_ENHANCED)?24:12;var base=Math.round((density-0.38)/0.62*cap);return surge?Math.min(base+6,MAX_MOTES):base;}
+function _outlinePt(pts){var i=Math.floor(Math.random()*pts.length),j=(i+1)%pts.length,t=Math.random();return{x:pts[i].x+(pts[j].x-pts[i].x)*t,y:pts[i].y+(pts[j].y-pts[i].y)*t};}
+function _spawnMote(m,pts,surge){var pt=_outlinePt(pts);m.alive=true;m.x=pt.x;m.y=pt.y;m.vy=-(0.25+Math.random()*0.45)*(surge?1.4:1.0);m.vx=(Math.random()-0.5)*0.28;m.life=0;m.maxLife=surge?900+Math.random()*700:1400+Math.random()*1200;m.size=1.1+Math.random()*1.6;m.phase=Math.random()*Math.PI*2;}
+function _resetMotes(){for(var i=0;i<MAX_MOTES;i++)_motePool[i].alive=false;}
+function _updateMotes(dt,pts,density,surge){var target=_targetMoteCount(density,surge),alive=0;for(var i=0;i<MAX_MOTES;i++){var m=_motePool[i];if(!m.alive)continue;m.life+=dt;if(m.life>=m.maxLife){m.alive=false;continue;}m.x+=m.vx+0.12*Math.sin(m.life*0.003+m.phase);m.y+=m.vy;alive++;}if(alive<target){for(var j=0;j<MAX_MOTES&&alive<target;j++){if(!_motePool[j].alive){_spawnMote(_motePool[j],pts,surge);alive++;}}}}
+function _drawMotes(ctx,r,g,b,surge){for(var i=0;i<MAX_MOTES;i++){var m=_motePool[i];if(!m.alive)continue;var progress=m.life/m.maxLife,op;if(progress<0.20)op=progress/0.20;else if(progress<0.65)op=1.0;else op=1.0-(progress-0.65)/0.35;op*=surge?0.72:0.55;var sz=m.size*(0.7+0.3*Math.sin(progress*Math.PI));ctx.save();ctx.globalAlpha=op;ctx.fillStyle='rgb('+r+','+g+','+b+')';ctx.beginPath();ctx.arc(m.x,m.y,sz,0,Math.PI*2);ctx.fill();var grad=ctx.createRadialGradient(m.x,m.y,0,m.x,m.y,sz*3.5);grad.addColorStop(0,'rgba('+r+','+g+','+b+','+(op*0.5).toFixed(3)+')');grad.addColorStop(1,'rgba('+r+','+g+','+b+',0)');ctx.fillStyle=grad;ctx.beginPath();ctx.arc(m.x,m.y,sz*3.5,0,Math.PI*2);ctx.fill();ctx.restore();}}
+function breathMult(layerIndex,t,density,surge){var speed=surge?0.0024:0.0015,phase=layerIndex*0.42,amp=surge?0.07+density*0.12:0.055+density*0.10;var base=1+amp*Math.sin(t*speed+phase);if(!surge)return base;return base+0.022*Math.sin(t*0.0058+phase*2.1);}
+function noisedPt(pt,np,t,noiseAmp){var s=0.00085;return{x:pt.x+Math.sin(t*s*np.fx+np.px)*noiseAmp,y:pt.y+Math.sin(t*s*np.fy+np.py)*noiseAmp};}
+function drawGlowLayer(mainCtx,pts,cx,cy,layer,r,g,b,density,bMult){if(density<layer.threshold)return;var progress=Math.min((density-layer.threshold)/(1-layer.threshold+0.001),1),opacity=progress*layer.maxOp,s=layer.scale*bMult,w=mainCtx.canvas.width,h=mainCtx.canvas.height;var off=new OffscreenCanvas(w,h),offCtx=off.getContext('2d');offCtx.filter='blur('+layer.blur+'px)';offCtx.fillStyle='rgba('+r+','+g+','+b+',1)';offCtx.beginPath();pts.forEach(function(p,i){var x=cx+(p.x-cx)*s,y=cy+(p.y-cy)*s;if(i===0)offCtx.moveTo(x,y);else offCtx.lineTo(x,y);});offCtx.closePath();offCtx.fill();mainCtx.save();mainCtx.globalAlpha=opacity;mainCtx.drawImage(off,0,0);mainCtx.restore();}
+function sizeCanvas(){var canvas=document.getElementById('aura-canvas');if(!canvas)return;var frame=document.getElementById('frame');canvas.width=frame.clientWidth;canvas.height=frame.clientHeight;}
+function renderAura(stageIndex,xp,t,dt){dt=dt||16;var canvas=document.getElementById('aura-canvas');if(!canvas)return;var isIpad=document.getElementById('frame').classList.contains('ipad'),devScale=isIpad?SIL_SCALE_IPAD:1.0,cw=canvas.width,ch=canvas.height,ctx=canvas.getContext('2d');ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cw,ch);var frameRect=document.getElementById('frame').getBoundingClientRect(),charRect=document.querySelector('.char-wrap');if(!charRect)return;var cr=charRect.getBoundingClientRect(),silOriginX=(cr.left-frameRect.left)-40*devScale,silOriginY=(cr.top-frameRect.top)-40*devScale;var surge=xp>=80,density=auraDensity(xp,stageIndex),noiseAmp=NOISE_AMP_BASE*(0.6+density*0.9)*devScale;if(surge)noiseAmp*=1.0+(xp-80)/20*0.8;var pts=SIL_BASE.map(function(p,i){var np=noisedPt(p,NOISE_PHASES[i],t,noiseAmp/devScale);return{x:np.x*devScale+silOriginX,y:np.y*devScale+silOriginY};});var cx=SIL_CX*devScale+silOriginX,cy=SIL_CY*devScale+silOriginY;var stage=AURA_STAGES[stageIndex]||AURA_STAGES[2],rgb=stage.rgb;var trScaleMod=1.0,trBurstOp=0.0;if(_tr.active&&_tr.startTs>0){var trElapsed=t-_tr.startTs;if(trElapsed<TR_CONTRACT){var p1=trElapsed/TR_CONTRACT;trScaleMod=1.0-0.18*(p1*p1);}else if(trElapsed<TR_BURST){trScaleMod=0.82;trBurstOp=Math.sin((trElapsed-TR_CONTRACT)/(TR_BURST-TR_CONTRACT)*Math.PI)*0.80;}else if(trElapsed<TR_TOTAL){var p4=(trElapsed-TR_BURST)/(TR_TOTAL-TR_BURST);trScaleMod=1.0+0.10*Math.exp(-5*p4)*Math.sin(p4*Math.PI*2.5);}}var layerLimit=(_quality===Q_REDUCED)?2:LAYERS.length;LAYERS.forEach(function(layer,li){if(li>=layerLimit)return;var bm=(_quality===Q_REDUCED)?trScaleMod:breathMult(li,t,density,surge)*trScaleMod;drawGlowLayer(ctx,pts,cx,cy,layer,rgb[0],rgb[1],rgb[2],density,bm);});if(trBurstOp>0){var burstRgb=AURA_STAGES[_tr.toStage]?AURA_STAGES[_tr.toStage].rgb:rgb;var grad=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(cw,ch)*0.85);grad.addColorStop(0,'rgba('+burstRgb[0]+','+burstRgb[1]+','+burstRgb[2]+','+trBurstOp.toFixed(3)+')');grad.addColorStop(0.35,'rgba('+burstRgb[0]+','+burstRgb[1]+','+burstRgb[2]+','+(trBurstOp*0.45).toFixed(3)+')');grad.addColorStop(1,'rgba('+burstRgb[0]+','+burstRgb[1]+','+burstRgb[2]+',0)');ctx.save();ctx.globalAlpha=1;ctx.fillStyle=grad;ctx.fillRect(0,0,cw,ch);ctx.restore();}if(_quality!==Q_REDUCED&&surge){var sStr=(xp-80)/20,cPulse=1+0.18*Math.sin(t*0.0048),cOp=sStr*0.18*cPulse,cScale=2.20*cPulse;var offC=new OffscreenCanvas(cw,ch),offCC=offC.getContext('2d');offCC.filter='blur(85px)';offCC.fillStyle='rgb('+rgb[0]+','+rgb[1]+','+rgb[2]+')';offCC.beginPath();pts.forEach(function(p,i){var x=cx+(p.x-cx)*cScale,y=cy+(p.y-cy)*cScale;if(i===0)offCC.moveTo(x,y);else offCC.lineTo(x,y);});offCC.closePath();offCC.fill();ctx.save();ctx.globalAlpha=Math.min(cOp,0.22);ctx.drawImage(offC,0,0);ctx.restore();}if(_quality!==Q_REDUCED)_updateMotes(dt,pts,density,surge);if(_quality!==Q_REDUCED)_drawMotes(ctx,rgb[0],rgb[1],rgb[2],surge);}
+function _animTick(ts){if(_quality===Q_STANDARD&&_lastRenderTs&&(ts-_lastRenderTs)<32){_animFrame=requestAnimationFrame(_animTick);return;}_lastRenderTs=ts;var dt=_lastTs?Math.min(ts-_lastTs,50):16;_lastTs=ts;if(_tr.active){if(_tr.startTs===0)_tr.startTs=ts;var elapsed=ts-_tr.startTs;if(!_tr.switched&&elapsed>=TR_SWITCH){_tr.switched=true;_animStage=_tr.toStage;_resetMotes();}if(elapsed>=TR_TOTAL){_tr.active=false;_tr.startTs=0;}}renderAura(_animStage,_animXP,ts,dt);_animFrame=requestAnimationFrame(_animTick);}
+function startAura(stageIndex,xp){_animStage=stageIndex;_animXP=xp;_lastTs=0;_lastRenderTs=0;if(_animFrame)cancelAnimationFrame(_animFrame);_animFrame=null;sizeCanvas();_resetMotes();if(_quality===Q_REDUCED){renderAura(stageIndex,xp,0,16);}else{_animFrame=requestAnimationFrame(_animTick);}}
+
+/* ══════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════ */
+_quality = _autoDetectQuality();
+// Draw initial resting orb state
+activeBreathCanvas = document.getElementById('breath-canvas');
+drawBreathOrb(0);
+// Build library list for default tab
+selectLibTab('kaze');
+
+</script>
+</body>
+</html>

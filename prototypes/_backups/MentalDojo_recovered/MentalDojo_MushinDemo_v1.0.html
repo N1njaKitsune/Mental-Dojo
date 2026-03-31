@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mental Dojo · Mushin Flow Demo v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   GLOBAL
+════════════════════════════════════════ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #030305;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100vh; padding: 24px 24px 52px; gap: 20px;
+  font-family: 'Crimson Pro', serif; color: #F5F0E8;
+}
+
+/* ── Device toggle ── */
+.device-toggle { display: flex; gap: 8px; z-index: 50; }
+.device-toggle button {
+  background: rgba(122,184,154,0.08); border: 0.5px solid rgba(122,184,154,0.2);
+  color: rgba(245,240,232,0.4); padding: 5px 14px; cursor: pointer;
+  font-size: 10px; border-radius: 4px; font-family: 'Cinzel', serif;
+  letter-spacing: 0.1em; transition: all 0.2s;
+}
+.device-toggle button.active {
+  background: rgba(122,184,154,0.2); color: rgba(122,184,154,0.9);
+  border-color: rgba(122,184,154,0.45);
+}
+
+/* ── Frame ── */
+.frame {
+  position: relative; overflow: hidden; border-radius: 4px;
+  box-shadow: 0 0 0 1.5px rgba(245,240,232,0.06), 0 24px 80px rgba(0,0,0,0.8);
+  background: #080810; flex-shrink: 0;
+}
+.frame.iphone { width: 844px; height: 390px; }
+.frame.ipad   { width: 1194px; height: 834px; }
+
+/* ── Screens ── */
+.screen {
+  position: absolute; inset: 0;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.55s ease;
+}
+.screen.active { opacity: 1; pointer-events: auto; }
+
+/* ── Shared hero + overlays ── */
+.hero { position: absolute; inset: 0; z-index: 1; background-size: cover; background-position: center; }
+.env-vignette {
+  position: absolute; inset: 0; z-index: 3;
+  background: radial-gradient(ellipse at center, transparent 18%, rgba(4,3,8,0.55) 100%);
+  pointer-events: none;
+}
+.env-texture {
+  position: absolute; inset: 0; z-index: 4; opacity: 0.01;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' fill='%23f5f0e8' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.ui-layer { position: absolute; inset: 0; z-index: 20; }
+
+/* ── Nav bar (shared) ── */
+.nav-bar {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 32px;
+  display: flex; align-items: center; padding: 0 16px;
+  background: rgba(6,6,14,0.4); backdrop-filter: blur(14px);
+  border-top: 0.5px solid rgba(245,240,232,0.04); z-index: 30;
+}
+.nav-back {
+  font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.12em;
+  color: rgba(245,240,232,0.28); cursor: pointer; width: 80px;
+  transition: color 0.2s; white-space: nowrap;
+}
+.nav-back:hover { color: rgba(245,240,232,0.55); }
+.nav-title {
+  flex: 1; text-align: center; font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: 0.18em;
+  color: rgba(245,240,232,0.28); text-transform: uppercase;
+}
+.nav-right {
+  width: 80px; text-align: right; font-family: 'Cinzel', serif;
+  font-size: 8px; letter-spacing: 0.12em; color: rgba(245,240,232,0.2);
+  display: flex; align-items: center; justify-content: flex-end; gap: 5px;
+}
+.aura-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(122,184,154,0.55); box-shadow: 0 0 6px rgba(122,184,154,0.4);
+  animation: auraPulse 3s ease-in-out infinite;
+}
+@keyframes auraPulse {
+  0%,100% { box-shadow: 0 0 6px rgba(122,184,154,0.3); }
+  50%      { box-shadow: 0 0 14px rgba(122,184,154,0.65); }
+}
+
+/* ── cardFloat animation ── */
+@keyframes cardFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+
+
+/* ════════════════════════════════════════
+   SCREEN 1: MENTAL DOJO HOME (MDH)
+════════════════════════════════════════ */
+.hero-mdh {
+  background:
+    radial-gradient(ellipse at 17% 55%, rgba(141,184,212,0.07) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, rgba(122,184,154,0.04) 0%, transparent 45%),
+    radial-gradient(ellipse at 83% 55%, rgba(212,120,80,0.07) 0%, transparent 40%),
+    linear-gradient(180deg, #0A0808 0%, #070710 50%, #050508 100%);
+}
+
+/* Three door panels */
+.mdh-doors {
+  position: absolute; inset: 0; display: flex;
+}
+.mdh-door {
+  flex: 1; position: relative; overflow: hidden;
+  cursor: pointer; transition: all 0.35s;
+}
+.mdh-door:hover .door-glow { opacity: 1; }
+.mdh-door:hover .disc-card  { animation: none; transform: translateY(-6px); }
+
+.door-glow { position: absolute; inset: 0; transition: opacity 0.4s; opacity: 0.88; }
+.door-metsuke .door-glow {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(141,184,212,0.18) 0%, rgba(100,150,200,0.08) 40%, transparent 70%),
+    linear-gradient(180deg, rgba(18,26,50,0.95) 0%, rgba(12,18,38,0.75) 100%);
+}
+.door-mushin .door-glow {
+  background:
+    radial-gradient(ellipse at 50% 32%, rgba(100,170,120,0.22) 0%, rgba(60,130,80,0.1) 40%, transparent 70%),
+    linear-gradient(180deg, rgba(10,22,14,0.95) 0%, rgba(7,18,10,0.75) 100%);
+}
+.door-tachi .door-glow {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(212,120,80,0.24) 0%, rgba(180,80,50,0.11) 40%, transparent 68%),
+    linear-gradient(180deg, rgba(30,10,6,0.95) 0%, rgba(22,8,5,0.75) 100%);
+}
+
+/* Pillar dividers */
+.mdh-pillar {
+  width: 18px; flex-shrink: 0; z-index: 5; pointer-events: none;
+  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(16,10,6,0.95) 40%, rgba(20,12,8,1) 50%, rgba(16,10,6,0.95) 60%, rgba(0,0,0,0) 100%);
+}
+
+/* Discipline cards on MDH */
+.mdh-doors .disc-card {
+  position: absolute; bottom: 46px;
+  left: 50%; transform: translateX(-50%);
+  width: 135px; text-align: center;
+  background: rgba(8,8,14,0.4); backdrop-filter: blur(20px);
+  border: 0.5px solid rgba(245,240,232,0.07); border-radius: 8px;
+  border-top: 2px solid transparent; padding: 14px 12px 12px;
+  cursor: pointer; transition: all 0.3s;
+  animation: cardFloat 4s ease-in-out infinite;
+}
+.mdh-doors .disc-card.metsuke { border-top-color: rgba(141,184,212,0.65); animation-delay: 0s; }
+.mdh-doors .disc-card.mushin  { border-top-color: rgba(100,170,120,0.65); animation-delay: 0.6s; }
+.mdh-doors .disc-card.tachi   { border-top-color: rgba(212,120,80,0.65);  animation-delay: 1.2s; }
+
+/* Focus fade */
+.mdh-doors:hover .mdh-door:not(:hover) .disc-card {
+  opacity: 0.45; filter: brightness(0.65);
+}
+.mdh-doors .disc-card .card-kanji {
+  font-family: serif; font-size: 26px; line-height: 1; margin-bottom: 7px; opacity: 0.85;
+}
+.disc-card.metsuke .card-kanji { color: rgba(141,184,212,1); text-shadow: 0 0 22px rgba(141,184,212,0.35); }
+.disc-card.mushin  .card-kanji { color: rgba(100,170,120,1); text-shadow: 0 0 22px rgba(100,170,120,0.35); }
+.disc-card.tachi   .card-kanji { color: rgba(212,120,80,1);  text-shadow: 0 0 22px rgba(212,120,80,0.35); }
+
+.disc-card .card-name {
+  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 3px;
+}
+.disc-card.metsuke .card-name { color: rgba(141,184,212,0.9); }
+.disc-card.mushin  .card-name { color: rgba(122,184,154,0.9); }
+.disc-card.tachi   .card-name { color: rgba(212,130,106,0.9); }
+
+.disc-card .card-desc {
+  font-family: 'Crimson Pro', serif; font-size: 9px; font-style: italic;
+  color: rgba(245,240,232,0.45); line-height: 1.3;
+}
+
+/* MDH top label */
+.mdh-top-label {
+  position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.22em;
+  color: rgba(245,240,232,0.38); text-transform: uppercase; white-space: nowrap;
+  pointer-events: none;
+}
+.mdh-nav-title { color: rgba(245,240,232,0.28); }
+
+
+/* ════════════════════════════════════════
+   SCREEN 2: MUSHIN HUB
+════════════════════════════════════════ */
+.hero-mushin {
+  background:
+    radial-gradient(ellipse at 40% 35%, rgba(100,170,120,0.1) 0%, transparent 55%),
+    radial-gradient(ellipse at 60% 70%, rgba(60,130,80,0.06) 0%, transparent 50%),
+    linear-gradient(165deg, #080E0A 0%, #060C08 45%, #040806 100%);
+}
+
+/* Hub layout — centered */
+.hub-body {
+  position: absolute; inset: 0 0 32px 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 0;
+  padding: 0 60px;
+}
+
+.hub-disc-kanji {
+  font-family: serif; font-size: 28px; line-height: 1;
+  color: rgba(100,170,120,0.6); text-shadow: 0 0 28px rgba(100,170,120,0.25);
+  margin-bottom: 4px;
+}
+.hub-disc-title {
+  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(122,184,154,0.5); margin-bottom: 5px;
+}
+.hub-disc-mantra {
+  font-family: 'Crimson Pro', serif; font-size: 9px; font-style: italic;
+  color: rgba(245,240,232,0.25); text-align: center; max-width: 500px;
+  line-height: 1.4; margin-bottom: 22px;
+}
+
+.begin-session-btn {
+  padding: 11px 38px;
+  background: rgba(8,20,12,0.45); backdrop-filter: blur(16px);
+  border: 1px solid rgba(122,184,154,0.38); border-radius: 5px;
+  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(122,184,154,0.88);
+  cursor: pointer; transition: all 0.3s;
+  box-shadow: 0 0 24px rgba(122,184,154,0.06);
+}
+.begin-session-btn:hover {
+  background: rgba(8,20,12,0.65); border-color: rgba(122,184,154,0.65);
+  box-shadow: 0 0 50px rgba(122,184,154,0.18); color: rgba(122,184,154,1);
+  transform: translateY(-2px);
+}
+
+.hub-explore-link {
+  margin-top: 12px; font-family: 'Cinzel', serif; font-size: 8px;
+  letter-spacing: 0.14em; color: rgba(245,240,232,0.2);
+  cursor: pointer; transition: color 0.2s; text-transform: uppercase;
+}
+.hub-explore-link:hover { color: rgba(245,240,232,0.45); }
+
+.hub-element-chips {
+  display: flex; gap: 8px; margin-top: 10px;
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.35s ease; opacity: 0;
+}
+.hub-element-chips.open { max-height: 40px; opacity: 1; }
+
+.element-chip {
+  padding: 4px 12px; border-radius: 20px;
+  border: 0.5px solid rgba(122,184,154,0.2);
+  background: rgba(122,184,154,0.06);
+  font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 0.1em;
+  color: rgba(122,184,154,0.5); cursor: pointer; transition: all 0.2s;
+}
+.element-chip:hover { border-color: rgba(122,184,154,0.4); color: rgba(122,184,154,0.8); }
+
+.hub-nav-title { color: rgba(122,184,154,0.38); }
+
+
+/* ════════════════════════════════════════
+   SCREEN 3: SHIHO BOX BREATHING
+════════════════════════════════════════ */
+.hero-shiho {
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(180,155,80,0.07) 0%, transparent 55%),
+    linear-gradient(180deg, #0C0A06 0%, #080608 50%, #060408 100%);
+}
+
+/* Top label */
+.shiho-top {
+  position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  pointer-events: none;
+}
+.shiho-kanji-sm { font-family: serif; font-size: 13px; color: rgba(200,175,110,0.55); }
+.shiho-word-sm  {
+  font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(200,175,110,0.35);
+}
+
+/* Shiho centered layout */
+.shiho-center {
+  position: absolute; inset: 0 0 32px 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0;
+}
+
+/* Mandala SVG wrapper — scales with breath */
+.shiho-mandala-wrap {
+  position: relative; transition: transform 4s ease-in-out;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+.shiho-mandala-wrap.inhale-expand { transform: scale(1.12); }
+.shiho-mandala-wrap.exhale-shrink { transform: scale(1.0); }
+
+.shiho-kanji-center {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: serif; font-size: 26px; line-height: 1;
+  color: rgba(245,240,232,0.68);
+  text-shadow: 0 0 28px rgba(180,155,80,0.3);
+  pointer-events: none; transition: opacity 0.5s;
+}
+
+/* Phase label + countdown */
+.shiho-phase-label {
+  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(200,175,110,0.55);
+  text-align: center; min-height: 16px; margin-bottom: 4px;
+  transition: opacity 0.4s;
+}
+.shiho-countdown {
+  font-family: 'Cinzel', serif; font-size: 22px; font-weight: 600;
+  color: rgba(245,240,232,0.55); text-align: center;
+  min-height: 28px; margin-bottom: 14px;
+  transition: opacity 0.3s;
+}
+
+/* Cycle dots */
+.shiho-cycle-dots {
+  display: flex; gap: 10px; align-items: center;
+}
+.cycle-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  border: 0.5px solid rgba(200,175,110,0.35);
+  background: transparent; transition: all 0.4s;
+}
+.cycle-dot.active {
+  background: rgba(200,175,110,0.7);
+  box-shadow: 0 0 8px rgba(200,175,110,0.45);
+  border-color: rgba(200,175,110,0.6);
+}
+
+/* Start / ready state on shiho */
+.shiho-start-hint {
+  font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(245,240,232,0.18); margin-top: 8px;
+}
+
+.shiho-nav-title { color: rgba(200,175,110,0.32); }
+
+
+/* ════════════════════════════════════════
+   SCREEN 4: CHECK-IN
+════════════════════════════════════════ */
+.hero-checkin {
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(122,184,154,0.06) 0%, transparent 55%),
+    linear-gradient(180deg, #070C09 0%, #060A08 50%, #050808 100%);
+}
+
+.checkin-body {
+  position: absolute; inset: 0 0 32px 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 0; padding: 0 40px;
+}
+
+.checkin-prompt {
+  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(245,240,232,0.38);
+  text-align: center; margin-bottom: 18px;
+}
+
+.checkin-cards {
+  display: flex; gap: 12px; align-items: stretch;
+  margin-bottom: 18px;
+}
+
+.checkin-card {
+  width: 128px; padding: 14px 10px 12px;
+  background: rgba(8,14,10,0.4); backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(122,184,154,0.1); border-radius: 8px;
+  border-top: 2px solid rgba(122,184,154,0.25);
+  text-align: center; cursor: pointer;
+  transition: all 0.28s ease;
+}
+.checkin-card:hover {
+  background: rgba(8,14,10,0.6); border-top-color: rgba(122,184,154,0.6);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(122,184,154,0.1);
+}
+.checkin-card.selected {
+  background: rgba(8,14,10,0.7); border-color: rgba(122,184,154,0.3);
+  border-top-color: rgba(122,184,154,0.85);
+  box-shadow: 0 10px 36px rgba(122,184,154,0.18);
+}
+.checkin-cards:has(.checkin-card.selected) .checkin-card:not(.selected) {
+  opacity: 0.4; transform: scale(0.97);
+}
+
+.checkin-kanji {
+  font-family: serif; font-size: 24px; line-height: 1; margin-bottom: 7px;
+  color: rgba(122,184,154,0.9); text-shadow: 0 0 18px rgba(122,184,154,0.3);
+}
+.checkin-name {
+  font-family: 'Cinzel', serif; font-size: 9px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(122,184,154,0.8); margin-bottom: 3px;
+}
+.checkin-desc {
+  font-family: 'Crimson Pro', serif; font-size: 8.5px; font-style: italic;
+  color: rgba(245,240,232,0.38); line-height: 1.3;
+}
+
+.checkin-begin {
+  padding: 9px 32px;
+  background: rgba(8,20,12,0.45); backdrop-filter: blur(16px);
+  border: 1px solid rgba(122,184,154,0.35); border-radius: 5px;
+  font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(122,184,154,0.7);
+  cursor: pointer; transition: all 0.3s;
+  opacity: 0; transform: translateY(6px);
+  pointer-events: none;
+}
+.checkin-begin.visible {
+  opacity: 1; transform: translateY(0); pointer-events: auto;
+}
+.checkin-begin:hover {
+  background: rgba(8,20,12,0.65); border-color: rgba(122,184,154,0.6);
+  color: rgba(122,184,154,1); box-shadow: 0 0 30px rgba(122,184,154,0.14);
+}
+
+.checkin-nav-title { color: rgba(122,184,154,0.28); }
+
+
+/* ════════════════════════════════════════
+   SCREEN 5: SESSION RUNNER
+════════════════════════════════════════ */
+.hero-session {
+  background:
+    radial-gradient(ellipse at 32% 50%, rgba(122,184,154,0.07) 0%, transparent 50%),
+    linear-gradient(165deg, #060C08 0%, #050A07 50%, #040806 100%);
+}
+
+.session-layout {
+  position: absolute; inset: 0 0 32px 0;
+  display: flex; align-items: center;
+}
+
+/* Left: breathing circle */
+.session-left {
+  flex: 0 0 46%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 0;
+}
+
+/* The breathing ring */
+.breath-ring-wrap {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px;
+}
+.breath-ring {
+  width: 90px; height: 90px; border-radius: 50%;
+  border: 1.5px solid rgba(122,184,154,0.45);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  box-shadow: 0 0 16px rgba(122,184,154,0.06), inset 0 0 20px rgba(122,184,154,0.04);
+  transition: all 1s ease-in-out;
+}
+.breath-ring.phase-inhale {
+  width: 140px; height: 140px;
+  border-color: rgba(122,184,154,0.85);
+  box-shadow: 0 0 40px rgba(122,184,154,0.2), inset 0 0 30px rgba(122,184,154,0.08);
+}
+.breath-ring.phase-hold {
+  border-color: rgba(122,184,154,0.65);
+  box-shadow: 0 0 28px rgba(122,184,154,0.14);
+}
+.breath-ring.phase-exhale {
+  width: 90px; height: 90px;
+  border-color: rgba(122,184,154,0.3);
+  box-shadow: 0 0 10px rgba(122,184,154,0.04);
+}
+
+.breath-count-num {
+  font-family: 'Cinzel', serif; font-size: 20px; font-weight: 600;
+  color: rgba(245,240,232,0.6); line-height: 1;
+  transition: opacity 0.2s;
+}
+.breath-phase-text {
+  font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(122,184,154,0.5);
+  text-align: center; min-height: 14px;
+}
+
+/* Right: technique info */
+.session-right {
+  flex: 1; padding: 0 24px 0 0;
+  display: flex; flex-direction: column; justify-content: center; gap: 0;
+}
+
+.session-element-tag {
+  font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 4px;
+  color: rgba(122,184,154,0.45);
+}
+.session-tech-kanji {
+  font-family: serif; font-size: 22px; line-height: 1; margin-bottom: 5px;
+  color: rgba(122,184,154,0.8); text-shadow: 0 0 18px rgba(122,184,154,0.25);
+}
+.session-tech-name {
+  font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600;
+  letter-spacing: 0.08em; color: rgba(245,240,232,0.82); margin-bottom: 2px;
+}
+.session-tech-realname {
+  font-family: 'Crimson Pro', serif; font-size: 9px; font-style: italic;
+  color: rgba(245,240,232,0.3); margin-bottom: 8px;
+}
+.session-tech-cue {
+  font-family: 'Crimson Pro', serif; font-size: 10px; font-style: italic;
+  color: rgba(245,240,232,0.45); line-height: 1.45; max-width: 300px;
+  margin-bottom: 14px;
+}
+
+/* Session progress dots */
+.session-prog-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+}
+.session-prog-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  border: 0.5px solid rgba(122,184,154,0.25);
+  background: transparent; transition: all 0.4s;
+}
+.session-prog-dot.done {
+  background: rgba(122,184,154,0.5);
+  box-shadow: 0 0 6px rgba(122,184,154,0.3);
+}
+.session-prog-dot.current {
+  background: rgba(122,184,154,0.85);
+  box-shadow: 0 0 12px rgba(122,184,154,0.5);
+  animation: dotPulse 1.2s ease-in-out infinite;
+}
+@keyframes dotPulse {
+  0%,100% { box-shadow: 0 0 8px rgba(122,184,154,0.4); }
+  50%      { box-shadow: 0 0 18px rgba(122,184,154,0.7); }
+}
+
+.session-tech-num {
+  font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(245,240,232,0.22);
+}
+
+/* Rest state */
+.session-rest-overlay {
+  position: absolute; inset: 0 0 32px 0;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.5s;
+  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(122,184,154,0.45);
+}
+.session-rest-overlay.visible { opacity: 1; }
+
+.session-nav-title { color: rgba(122,184,154,0.3); }
+
+
+/* ════════════════════════════════════════
+   SCREEN 6: SESSION COMPLETE
+════════════════════════════════════════ */
+.hero-complete {
+  background:
+    radial-gradient(ellipse at 28% 50%, rgba(122,184,154,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 72% 50%, rgba(180,155,80,0.05) 0%, transparent 45%),
+    linear-gradient(165deg, #070C09 0%, #060A08 50%, #040806 100%);
+}
+
+.complete-layout {
+  position: absolute; inset: 0 0 32px 0;
+  display: flex; align-items: center;
+}
+
+/* Left: aura */
+.complete-left {
+  flex: 0 0 40%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px;
+}
+.aura-orb {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%,
+    rgba(180,225,190,0.92) 0%,
+    rgba(122,184,154,0.72) 38%,
+    rgba(70,140,100,0.45) 75%,
+    rgba(40,90,65,0.2) 100%
+  );
+  box-shadow: 0 0 32px rgba(122,184,154,0.45), 0 0 64px rgba(122,184,154,0.2);
+  animation: orbBreath 3.5s ease-in-out infinite;
+}
+@keyframes orbBreath {
+  0%,100% { transform: scale(1);    box-shadow: 0 0 32px rgba(122,184,154,0.4), 0 0 64px rgba(122,184,154,0.18); }
+  50%      { transform: scale(1.06); box-shadow: 0 0 50px rgba(122,184,154,0.6), 0 0 90px rgba(122,184,154,0.28); }
+}
+.aura-stage-label {
+  font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(122,184,154,0.5);
+}
+.aura-stage-name {
+  font-family: 'Crimson Pro', serif; font-size: 11px; font-style: italic;
+  color: rgba(245,240,232,0.3); letter-spacing: 0.04em;
+}
+
+/* Right: stats + quote */
+.complete-right {
+  flex: 1; padding: 0 28px 0 0;
+  display: flex; flex-direction: column; justify-content: center; gap: 0;
+}
+
+.complete-xp-earned {
+  font-family: 'Cinzel', serif; font-size: 28px; font-weight: 600;
+  color: rgba(122,184,154,0.9); letter-spacing: 0.04em;
+  margin-bottom: 2px;
+  text-shadow: 0 0 24px rgba(122,184,154,0.35);
+}
+.complete-xp-label {
+  font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(245,240,232,0.25); margin-bottom: 8px;
+}
+.complete-xp-bar {
+  height: 2px; background: rgba(245,240,232,0.07);
+  border-radius: 1px; overflow: hidden; max-width: 240px; margin-bottom: 6px;
+}
+.complete-xp-fill {
+  height: 100%; border-radius: 1px; width: 0%;
+  background: linear-gradient(90deg, rgba(122,184,154,0.4), rgba(122,184,154,0.85));
+  transition: width 1.6s ease;
+}
+.complete-session-summary {
+  font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 0.12em;
+  color: rgba(245,240,232,0.2); text-transform: uppercase; margin-bottom: 16px;
+}
+
+.complete-divider {
+  width: 40px; height: 0.5px; background: rgba(245,240,232,0.1); margin-bottom: 14px;
+}
+
+.complete-quote {
+  font-family: 'Crimson Pro', serif; font-size: 12px; font-style: italic;
+  color: rgba(245,240,232,0.5); line-height: 1.6; max-width: 320px;
+  margin-bottom: 18px; opacity: 0; transition: opacity 1s ease;
+}
+.complete-quote.visible { opacity: 1; }
+
+.return-btn {
+  padding: 8px 24px; align-self: flex-start;
+  background: rgba(8,20,12,0.4); backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(122,184,154,0.32); border-radius: 5px;
+  font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(122,184,154,0.7);
+  cursor: pointer; transition: all 0.3s;
+  opacity: 0; pointer-events: none; transform: translateY(6px);
+}
+.return-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.return-btn:hover {
+  background: rgba(8,20,12,0.65); border-color: rgba(122,184,154,0.58);
+  color: rgba(122,184,154,1);
+}
+
+.complete-nav-title { color: rgba(122,184,154,0.3); }
+
+
+/* ════════════════════════════════════════
+   DEV CONTROLS
+════════════════════════════════════════ */
+.controls {
+  position: fixed; bottom: 0; left: 0; right: 0; height: 40px;
+  background: rgba(6,6,14,0.94); border-top: 0.5px solid rgba(245,240,232,0.06);
+  display: flex; align-items: center; justify-content: center;
+  gap: 5px; padding: 0 12px; z-index: 100; flex-wrap: wrap;
+}
+.ctrl-btn {
+  font-family: 'Cinzel', serif; font-size: 8.5px; letter-spacing: 0.07em;
+  padding: 5px 9px; border-radius: 4px;
+  border: 0.5px solid rgba(245,240,232,0.1);
+  background: rgba(245,240,232,0.03); color: rgba(245,240,232,0.38);
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.ctrl-btn:hover { background: rgba(245,240,232,0.06); color: rgba(245,240,232,0.65); }
+.ctrl-btn.active { border-color: rgba(122,184,154,0.4); color: rgba(122,184,154,0.78); background: rgba(122,184,154,0.05); }
+.ctrl-sep { width: 1px; height: 16px; background: rgba(245,240,232,0.07); flex-shrink: 0; }
+
+.version-label {
+  position: fixed; bottom: 48px; right: 14px;
+  font-family: 'Cinzel', serif; font-size: 7.5px; letter-spacing: 0.1em;
+  color: rgba(245,240,232,0.14); z-index: 90;
+}
+
+/* iPad overrides (global) */
+.frame.ipad .nav-bar { height: 48px; padding: 0 28px; }
+.frame.ipad .nav-back, .frame.ipad .nav-title, .frame.ipad .nav-right { font-size: 13px; }
+.frame.ipad .nav-back, .frame.ipad .nav-right { width: 100px; }
+.frame.ipad .mdh-top-label { font-size: 15px; top: 28px; }
+.frame.ipad .mdh-doors .disc-card { width: 220px; padding: 22px 18px 18px; bottom: 80px; }
+.frame.ipad .mdh-doors .disc-card .card-kanji { font-size: 44px; margin-bottom: 12px; }
+.frame.ipad .mdh-doors .disc-card .card-name  { font-size: 15px; margin-bottom: 5px; }
+.frame.ipad .mdh-doors .disc-card .card-desc  { font-size: 13px; }
+.frame.ipad .hub-disc-kanji { font-size: 46px; margin-bottom: 7px; }
+.frame.ipad .hub-disc-title { font-size: 15px; margin-bottom: 7px; }
+.frame.ipad .hub-disc-mantra { font-size: 13px; margin-bottom: 32px; }
+.frame.ipad .begin-session-btn { font-size: 16px; padding: 16px 56px; }
+.frame.ipad .hub-explore-link { font-size: 12px; }
+.frame.ipad .breath-ring { width: 120px; height: 120px; }
+.frame.ipad .breath-ring.phase-inhale { width: 200px; height: 200px; }
+.frame.ipad .breath-ring.phase-exhale { width: 120px; height: 120px; }
+.frame.ipad .breath-count-num { font-size: 32px; }
+.frame.ipad .aura-orb { width: 130px; height: 130px; }
+.frame.ipad .complete-xp-earned { font-size: 46px; }
+.frame.ipad .complete-quote { font-size: 18px; }
+</style>
+</head>
+<body>
+
+<div class="device-toggle">
+  <button id="btn-iphone" class="active" onclick="setDevice('iphone')">iPhone</button>
+  <button id="btn-ipad"              onclick="setDevice('ipad')">iPad</button>
+</div>
+
+<div class="frame iphone" id="frame">
+
+  <!-- ══════════════════════════════
+       SCREEN 1: MDH
+  ══════════════════════════════ -->
+  <div class="screen active" id="screen-mdh">
+    <div class="hero hero-mdh"></div>
+    <div class="env-vignette"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+      <div class="mdh-top-label">Choose Your Path</div>
+      <div class="mdh-doors">
+        <div class="mdh-door" onclick="navigateDiscipline('metsuke')">
+          <div class="door-glow door-metsuke"></div>
+          <div class="disc-card metsuke">
+            <div class="card-kanji">目付</div>
+            <div class="card-name">Metsuke</div>
+            <div class="card-desc">The Reading Mind</div>
+          </div>
+        </div>
+        <div class="mdh-pillar"></div>
+        <div class="mdh-door" onclick="navigateDiscipline('mushin')">
+          <div class="door-glow door-mushin"></div>
+          <div class="disc-card mushin">
+            <div class="card-kanji">無心</div>
+            <div class="card-name">Mushin</div>
+            <div class="card-desc">The Still Mind</div>
+          </div>
+        </div>
+        <div class="mdh-pillar"></div>
+        <div class="mdh-door" onclick="navigateDiscipline('tachi')">
+          <div class="door-glow door-tachi"></div>
+          <div class="disc-card tachi">
+            <div class="card-kanji">太刀</div>
+            <div class="card-name">Tachi</div>
+            <div class="card-desc">The Striking Mind</div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <div class="nav-back">← Profile</div>
+        <div class="nav-title mdh-nav-title">Mental Dojo</div>
+        <div class="nav-right"><div class="aura-dot"></div> Aura</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 2: MUSHIN HUB
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-mushin-hub">
+    <div class="hero hero-mushin"></div>
+    <div class="env-vignette"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+      <div class="hub-body">
+        <div class="hub-disc-kanji">無心</div>
+        <div class="hub-disc-title">Mushin · The Still Mind</div>
+        <div class="hub-disc-mantra">The untrained mind is full of noise. The ninja's mind is full of space.</div>
+        <button class="begin-session-btn" onclick="setScreen('screen-shiho')">Begin Session →</button>
+        <div class="hub-explore-link" id="explore-link" onclick="toggleExplore()">or explore techniques ↓</div>
+        <div class="hub-element-chips" id="hub-chips">
+          <div class="element-chip">風 · Kaze</div>
+          <div class="element-chip">地 · Chi</div>
+          <div class="element-chip">水 · Mizu</div>
+          <div class="element-chip">火 · Hi</div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <div class="nav-back" onclick="setScreen('screen-mdh')">← Back</div>
+        <div class="nav-title hub-nav-title">Mushin</div>
+        <div class="nav-right"><div class="aura-dot"></div> Aura</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 3: SHIHO BOX BREATHING
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-shiho">
+    <div class="hero hero-shiho"></div>
+    <div class="env-vignette"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+      <div class="shiho-top">
+        <div class="shiho-kanji-sm">四方</div>
+        <div class="shiho-word-sm">Opening Ritual · Box Breathing</div>
+      </div>
+      <div class="shiho-center">
+        <div class="shiho-mandala-wrap" id="shiho-mandala-wrap">
+          <svg width="160" height="160" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"
+               style="filter: drop-shadow(0 0 16px rgba(180,155,80,0.1))">
+            <circle cx="100" cy="100" r="92" fill="none" stroke="rgba(200,175,110,0.06)" stroke-width="0.5"/>
+            <line x1="100" y1="100" x2="100" y2="12"  stroke="rgba(200,175,110,0.16)" stroke-width="0.7"/>
+            <line x1="100" y1="100" x2="165" y2="35"  stroke="rgba(200,175,110,0.09)" stroke-width="0.5"/>
+            <line x1="100" y1="100" x2="188" y2="100" stroke="rgba(200,175,110,0.16)" stroke-width="0.7"/>
+            <line x1="100" y1="100" x2="165" y2="165" stroke="rgba(200,175,110,0.09)" stroke-width="0.5"/>
+            <line x1="100" y1="100" x2="100" y2="188" stroke="rgba(200,175,110,0.16)" stroke-width="0.7"/>
+            <line x1="100" y1="100" x2="35"  y2="165" stroke="rgba(200,175,110,0.09)" stroke-width="0.5"/>
+            <line x1="100" y1="100" x2="12"  y2="100" stroke="rgba(200,175,110,0.16)" stroke-width="0.7"/>
+            <line x1="100" y1="100" x2="35"  y2="35"  stroke="rgba(200,175,110,0.09)" stroke-width="0.5"/>
+            <line x1="100" y1="8"   x2="100" y2="18"  stroke="rgba(200,175,110,0.38)" stroke-width="1"/>
+            <line x1="192" y1="100" x2="182" y2="100" stroke="rgba(200,175,110,0.38)" stroke-width="1"/>
+            <line x1="100" y1="192" x2="100" y2="182" stroke="rgba(200,175,110,0.38)" stroke-width="1"/>
+            <line x1="8"   y1="100" x2="18"  y2="100" stroke="rgba(200,175,110,0.38)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="52" fill="none" stroke="rgba(200,175,110,0.1)" stroke-width="0.5"/>
+            <radialGradient id="cg"><stop offset="0%" stop-color="rgba(200,175,110,0.12)"/><stop offset="100%" stop-color="rgba(200,175,110,0)"/></radialGradient>
+            <circle cx="100" cy="100" r="30" fill="url(#cg)"/>
+            <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(200,175,110,0.62)" stroke-width="1.2" stroke-linecap="round" id="shiho-ring"/>
+          </svg>
+          <div class="shiho-kanji-center">四方</div>
+        </div>
+        <div class="shiho-phase-label" id="shiho-phase">Ready</div>
+        <div class="shiho-countdown" id="shiho-countdown"></div>
+        <div class="shiho-cycle-dots">
+          <div class="cycle-dot" id="cdot-0"></div>
+          <div class="cycle-dot" id="cdot-1"></div>
+          <div class="cycle-dot" id="cdot-2"></div>
+        </div>
+        <div class="shiho-start-hint" id="shiho-hint">Tap to begin</div>
+      </div>
+      <div class="nav-bar">
+        <div class="nav-back" onclick="stopShihoAndGo('screen-mushin-hub')">← Back</div>
+        <div class="nav-title shiho-nav-title">Shiho</div>
+        <div class="nav-right"><div class="aura-dot"></div> Aura</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 4: CHECK-IN
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-checkin">
+    <div class="hero hero-checkin"></div>
+    <div class="env-vignette"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+      <div class="checkin-body">
+        <div class="checkin-prompt">How are you feeling right now?</div>
+        <div class="checkin-cards" id="checkin-cards">
+          <div class="checkin-card" data-state="scattered" onclick="selectCheckin(this)">
+            <div class="checkin-kanji">風</div>
+            <div class="checkin-name">Fū</div>
+            <div class="checkin-desc">Busy head</div>
+          </div>
+          <div class="checkin-card" data-state="clouded" onclick="selectCheckin(this)">
+            <div class="checkin-kanji">雲</div>
+            <div class="checkin-name">Kumo</div>
+            <div class="checkin-desc">Worried or anxious</div>
+          </div>
+          <div class="checkin-card" data-state="tired" onclick="selectCheckin(this)">
+            <div class="checkin-kanji">月</div>
+            <div class="checkin-name">Tsuki</div>
+            <div class="checkin-desc">Tired, low energy</div>
+          </div>
+          <div class="checkin-card" data-state="clear" onclick="selectCheckin(this)">
+            <div class="checkin-kanji">日</div>
+            <div class="checkin-name">Hi</div>
+            <div class="checkin-desc">Clear and ready</div>
+          </div>
+          <div class="checkin-card" data-state="turbulent" onclick="selectCheckin(this)">
+            <div class="checkin-kanji">波</div>
+            <div class="checkin-name">Nami</div>
+            <div class="checkin-desc">Unsettled or off</div>
+          </div>
+        </div>
+        <button class="checkin-begin" id="checkin-begin" onclick="beginSession()">Begin Practice →</button>
+      </div>
+      <div class="nav-bar">
+        <div class="nav-back" onclick="setScreen('screen-shiho')">← Back</div>
+        <div class="nav-title checkin-nav-title">Check In</div>
+        <div class="nav-right"><div class="aura-dot"></div> Aura</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 5: SESSION RUNNER
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-session">
+    <div class="hero hero-session"></div>
+    <div class="env-vignette"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+      <div class="session-layout">
+        <div class="session-left">
+          <div class="breath-ring-wrap">
+            <div class="breath-ring" id="session-ring">
+              <div class="breath-count-num" id="session-count">—</div>
+            </div>
+            <div class="breath-phase-text" id="session-phase">—</div>
+          </div>
+        </div>
+        <div class="session-right">
+          <div class="session-element-tag" id="session-element-tag">Element</div>
+          <div class="session-tech-kanji"  id="session-tech-kanji">—</div>
+          <div class="session-tech-name"   id="session-tech-name">—</div>
+          <div class="session-tech-realname" id="session-tech-realname">—</div>
+          <div class="session-tech-cue"    id="session-tech-cue">—</div>
+          <div class="session-prog-row"    id="session-prog-row">
+            <div class="session-prog-dot" id="pd-0"></div>
+            <div class="session-prog-dot" id="pd-1"></div>
+            <div class="session-prog-dot" id="pd-2"></div>
+            <div class="session-prog-dot" id="pd-3"></div>
+          </div>
+          <div class="session-tech-num" id="session-tech-num">Technique 1 of 4</div>
+        </div>
+      </div>
+      <div class="session-rest-overlay" id="session-rest">Next technique…</div>
+      <div class="nav-bar">
+        <div class="nav-back" onclick="stopSessionAndGo('screen-mushin-hub')">← End Session</div>
+        <div class="nav-title session-nav-title">Session</div>
+        <div class="nav-right"><div class="aura-dot"></div> Aura</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SCREEN 6: SESSION COMPLETE
+  ══════════════════════════════ -->
+  <div class="screen" id="screen-complete">
+    <div class="hero hero-complete"></div>
+    <div class="env-vignette"></div>
+    <div class="env-texture"></div>
+    <div class="ui-layer">
+      <div class="complete-layout">
+        <div class="complete-left">
+          <div class="aura-orb"></div>
+          <div class="aura-stage-label">Stage 2 · Hikari</div>
+          <div class="aura-stage-name">Warm Light</div>
+        </div>
+        <div class="complete-right">
+          <div class="complete-xp-earned" id="complete-xp">+0 XP</div>
+          <div class="complete-xp-label">Earned this session</div>
+          <div class="complete-xp-bar"><div class="complete-xp-fill" id="xp-fill"></div></div>
+          <div class="complete-session-summary" id="complete-summary">4 techniques complete</div>
+          <div class="complete-divider"></div>
+          <div class="complete-quote" id="complete-quote"></div>
+          <button class="return-btn" id="return-btn" onclick="setScreen('screen-mushin-hub')">Return to Dojo →</button>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <div class="nav-back" onclick="setScreen('screen-mdh')">← Mental Dojo</div>
+        <div class="nav-title complete-nav-title">Session Complete</div>
+        <div class="nav-right"><div class="aura-dot"></div> Aura</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /frame -->
+
+<!-- ══════════════════════════════════════
+     DEV CONTROLS
+══════════════════════════════════════ -->
+<div class="controls">
+  <button class="ctrl-btn active" id="scr-mdh"     onclick="devGo('screen-mdh')">MDH</button>
+  <button class="ctrl-btn"        id="scr-hub"     onclick="devGo('screen-mushin-hub')">Hub</button>
+  <button class="ctrl-btn"        id="scr-shiho"   onclick="devGo('screen-shiho')">Shiho</button>
+  <button class="ctrl-btn"        id="scr-checkin" onclick="devGo('screen-checkin')">Check-in</button>
+  <button class="ctrl-btn"        id="scr-session" onclick="devGo('screen-session')">Session</button>
+  <button class="ctrl-btn"        id="scr-complete" onclick="devGo('screen-complete')">Complete</button>
+  <div class="ctrl-sep"></div>
+  <button class="ctrl-btn active" id="demo-mode-btn" onclick="toggleDemoMode(this)">Demo: On</button>
+</div>
+<div class="version-label">Mushin Flow Demo · v1.0 · March 2026</div>
+
+<script>
+/* ════════════════════════════════════════
+   CONFIG
+════════════════════════════════════════ */
+var DEMO_MODE = true; // 1 cycle per technique; false = 3 cycles
+
+/* ════════════════════════════════════════
+   BREATHING TECHNIQUE LIBRARY
+════════════════════════════════════════ */
+var TECHNIQUES = {
+  tanden: {
+    kanji: '中', name: 'Tanden', realName: 'Box Breathing', element: 'Chi',
+    pattern: [4,4,4,4],
+    cue: 'Equal in all directions. This is the foundation.'
+  },
+  shizen: {
+    kanji: '然', name: 'Shizen', realName: 'Extended Exhale', element: 'Chi',
+    pattern: [4,2,6,0],
+    cue: 'The long exhale brings the calm you need.'
+  },
+  kaze: {
+    kanji: '風', name: 'Kaze no Iki', realName: 'Rhythmic Breath', element: 'Kaze',
+    pattern: [4,0,4,0],
+    cue: 'Steady as wind through tall grass.'
+  },
+  tsuki: {
+    kanji: '月', name: 'Tsuki', realName: '4-7-8 Breath', element: 'Mizu',
+    pattern: [4,7,8,0],
+    cue: 'Slow and deep. The moon waits for no one.'
+  },
+  hi: {
+    kanji: '火', name: 'Hi no Iki', realName: 'Energising Breath', element: 'Hi',
+    pattern: [2,0,4,0],
+    cue: 'Sharp and quick. Awaken the flame within.'
+  },
+  mizu: {
+    kanji: '水', name: 'Mizu', realName: 'Ocean Breath', element: 'Mizu',
+    pattern: [6,0,6,0],
+    cue: 'Slow like the tide. Strong like the deep.'
+  }
+};
+
+/* Check-in → session technique sequence */
+var SESSIONS = {
+  scattered: ['kaze','shizen','tanden','mizu'],
+  clouded:   ['tanden','shizen','mizu','tsuki'],
+  tired:     ['hi','kaze','tanden','shizen'],
+  clear:     ['mizu','tanden','tsuki','shizen'],
+  turbulent: ['tanden','shizen','tsuki','mizu']
+};
+
+var QUOTES = [
+  'The still water sees the sky clearly.',
+  'Your breath was here before your thoughts.',
+  'The warrior who knows stillness strikes with precision.',
+  'Each breath is a step on the path. You have taken many today.',
+  'Before the blade is drawn, the mind is still.',
+  'The ninja does not rush. The ninja arrives.'
+];
+
+/* ════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════ */
+var currentScreen = 'screen-mdh';
+
+function setScreen(id) {
+  var screens = document.querySelectorAll('.screen');
+  screens.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.getElementById(id);
+  if (target) { target.classList.add('active'); currentScreen = id; }
+  updateDevBtns();
+  onScreenEnter(id);
+}
+
+function onScreenEnter(id) {
+  if (id === 'screen-shiho')    initShiho();
+  if (id === 'screen-complete') initComplete();
+  if (id === 'screen-session')  { /* session started from beginSession() */ }
+}
+
+function updateDevBtns() {
+  var map = {
+    'screen-mdh':         'scr-mdh',
+    'screen-mushin-hub':  'scr-hub',
+    'screen-shiho':       'scr-shiho',
+    'screen-checkin':     'scr-checkin',
+    'screen-session':     'scr-session',
+    'screen-complete':    'scr-complete'
+  };
+  Object.keys(map).forEach(function(k) {
+    var btn = document.getElementById(map[k]);
+    if (btn) btn.classList.toggle('active', k === currentScreen);
+  });
+}
+
+function setDevice(type) {
+  var f = document.getElementById('frame');
+  f.className = 'frame ' + type;
+  document.getElementById('btn-iphone').classList.toggle('active', type === 'iphone');
+  document.getElementById('btn-ipad').classList.toggle('active', type === 'ipad');
+}
+
+function devGo(id) {
+  breathEngine.stop();
+  sessionRunner.stop();
+  setScreen(id);
+}
+
+function toggleDemoMode(btn) {
+  DEMO_MODE = !DEMO_MODE;
+  btn.textContent = 'Demo: ' + (DEMO_MODE ? 'On' : 'Off');
+  btn.classList.toggle('active', DEMO_MODE);
+}
+
+/* ════════════════════════════════════════
+   MDH NAVIGATION
+════════════════════════════════════════ */
+function navigateDiscipline(disc) {
+  if (disc === 'mushin') { setScreen('screen-mushin-hub'); return; }
+  // Metsuke / Tachi — coming soon (flash the card, stay on MDH)
+  var card = document.querySelector('.door-' + disc + ' .disc-card');
+  if (!card) card = document.querySelector('.mdh-door:nth-child(' + (disc === 'metsuke' ? 1 : 5) + ') .disc-card');
+  // Flash
+  if (card) {
+    card.style.opacity = '0.4';
+    setTimeout(function() { card.style.opacity = ''; }, 600);
+  }
+}
+
+/* ════════════════════════════════════════
+   MUSHIN HUB
+════════════════════════════════════════ */
+var exploreOpen = false;
+function toggleExplore() {
+  exploreOpen = !exploreOpen;
+  document.getElementById('hub-chips').classList.toggle('open', exploreOpen);
+  document.getElementById('explore-link').textContent =
+    exploreOpen ? 'close ↑' : 'or explore techniques ↓';
+}
+
+/* ════════════════════════════════════════
+   UNIVERSAL BREATHING ENGINE
+════════════════════════════════════════ */
+var breathEngine = {
+  running:    false,
+  pattern:    [4,4,4,4],
+  phaseNames: ['Inhale','Hold','Exhale','Hold'],
+  phaseIdx:   0,
+  count:      0,
+  cycles:     0,
+  maxCycles:  3,
+  timer:      null,
+  onPhase:    null,  // fn(phaseIdx, name, duration)
+  onTick:     null,  // fn(count)
+  onCycle:    null,  // fn(cycleNum)
+  onDone:     null,  // fn()
+
+  start: function() {
+    this.running = true; this.phaseIdx = 0; this.cycles = 0;
+    this._next();
+  },
+  stop: function() {
+    this.running = false; clearInterval(this.timer); this.timer = null;
+  },
+  _next: function() {
+    var self = this;
+    clearInterval(this.timer);
+    // Skip zero-duration phases
+    var pi = this.phaseIdx % 4;
+    if (this.pattern[pi] === 0) {
+      this.phaseIdx++;
+      if (this.phaseIdx % 4 === 0) { this._endCycle(); } else { this._next(); }
+      return;
+    }
+    this.count = this.pattern[pi];
+    if (this.onPhase) this.onPhase(pi, this.phaseNames[pi], this.count);
+    if (this.onTick)  this.onTick(this.count);
+    this.timer = setInterval(function() {
+      if (!self.running) return;
+      self.count--;
+      if (self.onTick) self.onTick(self.count);
+      if (self.count <= 0) {
+        clearInterval(self.timer);
+        self.phaseIdx++;
+        if (self.phaseIdx % 4 === 0) { self._endCycle(); } else { self._next(); }
+      }
+    }, 1000);
+  },
+  _endCycle: function() {
+    this.cycles++;
+    if (this.onCycle) this.onCycle(this.cycles);
+    if (this.cycles >= this.maxCycles) {
+      this.running = false;
+      if (this.onDone) this.onDone();
+    } else {
+      this.phaseIdx = 0; this._next();
+    }
+  }
+};
+
+/* ════════════════════════════════════════
+   SCREEN 3: SHIHO BREATHING
+════════════════════════════════════════ */
+var shihoStarted = false;
+
+function initShiho() {
+  shihoStarted = false;
+  breathEngine.stop();
+  // Reset cycle dots
+  for (var i = 0; i < 3; i++) {
+    var d = document.getElementById('cdot-' + i);
+    if (d) d.classList.remove('active');
+  }
+  document.getElementById('shiho-phase').textContent    = 'Ready';
+  document.getElementById('shiho-countdown').textContent = '';
+  document.getElementById('shiho-hint').style.opacity   = '1';
+  var wrap = document.getElementById('shiho-mandala-wrap');
+  wrap.classList.remove('inhale-expand','exhale-shrink');
+
+  // Tap to begin on the shiho screen
+  var screen = document.getElementById('screen-shiho');
+  screen.onclick = function(e) {
+    if (!shihoStarted && e.target !== document.querySelector('#screen-shiho .nav-back')) {
+      shihoStarted = true;
+      document.getElementById('shiho-hint').style.opacity = '0';
+      screen.onclick = null;
+      startShiho();
+    }
+  };
+}
+
+function startShiho() {
+  var cycles = DEMO_MODE ? 1 : 3;
+  breathEngine.pattern   = [4,4,4,4];
+  breathEngine.maxCycles = cycles;
+  document.getElementById('cdot-0').classList.remove('active');
+  document.getElementById('cdot-1').classList.remove('active');
+  document.getElementById('cdot-2').classList.remove('active');
+
+  breathEngine.onPhase = function(pi, name, dur) {
+    document.getElementById('shiho-phase').textContent = name;
+    document.getElementById('shiho-countdown').textContent = dur;
+    var wrap = document.getElementById('shiho-mandala-wrap');
+    wrap.style.transition = 'transform ' + dur + 's ease-in-out';
+    if (pi === 0) { wrap.classList.add('inhale-expand'); wrap.classList.remove('exhale-shrink'); }
+    if (pi === 2) { wrap.classList.remove('inhale-expand'); wrap.classList.add('exhale-shrink'); }
+  };
+  breathEngine.onTick = function(c) {
+    document.getElementById('shiho-countdown').textContent = c;
+  };
+  breathEngine.onCycle = function(n) {
+    var d = document.getElementById('cdot-' + (n - 1));
+    if (d) d.classList.add('active');
+  };
+  breathEngine.onDone = function() {
+    document.getElementById('shiho-phase').textContent = 'You are centred';
+    document.getElementById('shiho-countdown').textContent = '';
+    var wrap = document.getElementById('shiho-mandala-wrap');
+    wrap.classList.remove('inhale-expand','exhale-shrink');
+    setTimeout(function() { setScreen('screen-checkin'); }, 2200);
+  };
+  breathEngine.start();
+}
+
+function stopShihoAndGo(target) {
+  breathEngine.stop();
+  shihoStarted = false;
+  setScreen(target);
+}
+
+/* ════════════════════════════════════════
+   SCREEN 4: CHECK-IN
+════════════════════════════════════════ */
+var selectedCheckin = null;
+
+function selectCheckin(card) {
+  document.querySelectorAll('.checkin-card').forEach(function(c) {
+    c.classList.remove('selected');
+  });
+  card.classList.add('selected');
+  selectedCheckin = card.getAttribute('data-state');
+  var btn = document.getElementById('checkin-begin');
+  btn.classList.add('visible');
+}
+
+function beginSession() {
+  if (!selectedCheckin) return;
+  var techKeys = SESSIONS[selectedCheckin] || SESSIONS['clear'];
+  sessionRunner.start(techKeys);
+  setScreen('screen-session');
+}
+
+/* Reset check-in when leaving */
+function resetCheckin() {
+  selectedCheckin = null;
+  document.querySelectorAll('.checkin-card').forEach(function(c) { c.classList.remove('selected'); });
+  document.getElementById('checkin-begin').classList.remove('visible');
+}
+
+/* ════════════════════════════════════════
+   SCREEN 5: SESSION RUNNER
+════════════════════════════════════════ */
+var sessionRunner = {
+  techniques: [],
+  currentIdx: 0,
+  running: false,
+  cyclesPerTech: 1,
+
+  start: function(keys) {
+    this.techniques = keys.map(function(k) { return { key: k, data: TECHNIQUES[k] }; });
+    this.currentIdx = 0;
+    this.running = true;
+    this.cyclesPerTech = DEMO_MODE ? 1 : 3;
+    this._loadTechnique();
+  },
+
+  stop: function() {
+    this.running = false;
+    breathEngine.stop();
+  },
+
+  _loadTechnique: function() {
+    var self = this;
+    var item = this.techniques[this.currentIdx];
+    if (!item) { this._allDone(); return; }
+    var t = item.data;
+
+    // Update UI
+    document.getElementById('session-element-tag').textContent = t.element;
+    document.getElementById('session-tech-kanji').textContent  = t.kanji;
+    document.getElementById('session-tech-name').textContent   = t.name;
+    document.getElementById('session-tech-realname').textContent = t.realName;
+    document.getElementById('session-tech-cue').textContent    = t.cue;
+    document.getElementById('session-tech-num').textContent    =
+      'Technique ' + (this.currentIdx + 1) + ' of ' + this.techniques.length;
+
+    // Progress dots
+    for (var i = 0; i < 4; i++) {
+      var d = document.getElementById('pd-' + i);
+      if (!d) continue;
+      d.className = 'session-prog-dot';
+      if (i < this.currentIdx)       d.classList.add('done');
+      else if (i === this.currentIdx) d.classList.add('current');
+    }
+
+    // Hide rest overlay
+    document.getElementById('session-rest').classList.remove('visible');
+
+    // Reset ring
+    var ring = document.getElementById('session-ring');
+    ring.className = 'breath-ring';
+
+    // Start breath engine
+    breathEngine.stop();
+    breathEngine.pattern   = t.pattern;
+    breathEngine.maxCycles = this.cyclesPerTech;
+
+    breathEngine.onPhase = function(pi, name, dur) {
+      var ring = document.getElementById('session-ring');
+      ring.style.transition = 'all ' + dur + 's ease-in-out';
+      var cls = ['phase-inhale','phase-hold','phase-exhale','phase-hold'][pi];
+      ring.className = 'breath-ring ' + cls;
+      document.getElementById('session-phase').textContent = name;
+      document.getElementById('session-count').textContent = dur;
+    };
+    breathEngine.onTick = function(c) {
+      document.getElementById('session-count').textContent = c;
+    };
+    breathEngine.onCycle = null;
+    breathEngine.onDone = function() {
+      self._techDone();
+    };
+    breathEngine.start();
+  },
+
+  _techDone: function() {
+    if (!this.running) return;
+    this.currentIdx++;
+
+    // Mark dot done
+    var d = document.getElementById('pd-' + (this.currentIdx - 1));
+    if (d) { d.className = 'session-prog-dot done'; }
+
+    if (this.currentIdx >= this.techniques.length) {
+      this._allDone();
+    } else {
+      // Brief rest between techniques
+      document.getElementById('session-rest').classList.add('visible');
+      document.getElementById('session-ring').className = 'breath-ring';
+      document.getElementById('session-count').textContent = '';
+      document.getElementById('session-phase').textContent = '';
+      var self = this;
+      setTimeout(function() {
+        if (self.running) self._loadTechnique();
+      }, DEMO_MODE ? 2000 : 4000);
+    }
+  },
+
+  _allDone: function() {
+    this.running = false;
+    breathEngine.stop();
+    setTimeout(function() { setScreen('screen-complete'); }, 1800);
+  }
+};
+
+/* ════════════════════════════════════════
+   SCREEN 6: SESSION COMPLETE
+════════════════════════════════════════ */
+function initComplete() {
+  resetCheckin();
+
+  // Reset animated elements
+  document.getElementById('complete-xp').textContent = '+0 XP';
+  document.getElementById('xp-fill').style.width = '0%';
+  document.getElementById('complete-quote').classList.remove('visible');
+  document.getElementById('complete-quote').textContent = '';
+  document.getElementById('return-btn').classList.remove('visible');
+
+  var xpTarget = 75;
+
+  // XP count-up
+  setTimeout(function() {
+    var current = 0;
+    var el = document.getElementById('complete-xp');
+    var iv = setInterval(function() {
+      current = Math.min(current + 3, xpTarget);
+      el.textContent = '+' + current + ' XP';
+      if (current >= xpTarget) clearInterval(iv);
+    }, 28);
+  }, 600);
+
+  // XP bar fill
+  setTimeout(function() {
+    document.getElementById('xp-fill').style.width = '62%';
+  }, 900);
+
+  // Quote fade in
+  var q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  setTimeout(function() {
+    var qEl = document.getElementById('complete-quote');
+    qEl.textContent = '"' + q + '"';
+    qEl.classList.add('visible');
+  }, 2200);
+
+  // Return button
+  setTimeout(function() {
+    document.getElementById('return-btn').classList.add('visible');
+  }, 3200);
+}
+
+function stopSessionAndGo(target) {
+  sessionRunner.stop();
+  breathEngine.stop();
+  setScreen(target);
+}
+</script>
+</body>
+</html>

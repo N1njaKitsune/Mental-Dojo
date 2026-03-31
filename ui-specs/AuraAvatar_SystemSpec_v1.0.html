@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura & Avatar · System Spec v1.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0E0E16;
+            color: #F0EBE0;
+            font-family: 'Crimson Pro', serif;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.02em;
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 32px;
+            font-weight: 600;
+            margin-top: 50px;
+            margin-bottom: 24px;
+            letter-spacing: 0.01em;
+        }
+
+        h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 28px;
+            margin-bottom: 16px;
+            letter-spacing: 0.01em;
+        }
+
+        h4 {
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 18px;
+            margin-bottom: 12px;
+            letter-spacing: 0.01em;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: rgba(240, 235, 224, 0.9);
+        }
+
+        .subtitle {
+            font-family: 'Crimson Pro', serif;
+            font-size: 18px;
+            font-weight: 300;
+            color: rgba(240, 235, 224, 0.7);
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        /* Overview Box */
+        .overview-box {
+            background: linear-gradient(135deg, rgba(184, 141, 212, 0.08) 0%, rgba(122, 184, 154, 0.08) 100%);
+            border: 1px solid rgba(184, 141, 212, 0.2);
+            border-radius: 8px;
+            padding: 32px;
+            margin: 40px 0;
+            font-size: 17px;
+            line-height: 1.8;
+            color: rgba(240, 235, 224, 0.95);
+        }
+
+        /* Section spacing */
+        section {
+            margin: 60px 0;
+        }
+
+        /* Aura Stages Grid */
+        .aura-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .aura-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .aura-orb {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #0E0E16;
+            box-shadow: 0 0 30px currentColor;
+        }
+
+        .aura-orb.stage-1 {
+            background: rgba(100, 100, 110, 0.6);
+            color: rgba(240, 235, 224, 0.8);
+        }
+
+        .aura-orb.stage-2 {
+            background: rgba(120, 130, 140, 0.6);
+            color: rgba(240, 235, 224, 0.85);
+        }
+
+        .aura-orb.stage-3 {
+            background: rgba(140, 160, 170, 0.6);
+            color: rgba(240, 235, 224, 0.85);
+        }
+
+        .aura-orb.stage-4 {
+            background: rgba(122, 184, 154, 0.5);
+            color: #0E0E16;
+        }
+
+        .aura-orb.stage-5 {
+            background: rgba(122, 184, 154, 0.65);
+            color: #0E0E16;
+        }
+
+        .aura-orb.stage-6 {
+            background: rgba(130, 190, 170, 0.7);
+            color: #0E0E16;
+        }
+
+        .aura-orb.stage-7 {
+            background: rgba(160, 200, 180, 0.75);
+            color: #0E0E16;
+        }
+
+        .aura-orb.stage-8 {
+            background: rgba(180, 200, 140, 0.8);
+            color: #0E0E16;
+        }
+
+        .aura-orb.stage-9 {
+            background: rgba(200, 190, 120, 0.85);
+            color: #0E0E16;
+        }
+
+        .aura-orb.stage-10 {
+            background: rgba(200, 170, 120, 0.85);
+            color: #0E0E16;
+        }
+
+        .aura-orb.stage-11 {
+            background: rgba(220, 200, 160, 0.9);
+            color: #0E0E16;
+        }
+
+        .aura-orb.stage-12 {
+            background: rgba(240, 220, 180, 0.9);
+            color: #0E0E16;
+        }
+
+        .aura-orb.stage-13 {
+            background: rgba(245, 240, 232, 0.95);
+            color: #0E0E16;
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(245, 240, 232, 0.6), 0 0 60px rgba(184, 141, 212, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(245, 240, 232, 0.9), 0 0 80px rgba(184, 141, 212, 0.5);
+            }
+        }
+
+        .aura-label {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            color: rgba(240, 235, 224, 0.9);
+        }
+
+        .aura-name {
+            font-family: 'Crimson Pro', serif;
+            font-size: 12px;
+            font-weight: 300;
+            text-align: center;
+            color: rgba(240, 235, 224, 0.7);
+        }
+
+        /* Phase labels */
+        .phase-header {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: rgba(240, 235, 224, 0.8);
+            margin: 40px 0 20px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(184, 141, 212, 0.3);
+        }
+
+        /* Avatar States */
+        .avatar-states {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .avatar-state-card {
+            background: rgba(20, 20, 28, 0.8);
+            border: 1px solid rgba(184, 141, 212, 0.2);
+            border-radius: 8px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar-visual {
+            width: 100px;
+            height: 120px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-body {
+            width: 40px;
+            height: 60px;
+            background: rgba(200, 170, 120, 0.5);
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .avatar-head {
+            width: 30px;
+            height: 30px;
+            background: rgba(200, 170, 120, 0.6);
+            border-radius: 50%;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .avatar-ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(122, 184, 154, 0.2);
+            border-radius: 50%;
+            filter: blur(2px);
+        }
+
+        /* Aura layers for avatar states */
+        .aura-dormant .avatar-body,
+        .aura-dormant .avatar-head {
+            opacity: 0.6;
+        }
+
+        .aura-awakening {
+            position: relative;
+        }
+
+        .aura-awakening::before {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(122, 184, 154, 0.3) 0%, rgba(122, 184, 154, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .aura-active {
+            position: relative;
+        }
+
+        .aura-active::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(160, 200, 180, 0.4) 0%, rgba(160, 200, 180, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .aura-active::after {
+            content: '';
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(122, 184, 154, 0.2) 0%, rgba(122, 184, 154, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -2;
+        }
+
+        .aura-radiant {
+            position: relative;
+        }
+
+        .aura-radiant::before {
+            content: '';
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(200, 190, 120, 0.5) 0%, rgba(200, 190, 120, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .aura-radiant::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(180, 200, 140, 0.3) 0%, rgba(180, 200, 140, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -2;
+        }
+
+        .aura-transcendent {
+            position: relative;
+        }
+
+        .aura-transcendent::before {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(245, 240, 232, 0.6) 0%, rgba(245, 240, 232, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        .aura-transcendent::after {
+            content: '';
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(220, 200, 160, 0.4) 0%, rgba(220, 200, 160, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -2;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .avatar-state-name {
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .avatar-state-desc {
+            font-family: 'Crimson Pro', serif;
+            font-size: 13px;
+            font-weight: 300;
+            text-align: center;
+            color: rgba(240, 235, 224, 0.7);
+        }
+
+        /* Data Contract Table */
+        .data-contract {
+            margin: 32px 0;
+        }
+
+        .contract-column {
+            margin-bottom: 32px;
+        }
+
+        .contract-column h4 {
+            color: rgba(240, 235, 224, 0.95);
+            margin-bottom: 16px;
+        }
+
+        .contract-item {
+            background: rgba(20, 20, 28, 0.8);
+            border-left: 3px solid rgba(184, 141, 212, 0.4);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+        }
+
+        .contract-key {
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(184, 141, 212, 0.9);
+            margin-bottom: 4px;
+        }
+
+        .contract-type {
+            font-family: 'Crimson Pro', serif;
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(240, 235, 224, 0.6);
+            margin-bottom: 6px;
+        }
+
+        .contract-desc {
+            font-family: 'Crimson Pro', serif;
+            font-size: 13px;
+            font-weight: 300;
+            color: rgba(240, 235, 224, 0.8);
+        }
+
+        /* Integration Points */
+        .integration-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .integration-section {
+            background: rgba(20, 20, 28, 0.8);
+            border: 1px solid rgba(122, 184, 154, 0.2);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .integration-section h4 {
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(122, 184, 154, 0.9);
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        .integration-item {
+            margin-bottom: 12px;
+            padding-left: 16px;
+            border-left: 2px solid rgba(122, 184, 154, 0.3);
+            font-size: 14px;
+        }
+
+        .integration-name {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            color: rgba(240, 235, 224, 0.9);
+        }
+
+        .integration-status {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-left: 8px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.05em;
+        }
+
+        .integration-status.live {
+            background: rgba(122, 184, 154, 0.3);
+            color: rgba(122, 184, 154, 1);
+        }
+
+        .integration-status.missing {
+            background: rgba(212, 130, 106, 0.3);
+            color: rgba(212, 130, 106, 1);
+        }
+
+        .integration-desc {
+            font-family: 'Crimson Pro', serif;
+            font-size: 13px;
+            font-weight: 300;
+            color: rgba(240, 235, 224, 0.7);
+            margin-top: 6px;
+        }
+
+        @media (max-width: 768px) {
+            .integration-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Prototypes List */
+        .prototypes-list {
+            margin: 32px 0;
+        }
+
+        .prototype-item {
+            background: rgba(20, 20, 28, 0.8);
+            border: 1px solid rgba(200, 170, 120, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .prototype-name {
+            font-family: 'Cinzel', serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: rgba(200, 170, 120, 0.9);
+            margin-bottom: 6px;
+        }
+
+        .prototype-desc {
+            font-family: 'Crimson Pro', serif;
+            font-size: 13px;
+            font-weight: 300;
+            color: rgba(240, 235, 224, 0.7);
+        }
+
+        /* Option Cards */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .option-card {
+            background: rgba(20, 20, 28, 0.8);
+            border: 1px solid rgba(170, 140, 210, 0.2);
+            border-radius: 8px;
+            padding: 28px;
+            position: relative;
+        }
+
+        .option-card.recommended {
+            border: 2px solid rgba(122, 184, 154, 0.5);
+            background: rgba(122, 184, 154, 0.05);
+        }
+
+        .option-label {
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(240, 235, 224, 0.7);
+            margin-bottom: 12px;
+        }
+
+        .option-title {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: rgba(240, 235, 224, 0.95);
+            margin-bottom: 16px;
+        }
+
+        .option-desc {
+            font-family: 'Crimson Pro', serif;
+            font-size: 14px;
+            font-weight: 300;
+            color: rgba(240, 235, 224, 0.85);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .option-pros,
+        .option-cons {
+            margin-bottom: 16px;
+        }
+
+        .option-pros h5,
+        .option-cons h5 {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(240, 235, 224, 0.8);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .option-pros h5 {
+            color: rgba(122, 184, 154, 0.8);
+        }
+
+        .option-cons h5 {
+            color: rgba(212, 130, 106, 0.8);
+        }
+
+        .option-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .option-list li {
+            font-family: 'Crimson Pro', serif;
+            font-size: 13px;
+            font-weight: 300;
+            color: rgba(240, 235, 224, 0.75);
+            margin-bottom: 6px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .option-list li::before {
+            content: '·';
+            position: absolute;
+            left: 0;
+        }
+
+        .recommendation-badge {
+            position: absolute;
+            top: -12px;
+            right: 24px;
+            background: rgba(122, 184, 154, 0.2);
+            border: 1px solid rgba(122, 184, 154, 0.5);
+            color: rgba(122, 184, 154, 1);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Pending Decisions */
+        .decisions-list {
+            margin: 32px 0;
+        }
+
+        .decision-item {
+            background: rgba(20, 20, 28, 0.8);
+            border-left: 4px solid rgba(170, 140, 210, 0.5);
+            padding: 20px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+        }
+
+        .decision-number {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(170, 140, 210, 0.8);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .decision-text {
+            font-family: 'Crimson Pro', serif;
+            font-size: 15px;
+            font-weight: 400;
+            color: rgba(240, 235, 224, 0.9);
+            margin-bottom: 8px;
+        }
+
+        .decision-meta {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(240, 235, 224, 0.6);
+        }
+
+        .decision-meta-item {
+            display: inline-block;
+            margin-right: 16px;
+        }
+
+        .decision-meta-label {
+            color: rgba(240, 235, 224, 0.5);
+            margin-right: 4px;
+        }
+
+        /* Technical Requirements */
+        .requirements-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 32px 0;
+        }
+
+        .requirement-chip {
+            background: rgba(122, 184, 154, 0.15);
+            border: 1px solid rgba(122, 184, 154, 0.4);
+            color: rgba(240, 235, 224, 0.9);
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(122, 184, 154, 0.08);
+            border: 1px solid rgba(122, 184, 154, 0.2);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(240, 235, 224, 0.9);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(184, 141, 212, 0.1);
+            text-align: center;
+            font-family: 'Crimson Pro', serif;
+            font-size: 14px;
+            color: rgba(240, 235, 224, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 24px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 24px;
+                margin-top: 40px;
+            }
+
+            .aura-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 16px;
+            }
+
+            .avatar-states {
+                grid-template-columns: 1fr;
+            }
+
+            .integration-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <h1>Aura & Avatar</h1>
+        <p class="subtitle">The visual progression system — 13 aura stages, avatar rendering, and integration points · v1.0 · March 2026</p>
+
+        <!-- Overview -->
+        <div class="overview-box">
+            The Aura & Avatar system is not a section students navigate to — it's a visual layer that renders within screens across both the Nendō Dojo and Student Section. This spec covers what the system is, how it works, and where it surfaces. Build it once, integrate everywhere.
+        </div>
+
+        <!-- Section 1: The 13 Aura Stages -->
+        <section>
+            <h2>1. The 13 Aura Stages</h2>
+            <p>The aura system progresses through three phases, each representing a stage of mastery. Each stage has a visual representation, Japanese name, and computed colour value.</p>
+
+            <!-- Phase 1: Foundation -->
+            <div class="phase-header">Phase 1 — Foundation (Stages 1–4)</div>
+            <div class="aura-grid">
+                <div class="aura-stage">
+                    <div class="aura-orb stage-1">1</div>
+                    <div class="aura-label">Stage 1</div>
+                    <div class="aura-name">Shizen</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Natural</div>
+                </div>
+                <div class="aura-stage">
+                    <div class="aura-orb stage-2">2</div>
+                    <div class="aura-label">Stage 2</div>
+                    <div class="aura-name">Kasuka</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Faint</div>
+                </div>
+                <div class="aura-stage">
+                    <div class="aura-orb stage-3">3</div>
+                    <div class="aura-label">Stage 3</div>
+                    <div class="aura-name">Mezame</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Awakening</div>
+                </div>
+                <div class="aura-stage">
+                    <div class="aura-orb stage-4">4</div>
+                    <div class="aura-label">Stage 4</div>
+                    <div class="aura-name">Hajime</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Beginning</div>
+                </div>
+            </div>
+
+            <!-- Phase 2: Growth -->
+            <div class="phase-header">Phase 2 — Growth (Stages 5–9)</div>
+            <div class="aura-grid">
+                <div class="aura-stage">
+                    <div class="aura-orb stage-5">5</div>
+                    <div class="aura-label">Stage 5</div>
+                    <div class="aura-name">Seichō</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Growth</div>
+                </div>
+                <div class="aura-stage">
+                    <div class="aura-orb stage-6">6</div>
+                    <div class="aura-label">Stage 6</div>
+                    <div class="aura-name">Nagare</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Flow</div>
+                </div>
+                <div class="aura-stage">
+                    <div class="aura-orb stage-7">7</div>
+                    <div class="aura-label">Stage 7</div>
+                    <div class="aura-name">Kagayaki</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Radiance</div>
+                </div>
+                <div class="aura-stage">
+                    <div class="aura-orb stage-8">8</div>
+                    <div class="aura-label">Stage 8</div>
+                    <div class="aura-name">Chikara</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Power</div>
+                </div>
+                <div class="aura-stage">
+                    <div class="aura-orb stage-9">9</div>
+                    <div class="aura-label">Stage 9</div>
+                    <div class="aura-name">Kōmyō</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Brilliance</div>
+                </div>
+            </div>
+
+            <!-- Phase 3: Mastery -->
+            <div class="phase-header">Phase 3 — Mastery (Stages 10–13)</div>
+            <div class="aura-grid">
+                <div class="aura-stage">
+                    <div class="aura-orb stage-10">10</div>
+                    <div class="aura-label">Stage 10</div>
+                    <div class="aura-name">Shinpi</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Mystery</div>
+                </div>
+                <div class="aura-stage">
+                    <div class="aura-orb stage-11">11</div>
+                    <div class="aura-label">Stage 11</div>
+                    <div class="aura-name">Meikyō</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Clear Mirror</div>
+                </div>
+                <div class="aura-stage">
+                    <div class="aura-orb stage-12">12</div>
+                    <div class="aura-label">Stage 12</div>
+                    <div class="aura-name">Kūsō</div>
+                    <div class="aura-name" style="color: rgba(240, 235, 224, 0.5); font-size: 11px;">Vision</div>
+                </div>
+                <div class="aura-stage">
+                    <div class="aura-orb stage-13">13</div>
+                    <div class="aura-label">Stage 13</div>
+                    <div class="aura-name">???</div>
+                    <div class="aura-name" style="color: rgba(245, 240, 232, 0.6); font-size: 11px;">Pending</div>
+                </div>
+            </div>
+
+            <p style="margin-top: 32px; font-size: 14px; color: rgba(240, 235, 224, 0.7);">Each stage colour is computed from the student's aura score and rendered as a radial gradient with a subtle glow effect. Stage 13 animates with a special pulsing glow to indicate its unique, transcendent status.</p>
+        </section>
+
+        <!-- Section 2: Avatar System -->
+        <section>
+            <h2>2. Avatar System</h2>
+            <p>The avatar is a minimal, intentional visual representation that evolves with the student's aura progression. It consists of a silhouette body and head, with layered aura glows that intensify as the student progresses.</p>
+
+            <h3>Avatar Structure</h3>
+            <p>The avatar uses a simple capsule-shaped body silhouette with a circular head positioned above. The aura renders as concentric radial glows that expand outward. The avatar sits on a subtle ground plane that anchors the visual composition.</p>
+
+            <h3>Avatar States</h3>
+            <div class="avatar-states">
+                <div class="avatar-state-card">
+                    <div class="avatar-visual">
+                        <div class="avatar-body aura-dormant">
+                            <div class="avatar-head"></div>
+                        </div>
+                        <div class="avatar-ground"></div>
+                    </div>
+                    <div class="avatar-state-name">Dormant</div>
+                    <div class="avatar-state-desc">No visible aura. Stage 1. Silhouette only.</div>
+                </div>
+
+                <div class="avatar-state-card">
+                    <div class="avatar-visual">
+                        <div class="avatar-body aura-awakening">
+                            <div class="avatar-head"></div>
+                        </div>
+                        <div class="avatar-ground"></div>
+                    </div>
+                    <div class="avatar-state-name">Awakening</div>
+                    <div class="avatar-state-desc">Faint glow appears. Stages 2–4. Single subtle layer.</div>
+                </div>
+
+                <div class="avatar-state-card">
+                    <div class="avatar-visual">
+                        <div class="avatar-body aura-active">
+                            <div class="avatar-head"></div>
+                        </div>
+                        <div class="avatar-ground"></div>
+                    </div>
+                    <div class="avatar-state-name">Active</div>
+                    <div class="avatar-state-desc">Clear aura visible. Stages 5–7. Multiple glow layers.</div>
+                </div>
+
+                <div class="avatar-state-card">
+                    <div class="avatar-visual">
+                        <div class="avatar-body aura-radiant">
+                            <div class="avatar-head"></div>
+                        </div>
+                        <div class="avatar-ground"></div>
+                    </div>
+                    <div class="avatar-state-name">Radiant</div>
+                    <div class="avatar-state-desc">Strong multi-layered aura. Stages 8–10. Particle effects.</div>
+                </div>
+
+                <div class="avatar-state-card">
+                    <div class="avatar-visual">
+                        <div class="avatar-body aura-transcendent">
+                            <div class="avatar-head"></div>
+                        </div>
+                        <div class="avatar-ground"></div>
+                    </div>
+                    <div class="avatar-state-name">Transcendent</div>
+                    <div class="avatar-state-desc">Full visual presence. Stages 11–13. Complex layered rendering.</div>
+                </div>
+            </div>
+
+            <h3>Rendering Approach</h3>
+            <div class="info-box">
+                Avatar uses Canvas API for aura rendering. The body is CSS/SVG. Aura layers are concentric radial gradients with animated opacity. Particle effects use a lightweight particle system (see ParticleSystem component v1.0). This hybrid approach balances visual quality with performance on mobile devices.
+            </div>
+        </section>
+
+        <!-- Section 3: Data Contract -->
+        <section>
+            <h2>3. Data Contract</h2>
+            <p>The Aura system consumes and produces specific data structures. Understanding these inputs and outputs is critical for integration across screens and systems.</p>
+
+            <div class="data-contract">
+                <div class="contract-column">
+                    <h4>Inputs (What the system receives)</h4>
+
+                    <div class="contract-item">
+                        <div class="contract-key">auraStage</div>
+                        <div class="contract-type">integer (1–13)</div>
+                        <div class="contract-desc">Current aura stage number. Determines the visual representation and colour.</div>
+                    </div>
+
+                    <div class="contract-item">
+                        <div class="contract-key">disciplineScores</div>
+                        <div class="contract-type">object { metsuke, mushin, tachi: 0–100 }</div>
+                        <div class="contract-desc">Scores for the three NEN disciplines. Used to compute aura intensity and colour balance.</div>
+                    </div>
+
+                    <div class="contract-item">
+                        <div class="contract-key">totalXP</div>
+                        <div class="contract-type">integer</div>
+                        <div class="contract-desc">Cumulative experience points. Contributes to stage progression calculation.</div>
+                    </div>
+
+                    <div class="contract-item">
+                        <div class="contract-key">streakDays</div>
+                        <div class="contract-type">integer</div>
+                        <div class="contract-desc">Current training streak in days. Influences aura pulse animation intensity.</div>
+                    </div>
+
+                    <div class="contract-item">
+                        <div class="contract-key">recentActivity</div>
+                        <div class="contract-type">array (last 7 days)</div>
+                        <div class="contract-desc">Activity log for the last 7 days. Used to compute particle density and animation speed.</div>
+                    </div>
+                </div>
+
+                <div class="contract-column">
+                    <h4>Outputs (What the system provides)</h4>
+
+                    <div class="contract-item">
+                        <div class="contract-key">auraColour</div>
+                        <div class="contract-type">string (rgba)</div>
+                        <div class="contract-desc">Computed RGBA colour for the current stage. Used for all visual rendering.</div>
+                    </div>
+
+                    <div class="contract-item">
+                        <div class="contract-key">auraIntensity</div>
+                        <div class="contract-type">float (0.0–1.0)</div>
+                        <div class="contract-desc">Glow strength computed from discipline scores and activity. Controls opacity and blur.</div>
+                    </div>
+
+                    <div class="contract-item">
+                        <div class="contract-key">avatarLayers</div>
+                        <div class="contract-type">array of layer objects</div>
+                        <div class="contract-desc">Layer definitions for Canvas rendering. Each layer specifies radius, colour, and opacity.</div>
+                    </div>
+
+                    <div class="contract-item">
+                        <div class="contract-key">particleConfig</div>
+                        <div class="contract-type">object (particle system config)</div>
+                        <div class="contract-desc">Configuration for the particle system: count, behaviour, colour, speed, lifetime.</div>
+                    </div>
+
+                    <div class="contract-item">
+                        <div class="contract-key">stageName</div>
+                        <div class="contract-type">string (Japanese)</div>
+                        <div class="contract-desc">Japanese name for the current stage (e.g., "Kagayaki" for stage 7).</div>
+                    </div>
+
+                    <div class="contract-item">
+                        <div class="contract-key">phaseLabel</div>
+                        <div class="contract-type">string</div>
+                        <div class="contract-desc">Phase label: "Foundation", "Growth", or "Mastery". Used for status displays.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Integration Points -->
+        <section>
+            <h2>4. Integration Points — Where It Surfaces</h2>
+            <p>The Aura & Avatar system renders within screens across two architectural contexts. Each integration has specific rendering requirements and visual variations.</p>
+
+            <div class="integration-grid">
+                <div class="integration-section">
+                    <h4>In the Student Section</h4>
+
+                    <div class="integration-item">
+                        <span class="integration-name">Student Profile</span>
+                        <span class="integration-status live">LIVE v3.9</span>
+                        <div class="integration-desc">Full avatar + aura display, centre stage. Primary showcase of progression.</div>
+                    </div>
+
+                    <div class="integration-item">
+                        <span class="integration-name">Aura Progression</span>
+                        <span class="integration-status live">LIVE v1.0</span>
+                        <div class="integration-desc">All 13 stages overview. Interactive stage exploration.</div>
+                    </div>
+
+                    <div class="integration-item">
+                        <span class="integration-name">Achievements</span>
+                        <span class="integration-status missing">MISSING</span>
+                        <div class="integration-desc">Aura milestone badges for stage milestones and streak achievements.</div>
+                    </div>
+
+                    <div class="integration-item">
+                        <span class="integration-name">Training Stats</span>
+                        <span class="integration-status missing">MISSING</span>
+                        <div class="integration-desc">Aura progression chart over time. Historical view of student growth.</div>
+                    </div>
+                </div>
+
+                <div class="integration-section">
+                    <h4>In the Nendō Dojo</h4>
+
+                    <div class="integration-item">
+                        <span class="integration-name">Nendō Home</span>
+                        <span class="integration-status live">LIVE v3.0</span>
+                        <div class="integration-desc">Small aura orb indicator. Quick visual status reference.</div>
+                    </div>
+
+                    <div class="integration-item">
+                        <span class="integration-name">Entry Screen</span>
+                        <span class="integration-status live">LIVE v4.0</span>
+                        <div class="integration-desc">Aura orb on welcome. Greeting with student's current progression.</div>
+                    </div>
+
+                    <div class="integration-item">
+                        <span class="integration-name">Discipline Hubs</span>
+                        <span class="integration-status missing">MISSING</span>
+                        <div class="integration-desc">Discipline-specific aura colour tint. Visual feedback for focused training.</div>
+                    </div>
+
+                    <div class="integration-item">
+                        <span class="integration-name">Session Complete</span>
+                        <span class="integration-status missing">MISSING</span>
+                        <div class="integration-desc">Aura XP gain animation. Celebration of progress with visual feedback.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Key architectural question:</strong> Does each screen import the Avatar component and render it, or does a global Avatar layer sit on top? <strong>Recommendation: each screen imports the component.</strong> The Avatar renders differently per context (full on Profile, orb-only on hubs, animation on session complete). A single global layer cannot handle these variations efficiently or cleanly. Distributed component ownership allows for flexible, context-aware rendering.
+            </div>
+        </section>
+
+        <!-- Section 5: Existing Prototypes -->
+        <section>
+            <h2>5. Existing Prototypes</h2>
+            <p>The following prototypes and specifications already exist and inform the current system design.</p>
+
+            <div class="prototypes-list">
+                <div class="prototype-item">
+                    <div class="prototype-name">AuraDisplay_Prototype_v1.0 → v1.1 → v1.3</div>
+                    <div class="prototype-desc">Interactive prototype with avatar + stage slider. Canvas-based rendering. Primary reference for visual quality and interaction patterns.</div>
+                </div>
+
+                <div class="prototype-item">
+                    <div class="prototype-name">AuraAvatar_BuildSpec_v1.0</div>
+                    <div class="prototype-desc">Build specification for the avatar visual system. Technical details on Canvas API usage and performance optimization.</div>
+                </div>
+
+                <div class="prototype-item">
+                    <div class="prototype-name">Nendo_AuraProgression_v1.0</div>
+                    <div class="prototype-desc">13-stage overview display. All stages rendered in phases. Used on the Aura Progression screen.</div>
+                </div>
+
+                <div class="prototype-item">
+                    <div class="prototype-name">AvatarMale_v1.0 → v1.1</div>
+                    <div class="prototype-desc">Male avatar body exploration. SVG silhouette with anatomical proportions. Foundation for avatar rendering.</div>
+                </div>
+
+                <div class="prototype-item">
+                    <div class="prototype-name">Components/AuraOrb_v1.0</div>
+                    <div class="prototype-desc">Standalone orb component. Reusable across small indicator contexts (hubs, entry screens, notifications).</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Development Approach -->
+        <section>
+            <h2>6. Development Approach</h2>
+            <p>Two strategic approaches to building and integrating the Aura & Avatar system are presented below. Choose based on resource constraints and risk tolerance.</p>
+
+            <div class="options-grid">
+                <div class="option-card">
+                    <div class="option-label">APPROACH A</div>
+                    <div class="option-title">Build Standalone,<br>Integrate Later</div>
+                    <div class="option-desc">Build the Aura & Avatar as a self-contained component library. Test with dummy data using the existing AuraDisplay prototype as a harness. Once solid, integrate into each screen one at a time.</div>
+
+                    <div class="option-pros">
+                        <h5>Pros</h5>
+                        <ul class="option-list">
+                            <li>Clean separation of concerns</li>
+                            <li>Testable in isolation</li>
+                            <li>No dependencies on other screens' progress</li>
+                            <li>Reusable across multiple contexts</li>
+                        </ul>
+                    </div>
+
+                    <div class="option-cons">
+                        <h5>Cons</h5>
+                        <ul class="option-list">
+                            <li>Integration might reveal layout issues late</li>
+                            <li>Extra step in the build pipeline</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="option-card recommended">
+                    <div class="recommendation-badge">RECOMMENDED</div>
+                    <div class="option-label">APPROACH B</div>
+                    <div class="option-title">Build Into<br>Each Screen</div>
+                    <div class="option-desc">Build the aura rendering directly into each screen as needed, evolving the approach with each integration. Start with the Profile, then hubs, then animations.</div>
+
+                    <div class="option-pros">
+                        <h5>Pros</h5>
+                        <ul class="option-list">
+                            <li>Immediate visual feedback in context</li>
+                            <li>No separate integration step</li>
+                            <li>Matches established component architecture</li>
+                            <li>Faster time to first visual</li>
+                        </ul>
+                    </div>
+
+                    <div class="option-cons">
+                        <h5>Cons</h5>
+                        <ul class="option-list">
+                            <li>Risk of inconsistency across screens</li>
+                            <li>Potential code duplication</li>
+                            <li>Harder to maintain across contexts</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-top: 32px;"><strong>Recommendation:</strong> Approach B is recommended because it matches the component architecture already established with AuraOrb, ParticleSystem, and other reusable components. Each screen imports and composes the Avatar differently based on context, avoiding the overhead of a standalone build step while maintaining clean component boundaries.</p>
+        </section>
+
+        <!-- Section 7: Pending Decisions -->
+        <section>
+            <h2>7. Pending Decisions</h2>
+            <p>The following decisions must be made before full implementation. They are tracked by decision owner and blocking status.</p>
+
+            <div class="decisions-list">
+                <div class="decision-item">
+                    <div class="decision-number">Decision 1</div>
+                    <div class="decision-text">Stage 13 — named or deliberately unnamed?</div>
+                    <div class="decision-meta">
+                        <span class="decision-meta-item">
+                            <span class="decision-meta-label">Blocks:</span>Aura stage data
+                        </span>
+                        <span class="decision-meta-item">
+                            <span class="decision-meta-label">Owner:</span>John Gunn
+                        </span>
+                    </div>
+                </div>
+
+                <div class="decision-item">
+                    <div class="decision-number">Decision 2</div>
+                    <div class="decision-text">Hybrid aura formula — exact weighting of each discipline towards stage</div>
+                    <div class="decision-meta">
+                        <span class="decision-meta-item">
+                            <span class="decision-meta-label">Blocks:</span>Progression calculation
+                        </span>
+                    </div>
+                </div>
+
+                <div class="decision-item">
+                    <div class="decision-number">Decision 3</div>
+                    <div class="decision-text">Avatar placeholder — how aura colour displays before avatar art is final</div>
+                    <div class="decision-meta">
+                        <span class="decision-meta-item">
+                            <span class="decision-meta-label">Blocks:</span>Profile integration
+                        </span>
+                    </div>
+                </div>
+
+                <div class="decision-item">
+                    <div class="decision-number">Decision 4</div>
+                    <div class="decision-text">Particle density per stage — how many particles, what behaviour</div>
+                    <div class="decision-meta">
+                        <span class="decision-meta-item">
+                            <span class="decision-meta-label">Blocks:</span>Performance on mobile
+                        </span>
+                    </div>
+                </div>
+
+                <div class="decision-item">
+                    <div class="decision-number">Decision 5</div>
+                    <div class="decision-text">Canvas vs WebGL — rendering approach for complex aura layers</div>
+                    <div class="decision-meta">
+                        <span class="decision-meta-item">
+                            <span class="decision-meta-label">Blocks:</span>Technical architecture
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Technical Requirements -->
+        <section>
+            <h2>8. Technical Requirements</h2>
+            <p>The following technical rules govern the implementation and performance of the Aura & Avatar system.</p>
+
+            <div class="requirements-chips">
+                <div class="requirement-chip">Canvas API for aura rendering (not CSS shadows)</div>
+                <div class="requirement-chip">Must run at 60fps on iPad</div>
+                <div class="requirement-chip">Degrade gracefully on low-end phones</div>
+                <div class="requirement-chip">Particle count capped per device tier</div>
+                <div class="requirement-chip">Aura data cacheable — no recompute per frame</div>
+                <div class="requirement-chip">Avatar body is static SVG</div>
+                <div class="requirement-chip">Only aura animates</div>
+                <div class="requirement-chip">No external JS dependencies</div>
+            </div>
+
+            <div class="info-box">
+                <strong>Performance note:</strong> CSS shadows and filters are too slow on mobile for continuous animation. Canvas API provides better control and performance. Pre-compute aura layer definitions on data change, not on every frame. Cache computed colours and intensity values. Use requestAnimationFrame for smooth animations. Capped particle count prevents frame drops on older devices.
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Aura & Avatar System Specification · Version 1.0 · March 2026</p>
+            <p style="margin-top: 8px; color: rgba(240, 235, 224, 0.4);">Part of the StudentNinja Nendō Dojo architecture</p>
+        </footer>
+    </div>
+</body>
+</html>

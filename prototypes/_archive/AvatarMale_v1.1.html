@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<title>Ninja Male Avatar v1.1</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#0A0A12; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  min-height:100vh; gap:32px; padding:40px;
+  font-family:'Courier New', monospace; color:rgba(245,240,232,0.5);
+}
+.row { display:flex; gap:40px; align-items:flex-end; }
+.col { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.label { font-size:10px; letter-spacing:0.12em; text-transform:uppercase; }
+.preview-sm {
+  width:124px; height:295px;
+  border:1px solid rgba(245,240,232,0.08);
+  border-radius:6px; overflow:visible; position:relative;
+  background:rgba(245,240,232,0.02);
+}
+.preview-lg {
+  width:248px; height:590px;
+  border:1px solid rgba(245,240,232,0.08);
+  border-radius:6px; overflow:visible; position:relative;
+  background:rgba(245,240,232,0.02);
+}
+.aura-ring {
+  position:absolute; inset:-20px; border-radius:50%;
+  background: radial-gradient(ellipse at 50% 45%,
+    transparent 30%, rgba(240,200,80,0.10) 55%,
+    rgba(240,200,80,0.18) 68%, rgba(240,200,80,0.08) 82%, transparent 100%);
+  pointer-events:none;
+}
+</style>
+</head>
+<body>
+<div class="row">
+
+<!-- ── iPhone 1× with aura ── -->
+<div class="col">
+<div class="preview-sm">
+  <div class="aura-ring"></div>
+  <svg viewBox="0 0 130 285" fill="none" xmlns="http://www.w3.org/2000/svg"
+       style="width:100%;height:100%;overflow:visible;">
+
+    <!-- ═══════════════════════════════════════════════════════
+         NINJA SCHOOL — ANIME MALE AVATAR v1.1
+         Improvements over v1.0:
+           · Gi chest shaping — light/shadow give body volume
+           · Sleeve cuffs — dark band before wrist skin
+           · Trouser ankle gathering — bunched fabric detail
+           · Shoulder highlight — deltoid form
+           · Knee crease highlight — suggests bent posture
+           · Collar shadow fold — depth on lapel crossing
+           · Hair inner volume streak
+           · Improved fist detail with thumb
+    ═══════════════════════════════════════════════════════ -->
+
+    <!-- Ground shadow -->
+    <ellipse cx="63" cy="283" rx="42" ry="3.5" fill="rgba(0,0,0,0.28)"/>
+
+    <!-- ══ BACK: LEFT FOOT + LEG + ARM ══ -->
+
+    <!-- Left foot (back) -->
+    <path d="M32,264 L28,277 Q27,281 31,281 L45,282 Q48,282 48,279 L46,265 Z"
+          fill="rgba(24,28,46,0.88)" stroke="rgba(245,240,232,0.16)" stroke-width="0.6"/>
+    <!-- Ankle gathering on back foot — bunched trouser above ankle -->
+    <path d="M36,256 Q34,260 32,264 L46,265 Q46,261 44,256 Z"
+          fill="rgba(20,24,40,0.70)" stroke="rgba(245,240,232,0.10)" stroke-width="0.4"/>
+    <path d="M35,258 Q38,255 42,257" stroke="rgba(245,240,232,0.08)" stroke-width="0.5" fill="none"/>
+    <path d="M34,262 Q38,259 44,261" stroke="rgba(245,240,232,0.06)" stroke-width="0.4" fill="none"/>
+
+    <!-- Left leg (back) -->
+    <path d="M43,198 Q39,222 38,247 L32,264 L46,265 L49,245 Q51,220 50,198 Z"
+          fill="rgba(16,20,34,0.84)" stroke="rgba(245,240,232,0.16)" stroke-width="0.6"/>
+    <!-- Left knee crease — slight highlight suggests bent knee -->
+    <path d="M40,228 Q44,224 48,227"
+          stroke="rgba(245,240,232,0.10)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+    <path d="M39,232 Q44,228 49,231"
+          stroke="rgba(245,240,232,0.07)" stroke-width="0.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Left arm (back) -->
+    <path d="M33,118 Q24,140 22,162 Q20,177 23,190 L31,190
+             Q28,175 30,162 Q32,142 38,120 Z"
+          fill="rgba(16,20,34,0.86)" stroke="rgba(245,240,232,0.16)" stroke-width="0.5"/>
+    <!-- Left sleeve cuff (dark band before wrist) -->
+    <path d="M22,182 Q22,190 23,190 L31,190 Q32,186 31,182 Z"
+          fill="rgba(10,13,24,0.75)" stroke="rgba(245,240,232,0.14)" stroke-width="0.5"/>
+    <!-- Left fist -->
+    <path d="M22,190 Q19,196 20,203 Q22,208 27,207 Q30,206 31,202 L31,190 Z"
+          fill="rgba(210,175,138,0.78)" stroke="rgba(155,122,88,0.40)" stroke-width="0.6"/>
+    <!-- Finger lines on left fist -->
+    <path d="M21,196 Q25,194 30,196" stroke="rgba(150,115,82,0.30)" stroke-width="0.5" fill="none"/>
+    <path d="M21,200 Q25,198 30,200" stroke="rgba(150,115,82,0.22)" stroke-width="0.4" fill="none"/>
+    <!-- Thumb hint on left fist -->
+    <path d="M22,193 Q19,191 19,196" stroke="rgba(155,122,88,0.35)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+
+    <!-- ══ GI BODY — torso base ══ -->
+    <path d="M36,112 Q31,126 30,144 L28,202 Q28,213 42,213 L86,213 Q98,213 97,202 L94,144 Q92,126 88,112 Z"
+          fill="rgba(16,20,34,0.92)" stroke="rgba(245,240,232,0.22)" stroke-width="0.7"/>
+
+    <!-- ── GI CHEST VOLUME — light/shadow passes give body form ──
+         Light source from upper right.
+         Right chest: subtle highlight suggesting pectoral mass.
+         Left chest: deeper shadow for contrast.
+         Centre sternum: thin dark line divides the two panels.    ── -->
+
+    <!-- Left chest shadow panel -->
+    <path d="M36,112 Q31,126 30,144 L30,170 Q38,170 44,165 L44,112 Z"
+          fill="rgba(0,0,0,0.14)"/>
+
+    <!-- Right chest highlight panel -->
+    <path d="M76,112 Q84,126 86,144 L86,168 Q78,168 74,163 L74,112 Z"
+          fill="rgba(245,240,232,0.05)"/>
+
+    <!-- Chest contour line — curves over pectoral shelf -->
+    <path d="M44,128 Q62,124 80,128"
+          stroke="rgba(245,240,232,0.08)" stroke-width="0.6" fill="none" stroke-linecap="round"/>
+
+    <!-- Sternum centre shadow line -->
+    <path d="M62,112 Q62,168 62,170"
+          stroke="rgba(0,0,0,0.18)" stroke-width="0.7" fill="none"/>
+
+    <!-- ── FRONT RIGHT LEG ── -->
+    <path d="M76,198 Q80,224 82,248 L80,268 L93,270 L92,245 Q90,220 86,198 Z"
+          fill="rgba(16,20,34,0.87)" stroke="rgba(245,240,232,0.18)" stroke-width="0.6"/>
+    <!-- Right knee crease highlight -->
+    <path d="M82,228 Q86,224 90,227"
+          stroke="rgba(245,240,232,0.12)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+    <path d="M82,232 Q86,229 91,232"
+          stroke="rgba(245,240,232,0.07)" stroke-width="0.5" fill="none" stroke-linecap="round"/>
+    <!-- Right ankle gathering — bunched trouser before foot -->
+    <path d="M81,256 Q80,262 80,268 L93,270 Q94,264 93,257 Z"
+          fill="rgba(20,24,40,0.72)" stroke="rgba(245,240,232,0.10)" stroke-width="0.4"/>
+    <path d="M82,258 Q86,255 91,257" stroke="rgba(245,240,232,0.08)" stroke-width="0.5" fill="none"/>
+    <path d="M81,262 Q86,259 92,261" stroke="rgba(245,240,232,0.06)" stroke-width="0.4" fill="none"/>
+
+    <!-- Right foot (front) -->
+    <path d="M80,268 L78,279 Q77,283 80,283 L94,283 Q97,283 96,280 L93,270 Z"
+          fill="rgba(24,28,46,0.88)" stroke="rgba(245,240,232,0.16)" stroke-width="0.6"/>
+    <!-- Foot highlight (right foot lit from above) -->
+    <path d="M82,272 Q87,270 92,272" stroke="rgba(245,240,232,0.10)" stroke-width="0.5" fill="none"/>
+
+    <!-- ══ BELT ══ -->
+    <rect id="char-belt" x="30" y="170" width="64" height="12" rx="2"
+          fill="#2E7D22" opacity="0.90"/>
+    <!-- Belt shading — top edge lighter, bottom darker for wrap roundness -->
+    <rect x="30" y="170" width="64" height="4" rx="2"
+          fill="rgba(255,255,255,0.06)"/>
+    <rect x="30" y="178" width="64" height="4" rx="2"
+          fill="rgba(0,0,0,0.12)"/>
+    <rect id="char-belt-stripe" x="30" y="174.5" width="64" height="4" rx="1"
+          fill="#888888" opacity="0.80"/>
+    <!-- Belt knot (centre) — double-wrap suggestion -->
+    <ellipse cx="62" cy="176" rx="8" ry="5"
+             fill="rgba(14,18,30,0.80)" stroke="rgba(245,240,232,0.30)" stroke-width="0.9"/>
+    <!-- Knot inner cross-lines suggest tied fabric -->
+    <path d="M56,173 L68,179" stroke="rgba(245,240,232,0.15)" stroke-width="0.5"/>
+    <path d="M56,179 L68,173" stroke="rgba(245,240,232,0.10)" stroke-width="0.4"/>
+    <!-- Belt tails -->
+    <path id="char-belt-tail-l" d="M55,182 Q52,192 50,205 Q49,210 51,211"
+          stroke="rgba(245,240,232,0.18)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path id="char-belt-tail-r" d="M69,182 Q72,194 74,207 Q75,212 73,213"
+          stroke="rgba(245,240,232,0.18)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M50,208 L48,212 M52,209 L51,213" stroke="rgba(245,240,232,0.07)" stroke-width="0.5"/>
+    <path d="M74,211 L76,215 M72,212 L72,216" stroke="rgba(245,240,232,0.07)" stroke-width="0.5"/>
+
+    <!-- ══ GI LAPELS ══ -->
+    <path d="M52,112 L44,168 L62,175" fill="none"
+          stroke="rgba(245,240,232,0.24)" stroke-width="0.9" stroke-linecap="round"/>
+    <path d="M76,112 L82,168 L62,175" fill="none"
+          stroke="rgba(245,240,232,0.24)" stroke-width="0.9" stroke-linecap="round"/>
+    <!-- Collar V skin glimpse (deeper V for more anime look) -->
+    <path d="M52,112 L62,142 L76,112 Z" fill="rgba(210,175,138,0.16)"/>
+    <!-- Collar fold shadow — where lapel crosses the neck -->
+    <path d="M54,114 Q62,120 74,114"
+          stroke="rgba(0,0,0,0.22)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <!-- Collar highlight above fold -->
+    <path d="M55,112 Q62,116 73,112"
+          stroke="rgba(245,240,232,0.14)" stroke-width="0.6" fill="none" stroke-linecap="round"/>
+
+    <!-- Gi fold creases above belt -->
+    <path d="M36,134 Q62,131 88,134" stroke="rgba(245,240,232,0.07)" stroke-width="0.6" fill="none" stroke-linecap="round"/>
+    <path d="M35,150 Q62,147 89,150" stroke="rgba(245,240,232,0.055)" stroke-width="0.5" fill="none" stroke-linecap="round"/>
+    <path d="M34,163 Q62,160 89,163" stroke="rgba(245,240,232,0.04)" stroke-width="0.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Gi left-side shadow -->
+    <path d="M36,112 Q31,126 30,144 L28,202 Q32,213 46,213 L46,202 Q38,192 38,152 Q38,130 42,114 Z"
+          fill="rgba(0,0,0,0.14)"/>
+
+    <!-- ══ RIGHT ARM (front) ══ -->
+    <path d="M91,116 Q100,138 102,162 Q104,178 101,192 L93,192
+             Q96,176 94,162 Q92,138 85,118 Z"
+          fill="rgba(16,20,34,0.86)" stroke="rgba(245,240,232,0.18)" stroke-width="0.5"/>
+    <!-- Sleeve arm highlight — outer curve of right arm catches light -->
+    <path d="M98,138 Q102,158 100,180"
+          stroke="rgba(245,240,232,0.08)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <!-- Right sleeve cuff -->
+    <path d="M100,184 Q101,192 101,192 L93,192 Q93,186 94,183 Z"
+          fill="rgba(10,13,24,0.75)" stroke="rgba(245,240,232,0.14)" stroke-width="0.5"/>
+    <!-- Right fist -->
+    <path d="M101,192 Q104,198 103,205 Q101,210 96,209 Q93,208 93,204 L93,192 Z"
+          fill="rgba(210,175,138,0.78)" stroke="rgba(155,122,88,0.40)" stroke-width="0.6"/>
+    <!-- Knuckle lines -->
+    <path d="M102,198 Q98,196 93,198" stroke="rgba(150,115,82,0.30)" stroke-width="0.5" fill="none"/>
+    <path d="M102,202 Q98,200 93,202" stroke="rgba(150,115,82,0.22)" stroke-width="0.4" fill="none"/>
+    <!-- Thumb hint on right fist -->
+    <path d="M102,195 Q105,193 105,198" stroke="rgba(155,122,88,0.38)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+
+    <!-- ══ SHOULDER CAPS — with highlight for deltoid volume ══ -->
+    <!-- Left shoulder -->
+    <path d="M36,112 Q28,108 24,114 Q21,120 30,122"
+          fill="rgba(16,20,34,0.88)" stroke="rgba(245,240,232,0.24)" stroke-width="0.6"/>
+    <!-- Left shoulder highlight curve (deltoid catch-light) -->
+    <path d="M28,110 Q26,116 28,120"
+          stroke="rgba(245,240,232,0.12)" stroke-width="1.0" fill="none" stroke-linecap="round"/>
+    <!-- Right shoulder -->
+    <path d="M88,112 Q96,108 100,114 Q103,120 94,122"
+          fill="rgba(16,20,34,0.88)" stroke="rgba(245,240,232,0.24)" stroke-width="0.6"/>
+    <!-- Right shoulder highlight (stronger — facing light) -->
+    <path d="M97,109 Q101,115 99,121"
+          stroke="rgba(245,240,232,0.18)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <path d="M96,108 Q100,114 98,120"
+          stroke="rgba(245,240,232,0.08)" stroke-width="0.6" fill="none" stroke-linecap="round"/>
+
+    <!-- ══ NECK ══ -->
+    <path d="M52,91 Q51,106 53,112 L73,112 Q75,106 74,91 Z"
+          fill="rgba(210,175,138,0.55)" stroke="rgba(160,128,96,0.22)" stroke-width="0.5"/>
+    <!-- Neck shadow on left side -->
+    <path d="M52,96 Q53,108 54,112 L57,112 Q56,107 55,96 Z"
+          fill="rgba(0,0,0,0.12)"/>
+    <!-- Neck highlight on right -->
+    <path d="M70,96 Q72,108 72,112 L70,112 Q69,107 68,96 Z"
+          fill="rgba(245,240,232,0.06)"/>
+
+    <!-- ══ EARS ══ -->
+    <ellipse cx="33" cy="64" rx="3.2" ry="4.2"
+             fill="rgba(200,162,125,0.42)" stroke="rgba(160,125,88,0.22)" stroke-width="0.4"/>
+    <!-- Ear inner curve -->
+    <path d="M33,61 Q31,64 33,67" stroke="rgba(150,115,82,0.20)" stroke-width="0.5" fill="none"/>
+    <ellipse cx="91" cy="64" rx="3.2" ry="4.2"
+             fill="rgba(200,162,125,0.42)" stroke="rgba(160,125,88,0.22)" stroke-width="0.4"/>
+    <path d="M91,61 Q93,64 91,67" stroke="rgba(150,115,82,0.20)" stroke-width="0.5" fill="none"/>
+
+    <!-- ══ HEAD (face) ══ -->
+    <path d="M34,60 Q34,36 62,28 Q90,36 90,60 Q90,80 62,96 Q36,82 34,60 Z"
+          fill="rgba(218,182,142,0.93)" stroke="rgba(155,120,84,0.30)" stroke-width="0.6"/>
+    <!-- Face highlight (right cheek, catching light) -->
+    <path d="M80,44 Q88,58 84,74"
+          stroke="rgba(245,240,232,0.08)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <!-- Chin shadow (underside, gives face roundness) -->
+    <path d="M46,84 Q62,94 78,84"
+          stroke="rgba(0,0,0,0.10)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+    <!-- ══ HAIR BASE (bulk behind spikes) ══ -->
+    <path d="M32,58 Q30,36 44,22 Q54,12 62,10 Q70,12 80,22 Q94,36 92,58
+             Q88,40 62,36 Q36,40 32,58 Z"
+          fill="rgba(20,12,6,0.92)" stroke="rgba(48,28,10,0.50)" stroke-width="0.5"/>
+
+    <!-- ══ HAIR SPIKES ══ -->
+    <polygon points="34,56  16,32  40,44"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="40,42  28,14  52,30"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="50,30  44,4   62,22"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="58,26  63,-4  72,22"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="70,25  82,4   80,28"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="80,34  96,12  86,40"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="88,48  108,32 92,56"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+
+    <!-- Spike highlights (inner lighter face) -->
+    <polygon points="52,30  46,6   60,22"  fill="rgba(44,28,12,0.55)"/>
+    <polygon points="60,26  63,-2  70,22"  fill="rgba(44,28,12,0.60)"/>
+    <polygon points="72,26  82,6   78,28"  fill="rgba(44,28,12,0.52)"/>
+
+    <!-- Hair volume streak — inner shine running through the mass -->
+    <path d="M50,36 Q58,30 68,34"
+          stroke="rgba(52,34,16,0.55)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M46,44 Q56,38 70,42"
+          stroke="rgba(52,34,16,0.40)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+    <!-- ══ FRONT HAIR STRANDS ══ -->
+    <path d="M46,28 Q43,40 41,54"  stroke="rgba(20,12,6,0.88)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <path d="M52,24 Q49,37 47,50"  stroke="rgba(20,12,6,0.82)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M74,26 Q78,40 78,52"  stroke="rgba(20,12,6,0.82)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M80,31 Q84,44 82,54"  stroke="rgba(20,12,6,0.76)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+    <!-- ══ ANIME EYES ══ -->
+    <!-- Left eye -->
+    <ellipse cx="49" cy="60" rx="7.5" ry="8.5"
+             fill="rgba(238,232,224,0.96)" stroke="rgba(16,8,4,0.88)" stroke-width="0.7"/>
+    <ellipse cx="49" cy="61" rx="5.8" ry="6.8" fill="rgba(80,50,18,0.96)"/>
+    <ellipse cx="49" cy="63" rx="5.2" ry="4.5" fill="rgba(50,28,8,0.50)"/>
+    <ellipse cx="49" cy="61" rx="3.2" ry="3.8" fill="rgba(6,4,2,0.99)"/>
+    <ellipse cx="46.5" cy="57.5" rx="2.2" ry="2.8" fill="rgba(245,240,232,0.92)"/>
+    <circle  cx="52"   cy="63.5" r="1.1"          fill="rgba(245,240,232,0.55)"/>
+    <!-- Eye rim light (thin bright arc at very top of sclera) -->
+    <path d="M43,55 Q49,53 55,55" stroke="rgba(245,240,232,0.22)" stroke-width="0.5" fill="none"/>
+    <path d="M41,54 Q49,50 57,54" stroke="rgba(12,6,3,0.97)"  stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path d="M41,54 Q40,57 42,60" stroke="rgba(12,6,3,0.75)"  stroke-width="1.0" fill="none" stroke-linecap="round"/>
+    <path d="M42,68 Q49,71 56,68" stroke="rgba(12,6,3,0.50)"  stroke-width="0.7" fill="none" stroke-linecap="round"/>
+
+    <!-- Right eye -->
+    <ellipse cx="75" cy="60" rx="7.5" ry="8.5"
+             fill="rgba(238,232,224,0.96)" stroke="rgba(16,8,4,0.88)" stroke-width="0.7"/>
+    <ellipse cx="75" cy="61" rx="5.8" ry="6.8" fill="rgba(80,50,18,0.96)"/>
+    <ellipse cx="75" cy="63" rx="5.2" ry="4.5" fill="rgba(50,28,8,0.50)"/>
+    <ellipse cx="75" cy="61" rx="3.2" ry="3.8" fill="rgba(6,4,2,0.99)"/>
+    <ellipse cx="72.5" cy="57.5" rx="2.2" ry="2.8" fill="rgba(245,240,232,0.92)"/>
+    <circle  cx="78"   cy="63.5" r="1.1"          fill="rgba(245,240,232,0.55)"/>
+    <path d="M69,55 Q75,53 81,55" stroke="rgba(245,240,232,0.22)" stroke-width="0.5" fill="none"/>
+    <path d="M67,54 Q75,50 83,54" stroke="rgba(12,6,3,0.97)"  stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path d="M83,54 Q84,57 82,60" stroke="rgba(12,6,3,0.75)"  stroke-width="1.0" fill="none" stroke-linecap="round"/>
+    <path d="M68,68 Q75,71 82,68" stroke="rgba(12,6,3,0.50)"  stroke-width="0.7" fill="none" stroke-linecap="round"/>
+
+    <!-- ══ EYEBROWS ══ -->
+    <path d="M41,51 Q49,47.5 57,50" stroke="rgba(18,10,4,0.94)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+    <path d="M67,50 Q75,47.5 83,51" stroke="rgba(18,10,4,0.94)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+
+    <!-- ══ NOSE ══ -->
+    <path d="M59,72 Q62,76 65,72" stroke="rgba(165,128,92,0.28)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+    <!-- Nose bridge hint -->
+    <path d="M60,66 Q61,68 60,70" stroke="rgba(155,118,82,0.14)" stroke-width="0.7" fill="none"/>
+
+    <!-- ══ MOUTH ══ -->
+    <path d="M54,81 Q62,86 70,81" stroke="rgba(165,100,78,0.48)" stroke-width="1.0" fill="none" stroke-linecap="round"/>
+    <path d="M57,80 Q62,82 67,80" stroke="rgba(165,100,78,0.22)" stroke-width="0.5" fill="none" stroke-linecap="round"/>
+
+    <!-- ══ CHEEK DETAILS ══ -->
+    <ellipse cx="40" cy="73" rx="6" ry="3" fill="rgba(210,130,110,0.10)"/>
+    <ellipse cx="84" cy="73" rx="6" ry="3" fill="rgba(210,130,110,0.10)"/>
+
+    <!-- Bandage on left cheek -->
+    <rect x="39" y="76" width="9" height="5" rx="1"
+          fill="rgba(240,225,205,0.80)" stroke="rgba(200,175,148,0.45)" stroke-width="0.4"/>
+    <path d="M40.5,76 L40.5,81 M42,76 L42,81" stroke="rgba(195,168,138,0.30)" stroke-width="0.5"/>
+    <rect x="38.5" y="77" width="2.5" height="3" rx="0.5" fill="rgba(220,200,175,0.58)"/>
+    <rect x="48"   y="77" width="2"   height="3" rx="0.5" fill="rgba(220,200,175,0.58)"/>
+
+  </svg>
+</div>
+<span class="label">iPhone 1×</span>
+</div>
+
+<!-- ── 2× zoom for inspection ── -->
+<div class="col">
+<div class="preview-lg">
+  <svg viewBox="0 0 130 285" fill="none" xmlns="http://www.w3.org/2000/svg"
+       style="width:100%;height:100%;overflow:visible;">
+    <!-- identical SVG at 2× CSS scale -->
+    <ellipse cx="63" cy="283" rx="42" ry="3.5" fill="rgba(0,0,0,0.28)"/>
+    <path d="M32,264 L28,277 Q27,281 31,281 L45,282 Q48,282 48,279 L46,265 Z" fill="rgba(24,28,46,0.88)" stroke="rgba(245,240,232,0.16)" stroke-width="0.6"/>
+    <path d="M36,256 Q34,260 32,264 L46,265 Q46,261 44,256 Z" fill="rgba(20,24,40,0.70)" stroke="rgba(245,240,232,0.10)" stroke-width="0.4"/>
+    <path d="M35,258 Q38,255 42,257" stroke="rgba(245,240,232,0.08)" stroke-width="0.5" fill="none"/>
+    <path d="M34,262 Q38,259 44,261" stroke="rgba(245,240,232,0.06)" stroke-width="0.4" fill="none"/>
+    <path d="M43,198 Q39,222 38,247 L32,264 L46,265 L49,245 Q51,220 50,198 Z" fill="rgba(16,20,34,0.84)" stroke="rgba(245,240,232,0.16)" stroke-width="0.6"/>
+    <path d="M40,228 Q44,224 48,227" stroke="rgba(245,240,232,0.10)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+    <path d="M39,232 Q44,228 49,231" stroke="rgba(245,240,232,0.07)" stroke-width="0.5" fill="none" stroke-linecap="round"/>
+    <path d="M33,118 Q24,140 22,162 Q20,177 23,190 L31,190 Q28,175 30,162 Q32,142 38,120 Z" fill="rgba(16,20,34,0.86)" stroke="rgba(245,240,232,0.16)" stroke-width="0.5"/>
+    <path d="M22,182 Q22,190 23,190 L31,190 Q32,186 31,182 Z" fill="rgba(10,13,24,0.75)" stroke="rgba(245,240,232,0.14)" stroke-width="0.5"/>
+    <path d="M22,190 Q19,196 20,203 Q22,208 27,207 Q30,206 31,202 L31,190 Z" fill="rgba(210,175,138,0.78)" stroke="rgba(155,122,88,0.40)" stroke-width="0.6"/>
+    <path d="M21,196 Q25,194 30,196" stroke="rgba(150,115,82,0.30)" stroke-width="0.5" fill="none"/>
+    <path d="M21,200 Q25,198 30,200" stroke="rgba(150,115,82,0.22)" stroke-width="0.4" fill="none"/>
+    <path d="M22,193 Q19,191 19,196" stroke="rgba(155,122,88,0.35)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+    <path d="M36,112 Q31,126 30,144 L28,202 Q28,213 42,213 L86,213 Q98,213 97,202 L94,144 Q92,126 88,112 Z" fill="rgba(16,20,34,0.92)" stroke="rgba(245,240,232,0.22)" stroke-width="0.7"/>
+    <path d="M36,112 Q31,126 30,144 L30,170 Q38,170 44,165 L44,112 Z" fill="rgba(0,0,0,0.14)"/>
+    <path d="M76,112 Q84,126 86,144 L86,168 Q78,168 74,163 L74,112 Z" fill="rgba(245,240,232,0.05)"/>
+    <path d="M44,128 Q62,124 80,128" stroke="rgba(245,240,232,0.08)" stroke-width="0.6" fill="none" stroke-linecap="round"/>
+    <path d="M62,112 Q62,168 62,170" stroke="rgba(0,0,0,0.18)" stroke-width="0.7" fill="none"/>
+    <path d="M76,198 Q80,224 82,248 L80,268 L93,270 L92,245 Q90,220 86,198 Z" fill="rgba(16,20,34,0.87)" stroke="rgba(245,240,232,0.18)" stroke-width="0.6"/>
+    <path d="M82,228 Q86,224 90,227" stroke="rgba(245,240,232,0.12)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+    <path d="M82,232 Q86,229 91,232" stroke="rgba(245,240,232,0.07)" stroke-width="0.5" fill="none" stroke-linecap="round"/>
+    <path d="M81,256 Q80,262 80,268 L93,270 Q94,264 93,257 Z" fill="rgba(20,24,40,0.72)" stroke="rgba(245,240,232,0.10)" stroke-width="0.4"/>
+    <path d="M82,258 Q86,255 91,257" stroke="rgba(245,240,232,0.08)" stroke-width="0.5" fill="none"/>
+    <path d="M81,262 Q86,259 92,261" stroke="rgba(245,240,232,0.06)" stroke-width="0.4" fill="none"/>
+    <path d="M80,268 L78,279 Q77,283 80,283 L94,283 Q97,283 96,280 L93,270 Z" fill="rgba(24,28,46,0.88)" stroke="rgba(245,240,232,0.16)" stroke-width="0.6"/>
+    <path d="M82,272 Q87,270 92,272" stroke="rgba(245,240,232,0.10)" stroke-width="0.5" fill="none"/>
+    <rect x="30" y="170" width="64" height="12" rx="2" fill="#2E7D22" opacity="0.90"/>
+    <rect x="30" y="170" width="64" height="4" rx="2" fill="rgba(255,255,255,0.06)"/>
+    <rect x="30" y="178" width="64" height="4" rx="2" fill="rgba(0,0,0,0.12)"/>
+    <rect id="char-belt-2" x="30" y="174.5" width="64" height="4" rx="1" fill="#888888" opacity="0.80"/>
+    <ellipse cx="62" cy="176" rx="8" ry="5" fill="rgba(14,18,30,0.80)" stroke="rgba(245,240,232,0.30)" stroke-width="0.9"/>
+    <path d="M56,173 L68,179" stroke="rgba(245,240,232,0.15)" stroke-width="0.5"/>
+    <path d="M56,179 L68,173" stroke="rgba(245,240,232,0.10)" stroke-width="0.4"/>
+    <path d="M55,182 Q52,192 50,205 Q49,210 51,211" stroke="rgba(245,240,232,0.18)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M69,182 Q72,194 74,207 Q75,212 73,213" stroke="rgba(245,240,232,0.18)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M52,112 L44,168 L62,175" fill="none" stroke="rgba(245,240,232,0.24)" stroke-width="0.9" stroke-linecap="round"/>
+    <path d="M76,112 L82,168 L62,175" fill="none" stroke="rgba(245,240,232,0.24)" stroke-width="0.9" stroke-linecap="round"/>
+    <path d="M52,112 L62,142 L76,112 Z" fill="rgba(210,175,138,0.16)"/>
+    <path d="M54,114 Q62,120 74,114" stroke="rgba(0,0,0,0.22)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <path d="M55,112 Q62,116 73,112" stroke="rgba(245,240,232,0.14)" stroke-width="0.6" fill="none" stroke-linecap="round"/>
+    <path d="M36,134 Q62,131 88,134" stroke="rgba(245,240,232,0.07)" stroke-width="0.6" fill="none" stroke-linecap="round"/>
+    <path d="M35,150 Q62,147 89,150" stroke="rgba(245,240,232,0.055)" stroke-width="0.5" fill="none" stroke-linecap="round"/>
+    <path d="M34,163 Q62,160 89,163" stroke="rgba(245,240,232,0.04)" stroke-width="0.5" fill="none" stroke-linecap="round"/>
+    <path d="M36,112 Q31,126 30,144 L28,202 Q32,213 46,213 L46,202 Q38,192 38,152 Q38,130 42,114 Z" fill="rgba(0,0,0,0.14)"/>
+    <path d="M91,116 Q100,138 102,162 Q104,178 101,192 L93,192 Q96,176 94,162 Q92,138 85,118 Z" fill="rgba(16,20,34,0.86)" stroke="rgba(245,240,232,0.18)" stroke-width="0.5"/>
+    <path d="M98,138 Q102,158 100,180" stroke="rgba(245,240,232,0.08)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <path d="M100,184 Q101,192 101,192 L93,192 Q93,186 94,183 Z" fill="rgba(10,13,24,0.75)" stroke="rgba(245,240,232,0.14)" stroke-width="0.5"/>
+    <path d="M101,192 Q104,198 103,205 Q101,210 96,209 Q93,208 93,204 L93,192 Z" fill="rgba(210,175,138,0.78)" stroke="rgba(155,122,88,0.40)" stroke-width="0.6"/>
+    <path d="M102,198 Q98,196 93,198" stroke="rgba(150,115,82,0.30)" stroke-width="0.5" fill="none"/>
+    <path d="M102,202 Q98,200 93,202" stroke="rgba(150,115,82,0.22)" stroke-width="0.4" fill="none"/>
+    <path d="M102,195 Q105,193 105,198" stroke="rgba(155,122,88,0.38)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+    <path d="M36,112 Q28,108 24,114 Q21,120 30,122" fill="rgba(16,20,34,0.88)" stroke="rgba(245,240,232,0.24)" stroke-width="0.6"/>
+    <path d="M28,110 Q26,116 28,120" stroke="rgba(245,240,232,0.12)" stroke-width="1.0" fill="none" stroke-linecap="round"/>
+    <path d="M88,112 Q96,108 100,114 Q103,120 94,122" fill="rgba(16,20,34,0.88)" stroke="rgba(245,240,232,0.24)" stroke-width="0.6"/>
+    <path d="M97,109 Q101,115 99,121" stroke="rgba(245,240,232,0.18)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <path d="M96,108 Q100,114 98,120" stroke="rgba(245,240,232,0.08)" stroke-width="0.6" fill="none" stroke-linecap="round"/>
+    <path d="M52,91 Q51,106 53,112 L73,112 Q75,106 74,91 Z" fill="rgba(210,175,138,0.55)" stroke="rgba(160,128,96,0.22)" stroke-width="0.5"/>
+    <path d="M52,96 Q53,108 54,112 L57,112 Q56,107 55,96 Z" fill="rgba(0,0,0,0.12)"/>
+    <path d="M70,96 Q72,108 72,112 L70,112 Q69,107 68,96 Z" fill="rgba(245,240,232,0.06)"/>
+    <ellipse cx="33" cy="64" rx="3.2" ry="4.2" fill="rgba(200,162,125,0.42)" stroke="rgba(160,125,88,0.22)" stroke-width="0.4"/>
+    <path d="M33,61 Q31,64 33,67" stroke="rgba(150,115,82,0.20)" stroke-width="0.5" fill="none"/>
+    <ellipse cx="91" cy="64" rx="3.2" ry="4.2" fill="rgba(200,162,125,0.42)" stroke="rgba(160,125,88,0.22)" stroke-width="0.4"/>
+    <path d="M91,61 Q93,64 91,67" stroke="rgba(150,115,82,0.20)" stroke-width="0.5" fill="none"/>
+    <path d="M34,60 Q34,36 62,28 Q90,36 90,60 Q90,80 62,96 Q36,82 34,60 Z" fill="rgba(218,182,142,0.93)" stroke="rgba(155,120,84,0.30)" stroke-width="0.6"/>
+    <path d="M80,44 Q88,58 84,74" stroke="rgba(245,240,232,0.08)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M46,84 Q62,94 78,84" stroke="rgba(0,0,0,0.10)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M32,58 Q30,36 44,22 Q54,12 62,10 Q70,12 80,22 Q94,36 92,58 Q88,40 62,36 Q36,40 32,58 Z" fill="rgba(20,12,6,0.92)" stroke="rgba(48,28,10,0.50)" stroke-width="0.5"/>
+    <polygon points="34,56  16,32  40,44"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="40,42  28,14  52,30"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="50,30  44,4   62,22"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="58,26  63,-4  72,22"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="70,25  82,4   80,28"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="80,34  96,12  86,40"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="88,48  108,32 92,56"  fill="rgba(22,13,6,0.92)" stroke="rgba(48,28,10,0.40)" stroke-width="0.5"/>
+    <polygon points="52,30  46,6   60,22"  fill="rgba(44,28,12,0.55)"/>
+    <polygon points="60,26  63,-2  70,22"  fill="rgba(44,28,12,0.60)"/>
+    <polygon points="72,26  82,6   78,28"  fill="rgba(44,28,12,0.52)"/>
+    <path d="M50,36 Q58,30 68,34" stroke="rgba(52,34,16,0.55)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M46,44 Q56,38 70,42" stroke="rgba(52,34,16,0.40)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <path d="M46,28 Q43,40 41,54" stroke="rgba(20,12,6,0.88)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <path d="M52,24 Q49,37 47,50" stroke="rgba(20,12,6,0.82)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M74,26 Q78,40 78,52" stroke="rgba(20,12,6,0.82)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M80,31 Q84,44 82,54" stroke="rgba(20,12,6,0.76)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- Eyes 2× -->
+    <ellipse cx="49" cy="60" rx="7.5" ry="8.5" fill="rgba(238,232,224,0.96)" stroke="rgba(16,8,4,0.88)" stroke-width="0.7"/>
+    <ellipse cx="49" cy="61" rx="5.8" ry="6.8" fill="rgba(80,50,18,0.96)"/>
+    <ellipse cx="49" cy="63" rx="5.2" ry="4.5" fill="rgba(50,28,8,0.50)"/>
+    <ellipse cx="49" cy="61" rx="3.2" ry="3.8" fill="rgba(6,4,2,0.99)"/>
+    <ellipse cx="46.5" cy="57.5" rx="2.2" ry="2.8" fill="rgba(245,240,232,0.92)"/>
+    <circle  cx="52"   cy="63.5" r="1.1"          fill="rgba(245,240,232,0.55)"/>
+    <path d="M43,55 Q49,53 55,55" stroke="rgba(245,240,232,0.22)" stroke-width="0.5" fill="none"/>
+    <path d="M41,54 Q49,50 57,54" stroke="rgba(12,6,3,0.97)"  stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path d="M41,54 Q40,57 42,60" stroke="rgba(12,6,3,0.75)"  stroke-width="1.0" fill="none" stroke-linecap="round"/>
+    <path d="M42,68 Q49,71 56,68" stroke="rgba(12,6,3,0.50)"  stroke-width="0.7" fill="none" stroke-linecap="round"/>
+    <ellipse cx="75" cy="60" rx="7.5" ry="8.5" fill="rgba(238,232,224,0.96)" stroke="rgba(16,8,4,0.88)" stroke-width="0.7"/>
+    <ellipse cx="75" cy="61" rx="5.8" ry="6.8" fill="rgba(80,50,18,0.96)"/>
+    <ellipse cx="75" cy="63" rx="5.2" ry="4.5" fill="rgba(50,28,8,0.50)"/>
+    <ellipse cx="75" cy="61" rx="3.2" ry="3.8" fill="rgba(6,4,2,0.99)"/>
+    <ellipse cx="72.5" cy="57.5" rx="2.2" ry="2.8" fill="rgba(245,240,232,0.92)"/>
+    <circle  cx="78"   cy="63.5" r="1.1"          fill="rgba(245,240,232,0.55)"/>
+    <path d="M69,55 Q75,53 81,55" stroke="rgba(245,240,232,0.22)" stroke-width="0.5" fill="none"/>
+    <path d="M67,54 Q75,50 83,54" stroke="rgba(12,6,3,0.97)"  stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path d="M83,54 Q84,57 82,60" stroke="rgba(12,6,3,0.75)"  stroke-width="1.0" fill="none" stroke-linecap="round"/>
+    <path d="M68,68 Q75,71 82,68" stroke="rgba(12,6,3,0.50)"  stroke-width="0.7" fill="none" stroke-linecap="round"/>
+    <path d="M41,51 Q49,47.5 57,50" stroke="rgba(18,10,4,0.94)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+    <path d="M67,50 Q75,47.5 83,51" stroke="rgba(18,10,4,0.94)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+    <path d="M59,72 Q62,76 65,72" stroke="rgba(165,128,92,0.28)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+    <path d="M60,66 Q61,68 60,70" stroke="rgba(155,118,82,0.14)" stroke-width="0.7" fill="none"/>
+    <path d="M54,81 Q62,86 70,81" stroke="rgba(165,100,78,0.48)" stroke-width="1.0" fill="none" stroke-linecap="round"/>
+    <path d="M57,80 Q62,82 67,80" stroke="rgba(165,100,78,0.22)" stroke-width="0.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="40" cy="73" rx="6" ry="3" fill="rgba(210,130,110,0.10)"/>
+    <ellipse cx="84" cy="73" rx="6" ry="3" fill="rgba(210,130,110,0.10)"/>
+    <rect x="39" y="76" width="9" height="5" rx="1" fill="rgba(240,225,205,0.80)" stroke="rgba(200,175,148,0.45)" stroke-width="0.4"/>
+    <path d="M40.5,76 L40.5,81 M42,76 L42,81" stroke="rgba(195,168,138,0.30)" stroke-width="0.5"/>
+    <rect x="38.5" y="77" width="2.5" height="3" rx="0.5" fill="rgba(220,200,175,0.58)"/>
+    <rect x="48"   y="77" width="2"   height="3" rx="0.5" fill="rgba(220,200,175,0.58)"/>
+  </svg>
+</div>
+<span class="label">2× zoom (detail)</span>
+</div>
+
+</div>
+
+<div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.35;text-align:center;line-height:1.8;margin-top:8px;">
+  Ninja School — Anime Male Avatar v1.1<br>
+  Chest volume · Sleeve cuffs · Ankle gathering · Shoulder highlights · Knee creases · Hair sheen
+</div>
+</body></html>

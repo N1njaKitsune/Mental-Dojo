@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nendō Dojo · UI Architecture v1.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0E0E16;
+            color: #F0EBE0;
+            font-family: 'Crimson Pro', serif;
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(240, 235, 224, 0.2);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(240, 235, 224, 0.7);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Summary Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: rgba(240, 235, 224, 0.05);
+            border: 1px solid rgba(240, 235, 224, 0.15);
+            padding: 25px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Cinzel', serif;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #F0EBE0;
+        }
+
+        .stat-label {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(240, 235, 224, 0.6);
+        }
+
+        /* Legend */
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: rgba(240, 235, 224, 0.03);
+            border: 1px solid rgba(240, 235, 224, 0.1);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .legend-dot.live {
+            background: rgba(122, 184, 154, 0.8);
+        }
+
+        .legend-dot.art-only {
+            background: rgba(210, 175, 110, 0.8);
+        }
+
+        .legend-dot.missing {
+            background: rgba(212, 130, 106, 0.8);
+        }
+
+        .legend-dot.decision {
+            background: rgba(170, 140, 210, 0.8);
+        }
+
+        .legend-dot.shared {
+            background: transparent;
+            border: 1.5px solid rgba(245, 240, 232, 0.5);
+            box-shadow: 0 0 0 2px rgba(245, 240, 232, 0.12);
+        }
+
+        .legend-label {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 60px;
+            scroll-margin-top: 40px;
+        }
+
+        section h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(240, 235, 224, 0.2);
+            letter-spacing: 1px;
+        }
+
+        /* Flow Container */
+        .flow-container {
+            margin-bottom: 30px;
+        }
+
+        .flow-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .flow-row-label {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            color: rgba(240, 235, 224, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-width: 100px;
+            font-weight: 600;
+        }
+
+        .flow-arrow {
+            color: rgba(240, 235, 224, 0.4);
+            font-size: 20px;
+            flex-shrink: 0;
+            display: none;
+        }
+
+        .flow-row.with-arrow .flow-arrow {
+            display: block;
+        }
+
+        /* Node Styling */
+        .node {
+            background: rgba(240, 235, 224, 0.08);
+            border: 2px solid rgba(240, 235, 224, 0.2);
+            padding: 20px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            min-width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .node:hover {
+            background: rgba(240, 235, 224, 0.12);
+            border-color: rgba(240, 235, 224, 0.4);
+        }
+
+        .node.live {
+            border-color: rgba(122, 184, 154, 0.6);
+            background: rgba(122, 184, 154, 0.08);
+        }
+
+        .node.art-only {
+            border-color: rgba(210, 175, 110, 0.6);
+            background: rgba(210, 175, 110, 0.08);
+        }
+
+        .node.missing {
+            border-color: rgba(212, 130, 106, 0.6);
+            background: rgba(212, 130, 106, 0.08);
+            opacity: 0.7;
+        }
+
+        .node.decision {
+            border-color: rgba(170, 140, 210, 0.6);
+            background: rgba(170, 140, 210, 0.08);
+        }
+
+        .node.external {
+            border: 2px dashed rgba(240, 235, 224, 0.3);
+            background: rgba(240, 235, 224, 0.03);
+        }
+
+        .node.shared {
+            border: 1px solid rgba(245, 240, 232, 0.4);
+            background: rgba(245, 240, 232, 0.06);
+            box-shadow: 0 0 0 3px rgba(245, 240, 232, 0.06);
+        }
+
+        .node.shared .node-title {
+            color: rgba(245, 240, 232, 0.95);
+        }
+
+        .node.shared .node-status {
+            color: rgba(245, 240, 232, 0.55);
+            font-size: 9px;
+            letter-spacing: 0.18em;
+        }
+
+        .shared-badge {
+            display: inline-block;
+            font-family: 'Cinzel', serif;
+            font-size: 8px;
+            letter-spacing: 0.16em;
+            padding: 2px 7px;
+            border-radius: 3px;
+            background: rgba(245, 240, 232, 0.1);
+            border: 0.5px solid rgba(245, 240, 232, 0.25);
+            color: rgba(245, 240, 232, 0.55);
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        .node.metsuke {
+            border-left: 4px solid rgba(141, 184, 212, 0.8);
+        }
+
+        .node.mushin {
+            border-left: 4px solid rgba(122, 184, 154, 0.8);
+        }
+
+        .node.tachi {
+            border-left: 4px solid rgba(212, 130, 106, 0.8);
+        }
+
+        .node-title {
+            font-family: 'Cinzel', serif;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .node-version {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            color: rgba(240, 235, 224, 0.5);
+            margin-bottom: 8px;
+        }
+
+        .node-desc {
+            font-size: 13px;
+            color: rgba(240, 235, 224, 0.7);
+            line-height: 1.5;
+        }
+
+        .node-status {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(240, 235, 224, 0.15);
+            color: rgba(240, 235, 224, 0.6);
+            letter-spacing: 0.5px;
+        }
+
+        /* Discipline Cards */
+        .discipline-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .discipline-card {
+            padding: 25px;
+            border-radius: 4px;
+            border-left: 5px solid;
+        }
+
+        .discipline-card.metsuke {
+            border-left-color: rgba(141, 184, 212, 0.8);
+            background: rgba(141, 184, 212, 0.05);
+            border: 1px solid rgba(141, 184, 212, 0.3);
+            border-left: 5px solid rgba(141, 184, 212, 0.8);
+        }
+
+        .discipline-card.mushin {
+            border-left-color: rgba(122, 184, 154, 0.8);
+            background: rgba(122, 184, 154, 0.05);
+            border: 1px solid rgba(122, 184, 154, 0.3);
+            border-left: 5px solid rgba(122, 184, 154, 0.8);
+        }
+
+        .discipline-card.tachi {
+            border-left-color: rgba(212, 130, 106, 0.8);
+            background: rgba(212, 130, 106, 0.05);
+            border: 1px solid rgba(212, 130, 106, 0.3);
+            border-left: 5px solid rgba(212, 130, 106, 0.8);
+        }
+
+        .discipline-title {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .discipline-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            color: rgba(240, 235, 224, 0.6);
+            margin-bottom: 12px;
+            font-weight: 400;
+        }
+
+        .discipline-desc {
+            font-size: 14px;
+            color: rgba(240, 235, 224, 0.75);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .discipline-status {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            color: rgba(240, 235, 224, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(240, 235, 224, 0.04);
+            border-left: 3px solid rgba(240, 235, 224, 0.3);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 2px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(240, 235, 224, 0.75);
+        }
+
+        /* Pending Items */
+        .pending-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .pending-item {
+            background: rgba(170, 140, 210, 0.06);
+            border: 1px solid rgba(170, 140, 210, 0.3);
+            border-left: 3px solid rgba(170, 140, 210, 0.8);
+            padding: 20px;
+            border-radius: 2px;
+        }
+
+        .pending-title {
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .pending-blocks {
+            font-size: 13px;
+            color: rgba(240, 235, 224, 0.6);
+            font-style: italic;
+        }
+
+        /* Rules */
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .rule-chip {
+            background: rgba(212, 130, 106, 0.08);
+            border: 1px solid rgba(212, 130, 106, 0.3);
+            padding: 15px 20px;
+            border-radius: 4px;
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 0.5px;
+            color: rgba(240, 235, 224, 0.8);
+        }
+
+        /* Cross-Cutting Components Grid */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .component-node {
+            background: rgba(240, 235, 224, 0.08);
+            border: 1px solid rgba(240, 235, 224, 0.2);
+            padding: 20px;
+            border-radius: 4px;
+        }
+
+        .component-node.live {
+            border-color: rgba(122, 184, 154, 0.6);
+            background: rgba(122, 184, 154, 0.08);
+        }
+
+        .component-node.decision {
+            border-color: rgba(170, 140, 210, 0.6);
+            background: rgba(170, 140, 210, 0.08);
+        }
+
+        /* Implementation Context */
+        .impl-box {
+            background: rgba(141, 184, 212, 0.06);
+            border: 1px solid rgba(141, 184, 212, 0.3);
+            padding: 25px;
+            border-radius: 2px;
+            margin-top: 40px;
+        }
+
+        .impl-title {
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .impl-item {
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .impl-label {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            color: rgba(240, 235, 224, 0.8);
+        }
+
+        .impl-value {
+            color: rgba(240, 235, 224, 0.7);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(240, 235, 224, 0.1);
+            text-align: center;
+            color: rgba(240, 235, 224, 0.5);
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .discipline-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .rules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .flow-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .flow-row-label {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Nendō Dojo</h1>
+            <h1 style="font-size: 32px; font-weight: 400; letter-spacing: 1px;">UI Architecture</h1>
+            <p class="subtitle">The inner NEN — Metsuke, Mushin, Tachi discipline flows · v1.0 · March 2026</p>
+        </header>
+
+        <!-- Summary Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Screens with Working UI</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Art Only</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Screens Missing</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Pending Decisions</div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-dot live"></div>
+                <div class="legend-label">Live with UI</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot art-only"></div>
+                <div class="legend-label">Art Only</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot missing"></div>
+                <div class="legend-label">Does Not Exist Yet</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot decision"></div>
+                <div class="legend-label">Pending Decision</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot shared"></div>
+                <div class="legend-label">Shared Screen (both maps)</div>
+            </div>
+        </div>
+
+        <!-- Section 1: Entry into Nendō -->
+        <section>
+            <h2>Entry into Nendō</h2>
+
+            <div class="flow-container">
+                <div class="flow-row with-arrow">
+                    <div class="flow-row-label">Gateway</div>
+                    <div class="node shared">
+                        <div class="node-title">Student Profile</div>
+                        <div class="node-version">v3.9</div>
+                        <div class="node-desc">Student's home base · gateway into the dojo</div>
+                        <div class="node-status">● LIVE</div>
+                        <div class="shared-badge">SHARED SCREEN</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="node live">
+                        <div class="node-title">Entry Screen</div>
+                        <div class="node-version">v4.0 Painted</div>
+                        <div class="node-desc">Gateway animation · Begin dojo experience</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="node live">
+                        <div class="node-title">Nendō Home</div>
+                        <div class="node-version">v3.0 · Three Doors</div>
+                        <div class="node-desc">Central hub · Access to three disciplines</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                The Student Profile is the shared entry point — the same screen that anchors the Student Section Architecture. It sits at the top of both maps. From the Profile, students enter the dojo via the Entry Screen, then land at the Nendō Home (the three-door hub).
+            </div>
+        </section>
+
+        <!-- Section 2: Nendō Home Hub -->
+        <section>
+            <h2>Nendō Home Hub</h2>
+
+            <div class="flow-container">
+                <div class="flow-row">
+                    <div class="flow-row-label">Navigation</div>
+                    <div class="node live" style="min-width: 250px;">
+                        <div class="node-title">Nendō Home</div>
+                        <div class="node-version">v3.0</div>
+                        <div class="node-desc">Three discipline doors · Central navigation hub</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="discipline-cards">
+                <div class="discipline-card metsuke">
+                    <div class="discipline-title">Metsuke</div>
+                    <div class="discipline-subtitle">The Reading Mind</div>
+                    <div class="discipline-desc">Perception, comprehension, pattern recognition</div>
+                    <div class="discipline-status">HUB LIVE v3.0</div>
+                </div>
+                <div class="discipline-card mushin">
+                    <div class="discipline-title">Mushin</div>
+                    <div class="discipline-subtitle">The Still Mind</div>
+                    <div class="discipline-desc">Breath, focus, regulation</div>
+                    <div class="discipline-status">PARTIALLY LIVE</div>
+                </div>
+                <div class="discipline-card tachi">
+                    <div class="discipline-title">Tachi</div>
+                    <div class="discipline-subtitle">The Striking Mind</div>
+                    <div class="discipline-desc">Strategy, speed, decision-making</div>
+                    <div class="discipline-status">HUB LIVE v3.0, v2.0 WIP</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Metsuke Flow -->
+        <section>
+            <h2>Metsuke Flow</h2>
+
+            <div class="flow-container">
+                <div class="flow-row">
+                    <div class="flow-row-label">Hub</div>
+                    <div class="node live metsuke">
+                        <div class="node-title">MetsukeHub</div>
+                        <div class="node-version">v3.0</div>
+                        <div class="node-desc">Challenge categories · Blue theme</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                </div>
+
+                <div class="flow-row">
+                    <div class="flow-row-label">Select</div>
+                    <div class="node missing metsuke">
+                        <div class="node-title">Challenge Select</div>
+                        <div class="node-desc">Pick a challenge from category</div>
+                        <div class="node-status">MISSING</div>
+                    </div>
+                </div>
+
+                <div class="flow-row with-arrow">
+                    <div class="flow-row-label">Play</div>
+                    <div class="node missing metsuke">
+                        <div class="node-title">Challenge Intro</div>
+                        <div class="node-desc">Brief + instructions</div>
+                        <div class="node-status">MISSING</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="node missing metsuke">
+                        <div class="node-title">Challenge Runner</div>
+                        <div class="node-desc">Active gameplay</div>
+                        <div class="node-status">MISSING</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="node missing metsuke">
+                        <div class="node-title">Challenge Result</div>
+                        <div class="node-desc">Score · XP · progress</div>
+                        <div class="node-status">MISSING</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                MetsukeHub has gone through v1.0 → v2.0 → v3.0. Hub is prototyped. No challenge screens prototyped yet. Challenge content volume is a pending decision.
+            </div>
+        </section>
+
+        <!-- Section 4: Mushin Flow -->
+        <section>
+            <h2>Mushin Flow</h2>
+
+            <div class="flow-container">
+                <div class="flow-row">
+                    <div class="flow-row-label">Hub</div>
+                    <div class="node live mushin">
+                        <div class="node-title">BreathHome</div>
+                        <div class="node-version">v2.0</div>
+                        <div class="node-desc">Element diamond · 4 element doors</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                </div>
+
+                <div class="flow-row">
+                    <div class="flow-row-label">Elements</div>
+                    <div class="node live mushin">
+                        <div class="node-title">Kaze</div>
+                        <div class="node-desc">Wind element</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                    <div class="node live mushin">
+                        <div class="node-title">Chi</div>
+                        <div class="node-desc">Earth element</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                    <div class="node live mushin">
+                        <div class="node-title">Mizu</div>
+                        <div class="node-desc">Water element</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                    <div class="node live mushin">
+                        <div class="node-title">Hi</div>
+                        <div class="node-desc">Fire element</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                </div>
+
+                <div class="flow-row with-arrow">
+                    <div class="flow-row-label">Session</div>
+                    <div class="node live mushin">
+                        <div class="node-title">Check-In</div>
+                        <div class="node-version">v3.0 Painted</div>
+                        <div class="node-desc">Mental state cards</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="node live mushin">
+                        <div class="node-title">Sequence</div>
+                        <div class="node-version">v2.0</div>
+                        <div class="node-desc">Build your session</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="node live mushin">
+                        <div class="node-title">Shiho</div>
+                        <div class="node-version">v1.0</div>
+                        <div class="node-desc">Breathing exercise</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="node missing mushin">
+                        <div class="node-title">Runner</div>
+                        <div class="node-desc">Live breathing with canvas</div>
+                        <div class="node-status">MISSING</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="node missing mushin">
+                        <div class="node-title">Complete</div>
+                        <div class="node-desc">Stats/XP summary</div>
+                        <div class="node-status">MISSING</div>
+                    </div>
+                </div>
+
+                <div class="flow-row">
+                    <div class="flow-row-label">Extended</div>
+                    <div class="node live mushin">
+                        <div class="node-title">MushinPractice</div>
+                        <div class="node-version">v1.0</div>
+                        <div class="node-desc">Extended practice flow</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                Mushin is the most developed discipline. BreathHome v2.0, CheckIn v3.0 Painted, Sequence v2.0, MushinPractice v1.0 all have working prototypes. Mushin v2.0 extended practice flow is on the backlog.
+            </div>
+        </section>
+
+        <!-- Section 5: Tachi Flow -->
+        <section>
+            <h2>Tachi Flow</h2>
+
+            <div class="flow-container">
+                <div class="flow-row">
+                    <div class="flow-row-label">Hub</div>
+                    <div class="node live tachi">
+                        <div class="node-title">TachiHub</div>
+                        <div class="node-version">v3.0</div>
+                        <div class="node-desc">Challenge categories · Red theme</div>
+                        <div class="node-status">LIVE</div>
+                    </div>
+                </div>
+
+                <div class="flow-row">
+                    <div class="flow-row-label">Select</div>
+                    <div class="node missing tachi">
+                        <div class="node-title">Challenge Select</div>
+                        <div class="node-desc">Pick a challenge</div>
+                        <div class="node-status">MISSING</div>
+                    </div>
+                </div>
+
+                <div class="flow-row with-arrow">
+                    <div class="flow-row-label">Play</div>
+                    <div class="node missing tachi">
+                        <div class="node-title">Challenge Intro</div>
+                        <div class="node-desc">Brief + instructions</div>
+                        <div class="node-status">MISSING</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="node missing tachi">
+                        <div class="node-title">Challenge Runner</div>
+                        <div class="node-desc">Active gameplay</div>
+                        <div class="node-status">MISSING</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="node missing tachi">
+                        <div class="node-title">Challenge Result</div>
+                        <div class="node-desc">Score · XP · progress</div>
+                        <div class="node-status">MISSING</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                TachiHub went from v1.0 to v3.0 (skipping v2.0). TachiHub v2.0 redesign is the current active task. No challenge screens prototyped.
+            </div>
+        </section>
+
+        <!-- Section 6: Cross-Cutting Dojo Components -->
+        <section>
+            <h2>Cross-Cutting Dojo Components</h2>
+
+            <div class="component-grid">
+                <div class="component-node live">
+                    <div class="node-title">Navigation Shell</div>
+                    <div class="node-version">v1.0</div>
+                    <div class="node-desc">Shared nav chrome</div>
+                    <div class="node-status">LIVE COMPONENT</div>
+                </div>
+                <div class="component-node live">
+                    <div class="node-title">Check-In Mood</div>
+                    <div class="node-version">v1.0</div>
+                    <div class="node-desc">Mood selector component</div>
+                    <div class="node-status">LIVE COMPONENT</div>
+                </div>
+                <div class="component-node live">
+                    <div class="node-title">Particle System</div>
+                    <div class="node-version">v1.0</div>
+                    <div class="node-desc">Ambient effects</div>
+                    <div class="node-status">LIVE COMPONENT</div>
+                </div>
+                <div class="component-node live">
+                    <div class="node-title">Screen Template</div>
+                    <div class="node-version">v1.0</div>
+                    <div class="node-desc">Base layout template</div>
+                    <div class="node-status">LIVE COMPONENT</div>
+                </div>
+                <div class="component-node decision">
+                    <div class="node-title">Progress Stages</div>
+                    <div class="node-desc">5 stages per discipline — names and unlock criteria</div>
+                    <div class="node-status">PENDING DECISION</div>
+                </div>
+                <div class="component-node decision">
+                    <div class="node-title">XP / Points System</div>
+                    <div class="node-desc">How challenges earn aura progression</div>
+                    <div class="node-status">PENDING DECISION</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Pending Decisions -->
+        <section>
+            <h2>Pending Decisions (Dojo-Specific)</h2>
+
+            <div class="pending-list">
+                <div class="pending-item">
+                    <div class="pending-title">Five progress stages per discipline</div>
+                    <div class="pending-blocks">Names and unlock criteria</div>
+                    <div class="pending-blocks">Blocks: Progress system</div>
+                </div>
+                <div class="pending-item">
+                    <div class="pending-title">XP or points system</div>
+                    <div class="pending-blocks">How challenges earn aura progression</div>
+                    <div class="pending-blocks">Blocks: Challenge build</div>
+                </div>
+                <div class="pending-item">
+                    <div class="pending-title">Content volume</div>
+                    <div class="pending-blocks">Minimum challenge bank per discipline</div>
+                    <div class="pending-blocks">Blocks: Content production</div>
+                </div>
+                <div class="pending-item">
+                    <div class="pending-title">Hybrid aura formula</div>
+                    <div class="pending-blocks">Exact weighting of each discipline</div>
+                    <div class="pending-blocks">Blocks: Aura display</div>
+                </div>
+                <div class="pending-item">
+                    <div class="pending-title">Japanese kanji accuracy</div>
+                    <div class="pending-blocks">Metsuke, Tachi, Mushin</div>
+                    <div class="pending-blocks">Blocks: All discipline screens</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Non-Negotiable Rules -->
+        <section>
+            <h2>Non-Negotiable Rules (Dojo)</h2>
+
+            <div class="rules-grid">
+                <div class="rule-chip">Landscape only — no portrait scroll</div>
+                <div class="rule-chip">All content for 7–9 year olds</div>
+                <div class="rule-chip">Mushin must feel active, never passive</div>
+                <div class="rule-chip">Full-screen takeover within student profile</div>
+                <div class="rule-chip">Must work on phone landscape + tablet landscape</div>
+                <div class="rule-chip">No belt language — auras only</div>
+                <div class="rule-chip">TEN, REN reserved for physical dojo</div>
+            </div>
+        </section>
+
+        <!-- Implementation Context -->
+        <section>
+            <div class="impl-box">
+                <div class="impl-title">Implementation Context</div>
+                <div class="impl-item">
+                    <span class="impl-label">Tech:</span>
+                    <span class="impl-value">React 18.2, Canvas API for breath circles, SVG for layouts, Cinzel + Crimson Pro, dark theme (#0A0A12)</span>
+                </div>
+                <div class="impl-item">
+                    <span class="impl-label">Workflow:</span>
+                    <span class="impl-value">Design as HTML prototypes → refine → port to React → push to live</span>
+                </div>
+                <div class="impl-item">
+                    <span class="impl-label">Repo:</span>
+                    <span class="impl-value">github.com/N1njaKitsune/Nendo</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Nendō Dojo · UI Architecture Map v1.0 · March 2026</p>
+            <p style="margin-top: 8px;">StudentNinja Ninja Learning App</p>
+        </footer>
+    </div>
+</body>
+</html>

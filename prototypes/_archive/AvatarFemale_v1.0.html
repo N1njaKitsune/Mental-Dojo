@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Nendo Avatar — Female v1.0</title>
+  <style>
+    body {
+      background: #1a1a2e;
+      display: flex;
+      gap: 36px;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px;
+      font-family: sans-serif;
+    }
+    .preview { text-align: center; color: #777; font-size: 11px; }
+    .preview span { display: block; margin-bottom: 10px; letter-spacing: 0.5px; }
+    svg { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ===== 1× Preview (130×285) ===== -->
+<div class="preview">
+  <span>1× (130×285)</span>
+  <svg width="130" height="285" viewBox="0 0 130 285" xmlns="http://www.w3.org/2000/svg">
+
+    <defs>
+      <radialGradient id="skinFaceF" cx="44%" cy="36%" r="56%">
+        <stop offset="0%"   stop-color="#fce8d0"/>
+        <stop offset="100%" stop-color="#e8c8a0"/>
+      </radialGradient>
+      <radialGradient id="skinLimbF" cx="40%" cy="30%" r="60%">
+        <stop offset="0%"   stop-color="#f5d8b8"/>
+        <stop offset="100%" stop-color="#ddb898"/>
+      </radialGradient>
+      <linearGradient id="giNavyF" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#1c2240"/>
+        <stop offset="48%"  stop-color="#242b4e"/>
+        <stop offset="100%" stop-color="#181e3a"/>
+      </linearGradient>
+      <linearGradient id="hakamaDark" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#181d38"/>
+        <stop offset="50%"  stop-color="#1e2440"/>
+        <stop offset="100%" stop-color="#151a34"/>
+      </linearGradient>
+    </defs>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 1 — LONG BACK HAIR (behind everything)            -->
+    <!-- ======================================================= -->
+
+    <!-- Left back hair mass -->
+    <path d="M47,20 C43,24 38,34 36,48 C34,64 34,84 35,104
+             C36,126 37,150 38,166 C39,176 40,182 42,180
+             C43,172 43,152 43,132 C43,112 44,90 46,70
+             C48,52 52,36 56,24 Z"
+          fill="#0c0910"/>
+
+    <!-- Right back hair mass -->
+    <path d="M83,20 C87,24 92,34 94,48 C96,64 96,84 95,104
+             C94,126 93,150 92,166 C91,176 90,182 88,180
+             C87,172 87,152 87,132 C87,112 86,90 84,70
+             C82,52 78,36 74,24 Z"
+          fill="#0c0910"/>
+
+    <!-- Center back hair (fills gap, longest strand) -->
+    <path d="M56,14 C59,12 62,11 65,11 C68,11 71,12 74,14
+             C77,17 79,22 79,27 L76,35 C76,55 75,85 74,115
+             C73,142 72,165 71,178 C70,185 69,187 68,185
+             C67,176 67,155 67,130 C67,105 66,80 65,62
+             C64,80 63,105 63,130 C63,155 63,176 62,185
+             C61,187 60,185 59,178 C58,165 57,142 56,115
+             C55,85 54,55 54,35 L51,27 C51,22 53,17 56,14 Z"
+          fill="#0a0810"/>
+
+    <!-- Back hair highlight (very subtle shine) -->
+    <path d="M63,16 C63,30 63,60 63,90 C63,120 63,155 63,178"
+          fill="none" stroke="rgba(100,80,120,0.18)" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 2 — BODY: DARK NAVY GI                            -->
+    <!-- ======================================================= -->
+
+    <!-- Main torso block -->
+    <path d="M38,92 C33,96 30,108 29,122 C28,136 28,152 29,162
+             C30,168 32,170 36,170 L94,170 C98,170 100,168 101,162
+             C102,152 102,136 101,122 C100,108 97,96 92,92
+             C86,89 76,87 65,87 C54,87 44,89 38,92 Z"
+          fill="url(#giNavyF)"/>
+
+    <!-- Left gi panel -->
+    <path d="M65,87 L56,93 L52,102 L50,118 L50,148 L52,170 L65,170 Z"
+          fill="#1c2240" opacity="0.9"/>
+
+    <!-- Right gi panel -->
+    <path d="M65,87 L74,93 L78,102 L80,118 L80,148 L78,170 L65,170 Z"
+          fill="#252c4e" opacity="0.9"/>
+
+    <!-- Gi chest contour shadow (sternum line) -->
+    <path d="M65,94 L65,115 L64,140 L64,168"
+          fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="1.2"/>
+
+    <!-- Left sleeve -->
+    <path d="M38,92 C33,96 29,101 27,109 C25,117 25,126 27,132
+             C29,136 33,138 38,137 L40,122 L42,107 Z"
+          fill="#1c2240"/>
+
+    <!-- Right sleeve -->
+    <path d="M92,92 C97,96 101,101 103,109 C105,117 105,126 103,132
+             C101,136 97,138 92,137 L90,122 L88,107 Z"
+          fill="#202848"/>
+
+    <!-- Right shoulder highlight (light catch) -->
+    <path d="M85,92 C88,95 91,100 93,107"
+          fill="none" stroke="rgba(255,255,255,0.09)" stroke-width="3.5" stroke-linecap="round"/>
+
+    <!-- Gi body right-side subtle highlight -->
+    <path d="M84,95 C86,108 87,125 87,142 C87,155 86,163 85,168"
+          fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 3 — ARMS: FOREARMS + HANDS                        -->
+    <!-- ======================================================= -->
+
+    <!-- Left forearm (skin) -->
+    <path d="M27,132 C26,138 26,146 27,154 C28,160 31,163 34,163
+             C37,163 39,160 40,154 L40,137 C36,138 30,136 27,132 Z"
+          fill="url(#skinLimbF)"/>
+
+    <!-- Right forearm (skin) -->
+    <path d="M103,132 C104,138 104,146 103,154 C102,160 99,163 96,163
+             C93,163 91,160 90,154 L90,137 C94,138 100,136 103,132 Z"
+          fill="#eac8a4"/>
+
+    <!-- Left sleeve cuff dark band -->
+    <path d="M26,128 L26,133 L40,134 L40,129 Z" fill="rgba(10,12,22,0.72)"/>
+    <!-- Right sleeve cuff dark band -->
+    <path d="M104,128 L104,133 L90,134 L90,129 Z" fill="rgba(10,12,22,0.72)"/>
+
+    <!-- Left hand (relaxed, slightly open) -->
+    <path d="M28,162 C27,165 27,168 28,170 C29,172 31,173 34,173
+             C37,173 39,172 40,170 C41,168 41,165 40,162 Z"
+          fill="#e8c4a0"/>
+    <!-- Left thumb hint -->
+    <path d="M40,163 C42,164 43,166 42,168 C41,169 40,169 40,167"
+          fill="#e0bca0" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
+
+    <!-- Right hand -->
+    <path d="M90,162 C89,165 89,168 90,170 C91,172 93,173 96,173
+             C99,173 101,172 102,170 C103,168 103,165 102,162 Z"
+          fill="#e0c09a"/>
+    <!-- Right thumb hint -->
+    <path d="M90,163 C88,164 87,166 88,168 C89,169 90,169 90,167"
+          fill="#d8b898" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 4 — WHITE SAILOR COLLAR + RED NECKERCHIEF         -->
+    <!-- ======================================================= -->
+
+    <!-- Collar backing (white, behind neck) -->
+    <path d="M50,87 L65,80 L80,87 L82,85 L80,82
+             C76,79 71,78 65,78 C59,78 54,79 50,82 L48,85 Z"
+          fill="#e2e2e2"/>
+
+    <!-- Left collar flap -->
+    <path d="M50,87 L48,85 L46,89 L44,98 L47,103 L55,101 L61,95 L65,96 Z"
+          fill="#e6e6e6"/>
+
+    <!-- Right collar flap -->
+    <path d="M80,87 L82,85 L84,89 L86,98 L83,103 L75,101 L69,95 L65,96 Z"
+          fill="#e2e2e2"/>
+
+    <!-- Collar fold shadow (left) -->
+    <path d="M50,87 L48,90 L46,98" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+    <!-- Collar fold highlight (right) -->
+    <path d="M80,87 L82,90 L84,98" fill="none" stroke="rgba(255,255,255,0.30)" stroke-width="0.8"/>
+
+    <!-- Collar trim line -->
+    <path d="M48,86 C55,83 60,82 65,82 C70,82 75,83 82,86"
+          fill="none" stroke="#c8c8c8" stroke-width="0.6"/>
+
+    <!-- Red neckerchief (V shape) -->
+    <path d="M58,96 L65,108 L72,96 L69,91 L65,95 L61,91 Z"
+          fill="#cc2020"/>
+    <!-- Neckerchief knot -->
+    <ellipse cx="65" cy="102" rx="3.8" ry="3.2" fill="#aa1414"/>
+    <!-- Neckerchief fold detail -->
+    <path d="M61,96 L65,108" fill="none" stroke="#991010" stroke-width="0.7" opacity="0.5"/>
+    <path d="M69,96 L65,108" fill="none" stroke="#991010" stroke-width="0.7" opacity="0.5"/>
+    <!-- Collar pin / button -->
+    <circle cx="65" cy="97" r="1.6" fill="#888" stroke="#aaa" stroke-width="0.4"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 5 — BELT (IDs preserved for aura system)          -->
+    <!-- ======================================================= -->
+
+    <rect id="char-belt" x="36" y="164" width="58" height="8" rx="1.2" fill="#aa1414"/>
+    <rect id="char-belt-stripe" x="36" y="165" width="58" height="2.2" rx="0.6"
+          fill="#cc2020" opacity="0.55"/>
+    <!-- Belt shading bottom -->
+    <rect x="36" y="169" width="58" height="3" rx="0" fill="rgba(0,0,0,0.20)" opacity="0.6"/>
+    <!-- Belt buckle -->
+    <rect x="61.5" y="164.5" width="7" height="7" rx="1.2" fill="#8a8a8a" stroke="#b0b0b0" stroke-width="0.5"/>
+    <rect x="63.5" y="166" width="3" height="4" rx="0.6" fill="#606060"/>
+    <!-- Buckle highlight -->
+    <path d="M62.5,165.5 L65,165.5" stroke="rgba(255,255,255,0.40)" stroke-width="0.7"/>
+    <!-- Belt tail left -->
+    <path id="char-belt-tail-l" d="M36,164 L36,168 L34,172 L33,176 L34,178 L36,177 L38,172 L38,164 Z"
+          fill="#991010"/>
+    <!-- Belt tail right -->
+    <path id="char-belt-tail-r" d="M94,164 L94,168 L96,172 L97,176 L96,178 L94,177 L92,172 L92,164 Z"
+          fill="#991010"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 6 — HAKAMA / PLEATED SKIRT                        -->
+    <!-- ======================================================= -->
+
+    <!-- Main hakama body -->
+    <path d="M37,170 C35,175 33,184 32,194 C31,204 31,214 32,222
+             C33,228 35,230 39,230 L91,230 C95,230 97,228 98,222
+             C99,214 99,204 98,194 C97,184 95,175 93,170 Z"
+          fill="url(#hakamaDark)"/>
+
+    <!-- Pleat shadow lines -->
+    <line x1="47" y1="172" x2="45" y2="228" stroke="#12172e" stroke-width="1.3" opacity="0.70"/>
+    <line x1="55" y1="172" x2="53" y2="229" stroke="#12172e" stroke-width="1.3" opacity="0.65"/>
+    <line x1="65" y1="172" x2="65" y2="230" stroke="#12172e" stroke-width="1.0" opacity="0.45"/>
+    <line x1="75" y1="172" x2="77" y2="229" stroke="#12172e" stroke-width="1.3" opacity="0.65"/>
+    <line x1="83" y1="172" x2="85" y2="228" stroke="#12172e" stroke-width="1.3" opacity="0.70"/>
+
+    <!-- Pleat highlight peaks (between shadows) -->
+    <line x1="51" y1="172" x2="49" y2="228" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+    <line x1="60" y1="172" x2="59" y2="228" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+    <line x1="70" y1="172" x2="71" y2="228" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+    <line x1="79" y1="172" x2="81" y2="228" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+
+    <!-- Right side catch light on hakama -->
+    <path d="M82,172 C84,182 85,196 85,210 C85,220 84,226 82,229"
+          fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3.5"/>
+
+    <!-- Red side accent panel (referencing image) -->
+    <path d="M86,170 L93,170 L98,205 L96,230 L86,230 L84,205 Z"
+          fill="#991212" opacity="0.82"/>
+    <path d="M88,172 L91,172 L94,204 L92,228 L89,228 L87,204 Z"
+          fill="#cc2020" opacity="0.28"/>
+
+    <!-- Hakama hem fold -->
+    <path d="M33,228 C45,231 55,232 65,232 C75,232 85,231 97,228"
+          fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1.5"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 7 — LEGS: DARK TIGHTS + SHOES                     -->
+    <!-- ======================================================= -->
+
+    <!-- Left leg (dark tights) -->
+    <path d="M40,230 C38,236 37,244 37,252 C37,260 38,266 40,270
+             C42,273 45,274 48,274 C51,274 54,272 55,269
+             C57,265 57,258 56,250 C55,242 53,234 51,230 Z"
+          fill="#111120"/>
+
+    <!-- Right leg -->
+    <path d="M80,230 C78,234 77,242 76,250 C75,258 75,265 77,269
+             C78,272 81,274 84,274 C87,274 90,273 92,270
+             C94,266 95,260 95,252 C95,244 94,236 92,230 Z"
+          fill="#111120"/>
+
+    <!-- Right leg highlight -->
+    <path d="M84,230 C86,236 87,244 87,252 C87,260 86,266 85,270"
+          fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="2.5"/>
+
+    <!-- Left knee subtle highlight -->
+    <path d="M40,248 C42,247 44,247 46,248"
+          fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.2" stroke-linecap="round"/>
+
+    <!-- Right knee subtle highlight -->
+    <path d="M84,248 C86,247 88,247 90,248"
+          fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.2" stroke-linecap="round"/>
+
+    <!-- Left shoe / boot -->
+    <path d="M36,268 C35,271 34,273 34,275 C34,277 35,279 38,280
+             C41,281 45,281 48,280 C51,279 53,277 53,275
+             C53,273 52,271 51,269 L47,268 Z"
+          fill="#181828"/>
+    <!-- Left boot trim -->
+    <path d="M35,269 C37,272 41,273 47,273 C50,273 52,272 53,270"
+          fill="none" stroke="rgba(255,255,255,0.11)" stroke-width="1"/>
+
+    <!-- Right shoe / boot -->
+    <path d="M79,268 C78,271 77,273 77,275 C77,277 78,279 81,280
+             C84,281 88,281 91,280 C94,279 96,277 96,275
+             C96,273 95,271 93,269 L89,268 Z"
+          fill="#181828"/>
+    <!-- Right boot trim -->
+    <path d="M78,269 C80,272 84,273 89,273 C92,273 94,272 95,270"
+          fill="none" stroke="rgba(255,255,255,0.11)" stroke-width="1"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 8 — NECK                                          -->
+    <!-- ======================================================= -->
+
+    <path d="M59,68 C58,72 57,76 57,80 C57,84 58,87 60,89 L70,89
+             C72,87 73,84 73,80 C73,76 72,72 71,68 Z"
+          fill="#f0d0b0"/>
+    <!-- Neck left shadow -->
+    <path d="M59,70 C58,75 58,81 59,87"
+          fill="none" stroke="rgba(0,0,0,0.13)" stroke-width="2.2"/>
+    <!-- Neck right highlight -->
+    <path d="M71,70 C72,75 72,81 71,87"
+          fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 9 — HEAD                                          -->
+    <!-- ======================================================= -->
+
+    <!-- Head base -->
+    <ellipse cx="65" cy="42" rx="22" ry="26" fill="url(#skinFaceF)"/>
+
+    <!-- Right cheek form highlight -->
+    <path d="M80,40 C81,43 81,48 80,53"
+          fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="3.5" stroke-linecap="round"/>
+
+    <!-- Chin shadow -->
+    <path d="M51,57 C54,63 58,67 65,68 C72,67 76,63 79,57"
+          fill="none" stroke="rgba(0,0,0,0.09)" stroke-width="3.5"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 10 — EARS                                         -->
+    <!-- ======================================================= -->
+
+    <ellipse cx="43.5" cy="44" rx="3" ry="4" fill="#e8c8a0"/>
+    <path d="M44,41 C43.5,43 43.5,45 44,47"
+          fill="none" stroke="rgba(0,0,0,0.16)" stroke-width="0.8"/>
+    <ellipse cx="86.5" cy="44" rx="3" ry="4" fill="#e8c8a0"/>
+    <path d="M86,41 C86.5,43 86.5,45 86,47"
+          fill="none" stroke="rgba(0,0,0,0.16)" stroke-width="0.8"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 11 — HAIR FRONT (bangs + sides + headband)        -->
+    <!-- ======================================================= -->
+
+    <!-- Hair cap (top of head, over ear level) -->
+    <path d="M43,34 C44,20 50,12 65,10 C80,12 86,20 87,34
+             C88,42 86,50 84,52 C82,54 80,54 79,52 C78,49 78,44 79,40
+             C80,35 82,28 80,22 C78,17 72,13 65,12 C58,13 52,17 50,22
+             C48,28 50,35 51,40 C52,44 52,49 51,52 C50,54 48,54 46,52
+             C44,50 42,42 43,34 Z"
+          fill="#0f0c14"/>
+
+    <!-- Left side hair panel (covers ear) -->
+    <path d="M43,34 C40,38 38,44 38,52 C38,58 40,62 43,65
+             C44,63 44,59 44,55 C44,48 44,42 46,36 Z"
+          fill="#0c0a12"/>
+
+    <!-- Right side hair panel -->
+    <path d="M87,34 C90,38 92,44 92,52 C92,58 90,62 87,65
+             C86,63 86,59 86,55 C86,48 86,42 84,36 Z"
+          fill="#0c0a12"/>
+
+    <!-- Straight bangs overlay -->
+    <path d="M47,30 C50,22 57,17 65,16 C73,17 80,22 83,30
+             C82,34 80,36 78,36 C75,35 72,31 70,29
+             C68,27 67,26 65,26 C63,26 62,27 60,29
+             C58,31 55,35 52,36 C50,36 48,34 47,30 Z"
+          fill="#140f18"/>
+
+    <!-- Hair highlight streak 1 -->
+    <path d="M54,18 C57,20 61,22 65,22"
+          fill="none" stroke="rgba(90,70,110,0.42)" stroke-width="2.8" stroke-linecap="round"/>
+    <!-- Hair highlight streak 2 -->
+    <path d="M60,14 C62,15 65,16 68,15"
+          fill="none" stroke="rgba(90,70,110,0.28)" stroke-width="1.8" stroke-linecap="round"/>
+
+    <!-- Headband (ninja school detail) -->
+    <path d="M43,32 C48,28 56,26 65,26 C74,26 82,28 87,32"
+          fill="none" stroke="#1a1e36" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- Headband metal plate (small, centered) -->
+    <rect x="59" y="27.5" width="12" height="5.5" rx="1.2" fill="#2a2e50" stroke="#3a3e60" stroke-width="0.5"/>
+    <!-- Plate engraving lines -->
+    <line x1="62" y1="28.5" x2="62" y2="32" stroke="#1e2240" stroke-width="0.6"/>
+    <line x1="65" y1="28.5" x2="65" y2="32" stroke="#1e2240" stroke-width="0.6"/>
+    <line x1="68" y1="28.5" x2="68" y2="32" stroke="#1e2240" stroke-width="0.6"/>
+    <!-- Plate highlight -->
+    <path d="M60,28.5 L70,28.5" stroke="rgba(255,255,255,0.25)" stroke-width="0.6"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 12 — EYES                                         -->
+    <!-- ======================================================= -->
+
+    <!-- Left eye -->
+    <ellipse cx="53" cy="43" rx="7.2" ry="8.2" fill="#f7f3ec"/>
+    <ellipse cx="53" cy="43.5" rx="5.6" ry="6.6" fill="#28335a"/>
+    <ellipse cx="53" cy="44"   rx="3.2" ry="3.8" fill="#141c30"/>
+    <!-- Iris depth shimmer -->
+    <ellipse cx="51.8" cy="42" rx="2" ry="1.6" fill="#364875" opacity="0.55"/>
+    <!-- Upper eyelid (thick, dark) -->
+    <path d="M46,38.5 C48,37 51,36.5 53,36.5 C55,36.5 58,37 60,38.5"
+          stroke="#181818" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+    <!-- Upper eyelash flick (left corner) -->
+    <path d="M46.2,38.8 C45.2,38 44.5,37.5 44,37.2"
+          stroke="#181818" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <!-- Upper eyelash flick (right corner) -->
+    <path d="M59.8,38.8 C60.8,38 61.5,37.5 62,37.2"
+          stroke="#181818" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <!-- Lower eyelid line -->
+    <path d="M46.5,47 C48.5,48.5 51,49 53,49 C55,49 57.5,48.5 59.5,47"
+          fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="0.7"/>
+    <!-- Primary highlight (top left) -->
+    <ellipse cx="50.2" cy="40" rx="2" ry="1.4" fill="rgba(255,255,255,0.90)"/>
+    <!-- Secondary highlight (small, bottom right) -->
+    <ellipse cx="55.5" cy="45.5" rx="1" ry="0.7" fill="rgba(255,255,255,0.52)"/>
+    <!-- Eye rim light -->
+    <path d="M47,37.2 C49,36.2 51,35.8 53,35.8 C55,35.8 57,36.2 59,37.2"
+          fill="none" stroke="rgba(255,255,255,0.26)" stroke-width="0.7"/>
+
+    <!-- Right eye -->
+    <ellipse cx="77" cy="43" rx="7.2" ry="8.2" fill="#f7f3ec"/>
+    <ellipse cx="77" cy="43.5" rx="5.6" ry="6.6" fill="#28335a"/>
+    <ellipse cx="77" cy="44"   rx="3.2" ry="3.8" fill="#141c30"/>
+    <ellipse cx="75.8" cy="42" rx="2" ry="1.6" fill="#364875" opacity="0.55"/>
+    <path d="M70,38.5 C72,37 75,36.5 77,36.5 C79,36.5 82,37 84,38.5"
+          stroke="#181818" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+    <path d="M70.2,38.8 C69.2,38 68.5,37.5 68,37.2"
+          stroke="#181818" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M83.8,38.8 C84.8,38 85.5,37.5 86,37.2"
+          stroke="#181818" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M70.5,47 C72.5,48.5 75,49 77,49 C79,49 81.5,48.5 83.5,47"
+          fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="0.7"/>
+    <ellipse cx="74.2" cy="40" rx="2" ry="1.4" fill="rgba(255,255,255,0.90)"/>
+    <ellipse cx="79.5" cy="45.5" rx="1" ry="0.7" fill="rgba(255,255,255,0.52)"/>
+    <path d="M71,37.2 C73,36.2 75,35.8 77,35.8 C79,35.8 81,36.2 83,37.2"
+          fill="none" stroke="rgba(255,255,255,0.26)" stroke-width="0.7"/>
+
+    <!-- ======================================================= -->
+    <!-- LAYER 13 — EYEBROWS, NOSE, MOUTH, BLUSH                 -->
+    <!-- ======================================================= -->
+
+    <!-- Left eyebrow (thin, slightly arched — feminine) -->
+    <path d="M46.5,34.5 C48.5,33 51,32.5 54,33 C55.5,33.5 56.5,34.2 57,35"
+          stroke="#1c1520" stroke-width="2.0" fill="none" stroke-linecap="round"/>
+
+    <!-- Right eyebrow -->
+    <path d="M73,35 C73.5,34.2 74.5,33.5 76,33 C79,32.5 81.5,33 83.5,34.5"
+          stroke="#1c1520" stroke-width="2.0" fill="none" stroke-linecap="round"/>
+
+    <!-- Nose bridge hint -->
+    <path d="M64.5,52 C64,54 63.5,56 64,57 C64.5,58 65.5,58 66,57
+             C66.5,56 66,54 65.5,52"
+          fill="none" stroke="rgba(0,0,0,0.16)" stroke-width="0.9" stroke-linecap="round"/>
+
+    <!-- Mouth (calm, composed — slight upward at corners) -->
+    <path d="M59.5,62 C61.5,63.5 63.5,64 65,64 C66.5,64 68.5,63.5 70.5,62"
+          fill="none" stroke="#c49070" stroke-width="1.3" stroke-linecap="round"/>
+    <!-- Subtle lower lip volume -->
+    <path d="M62,64 C63.5,65 66.5,65 68,64"
+          fill="none" stroke="rgba(210,140,100,0.35)" stroke-width="1.2" stroke-linecap="round"/>
+
+    <!-- Left blush (very subtle) -->
+    <ellipse cx="47" cy="51" rx="4.5" ry="2" fill="rgba(215,135,140,0.16)"/>
+    <!-- Right blush -->
+    <ellipse cx="83" cy="51" rx="4.5" ry="2" fill="rgba(215,135,140,0.16)"/>
+
+  </svg>
+</div>
+
+<!-- ===== 2× Preview (260×570) ===== -->
+<div class="preview">
+  <span>2× (260×570)</span>
+  <svg width="260" height="570" viewBox="0 0 130 285" xmlns="http://www.w3.org/2000/svg">
+
+    <defs>
+      <radialGradient id="skinFaceF2" cx="44%" cy="36%" r="56%">
+        <stop offset="0%"   stop-color="#fce8d0"/>
+        <stop offset="100%" stop-color="#e8c8a0"/>
+      </radialGradient>
+      <radialGradient id="skinLimbF2" cx="40%" cy="30%" r="60%">
+        <stop offset="0%"   stop-color="#f5d8b8"/>
+        <stop offset="100%" stop-color="#ddb898"/>
+      </radialGradient>
+      <linearGradient id="giNavyF2" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#1c2240"/>
+        <stop offset="48%"  stop-color="#242b4e"/>
+        <stop offset="100%" stop-color="#181e3a"/>
+      </linearGradient>
+      <linearGradient id="hakamaDark2" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#181d38"/>
+        <stop offset="50%"  stop-color="#1e2440"/>
+        <stop offset="100%" stop-color="#151a34"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Back hair -->
+    <path d="M47,20 C43,24 38,34 36,48 C34,64 34,84 35,104 C36,126 37,150 38,166 C39,176 40,182 42,180 C43,172 43,152 43,132 C43,112 44,90 46,70 C48,52 52,36 56,24 Z" fill="#0c0910"/>
+    <path d="M83,20 C87,24 92,34 94,48 C96,64 96,84 95,104 C94,126 93,150 92,166 C91,176 90,182 88,180 C87,172 87,152 87,132 C87,112 86,90 84,70 C82,52 78,36 74,24 Z" fill="#0c0910"/>
+    <path d="M56,14 C59,12 62,11 65,11 C68,11 71,12 74,14 C77,17 79,22 79,27 L76,35 C76,55 75,85 74,115 C73,142 72,165 71,178 C70,185 69,187 68,185 C67,176 67,155 67,130 C67,105 66,80 65,62 C64,80 63,105 63,130 C63,155 63,176 62,185 C61,187 60,185 59,178 C58,165 57,142 56,115 C55,85 54,55 54,35 L51,27 C51,22 53,17 56,14 Z" fill="#0a0810"/>
+    <path d="M63,16 C63,30 63,60 63,90 C63,120 63,155 63,178" fill="none" stroke="rgba(100,80,120,0.18)" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Gi body -->
+    <path d="M38,92 C33,96 30,108 29,122 C28,136 28,152 29,162 C30,168 32,170 36,170 L94,170 C98,170 100,168 101,162 C102,152 102,136 101,122 C100,108 97,96 92,92 C86,89 76,87 65,87 C54,87 44,89 38,92 Z" fill="url(#giNavyF2)"/>
+    <path d="M65,87 L56,93 L52,102 L50,118 L50,148 L52,170 L65,170 Z" fill="#1c2240" opacity="0.9"/>
+    <path d="M65,87 L74,93 L78,102 L80,118 L80,148 L78,170 L65,170 Z" fill="#252c4e" opacity="0.9"/>
+    <path d="M65,94 L65,115 L64,140 L64,168" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="1.2"/>
+    <path d="M38,92 C33,96 29,101 27,109 C25,117 25,126 27,132 C29,136 33,138 38,137 L40,122 L42,107 Z" fill="#1c2240"/>
+    <path d="M92,92 C97,96 101,101 103,109 C105,117 105,126 103,132 C101,136 97,138 92,137 L90,122 L88,107 Z" fill="#202848"/>
+    <path d="M85,92 C88,95 91,100 93,107" fill="none" stroke="rgba(255,255,255,0.09)" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M84,95 C86,108 87,125 87,142 C87,155 86,163 85,168" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3"/>
+
+    <!-- Arms -->
+    <path d="M27,132 C26,138 26,146 27,154 C28,160 31,163 34,163 C37,163 39,160 40,154 L40,137 C36,138 30,136 27,132 Z" fill="url(#skinLimbF2)"/>
+    <path d="M103,132 C104,138 104,146 103,154 C102,160 99,163 96,163 C93,163 91,160 90,154 L90,137 C94,138 100,136 103,132 Z" fill="#eac8a4"/>
+    <path d="M26,128 L26,133 L40,134 L40,129 Z" fill="rgba(10,12,22,0.72)"/>
+    <path d="M104,128 L104,133 L90,134 L90,129 Z" fill="rgba(10,12,22,0.72)"/>
+    <path d="M28,162 C27,165 27,168 28,170 C29,172 31,173 34,173 C37,173 39,172 40,170 C41,168 41,165 40,162 Z" fill="#e8c4a0"/>
+    <path d="M40,163 C42,164 43,166 42,168 C41,169 40,169 40,167" fill="#e0bca0" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
+    <path d="M90,162 C89,165 89,168 90,170 C91,172 93,173 96,173 C99,173 101,172 102,170 C103,168 103,165 102,162 Z" fill="#e0c09a"/>
+    <path d="M90,163 C88,164 87,166 88,168 C89,169 90,169 90,167" fill="#d8b898" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
+
+    <!-- Collar + neckerchief -->
+    <path d="M50,87 L65,80 L80,87 L82,85 L80,82 C76,79 71,78 65,78 C59,78 54,79 50,82 L48,85 Z" fill="#e2e2e2"/>
+    <path d="M50,87 L48,85 L46,89 L44,98 L47,103 L55,101 L61,95 L65,96 Z" fill="#e6e6e6"/>
+    <path d="M80,87 L82,85 L84,89 L86,98 L83,103 L75,101 L69,95 L65,96 Z" fill="#e2e2e2"/>
+    <path d="M50,87 L48,90 L46,98" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+    <path d="M80,87 L82,90 L84,98" fill="none" stroke="rgba(255,255,255,0.30)" stroke-width="0.8"/>
+    <path d="M48,86 C55,83 60,82 65,82 C70,82 75,83 82,86" fill="none" stroke="#c8c8c8" stroke-width="0.6"/>
+    <path d="M58,96 L65,108 L72,96 L69,91 L65,95 L61,91 Z" fill="#cc2020"/>
+    <ellipse cx="65" cy="102" rx="3.8" ry="3.2" fill="#aa1414"/>
+    <path d="M61,96 L65,108" fill="none" stroke="#991010" stroke-width="0.7" opacity="0.5"/>
+    <path d="M69,96 L65,108" fill="none" stroke="#991010" stroke-width="0.7" opacity="0.5"/>
+    <circle cx="65" cy="97" r="1.6" fill="#888" stroke="#aaa" stroke-width="0.4"/>
+
+    <!-- Belt -->
+    <rect id="char-belt-2x" x="36" y="164" width="58" height="8" rx="1.2" fill="#aa1414"/>
+    <rect x="36" y="165" width="58" height="2.2" rx="0.6" fill="#cc2020" opacity="0.55"/>
+    <rect x="36" y="169" width="58" height="3" rx="0" fill="rgba(0,0,0,0.20)" opacity="0.6"/>
+    <rect x="61.5" y="164.5" width="7" height="7" rx="1.2" fill="#8a8a8a" stroke="#b0b0b0" stroke-width="0.5"/>
+    <rect x="63.5" y="166" width="3" height="4" rx="0.6" fill="#606060"/>
+    <path d="M62.5,165.5 L65,165.5" stroke="rgba(255,255,255,0.40)" stroke-width="0.7"/>
+    <path d="M36,164 L36,168 L34,172 L33,176 L34,178 L36,177 L38,172 L38,164 Z" fill="#991010"/>
+    <path d="M94,164 L94,168 L96,172 L97,176 L96,178 L94,177 L92,172 L92,164 Z" fill="#991010"/>
+
+    <!-- Hakama -->
+    <path d="M37,170 C35,175 33,184 32,194 C31,204 31,214 32,222 C33,228 35,230 39,230 L91,230 C95,230 97,228 98,222 C99,214 99,204 98,194 C97,184 95,175 93,170 Z" fill="url(#hakamaDark2)"/>
+    <line x1="47" y1="172" x2="45" y2="228" stroke="#12172e" stroke-width="1.3" opacity="0.70"/>
+    <line x1="55" y1="172" x2="53" y2="229" stroke="#12172e" stroke-width="1.3" opacity="0.65"/>
+    <line x1="65" y1="172" x2="65" y2="230" stroke="#12172e" stroke-width="1.0" opacity="0.45"/>
+    <line x1="75" y1="172" x2="77" y2="229" stroke="#12172e" stroke-width="1.3" opacity="0.65"/>
+    <line x1="83" y1="172" x2="85" y2="228" stroke="#12172e" stroke-width="1.3" opacity="0.70"/>
+    <line x1="51" y1="172" x2="49" y2="228" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+    <line x1="60" y1="172" x2="59" y2="228" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+    <line x1="70" y1="172" x2="71" y2="228" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+    <line x1="79" y1="172" x2="81" y2="228" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+    <path d="M82,172 C84,182 85,196 85,210 C85,220 84,226 82,229" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3.5"/>
+    <path d="M86,170 L93,170 L98,205 L96,230 L86,230 L84,205 Z" fill="#991212" opacity="0.82"/>
+    <path d="M88,172 L91,172 L94,204 L92,228 L89,228 L87,204 Z" fill="#cc2020" opacity="0.28"/>
+    <path d="M33,228 C45,231 55,232 65,232 C75,232 85,231 97,228" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1.5"/>
+
+    <!-- Legs + shoes -->
+    <path d="M40,230 C38,236 37,244 37,252 C37,260 38,266 40,270 C42,273 45,274 48,274 C51,274 54,272 55,269 C57,265 57,258 56,250 C55,242 53,234 51,230 Z" fill="#111120"/>
+    <path d="M80,230 C78,234 77,242 76,250 C75,258 75,265 77,269 C78,272 81,274 84,274 C87,274 90,273 92,270 C94,266 95,260 95,252 C95,244 94,236 92,230 Z" fill="#111120"/>
+    <path d="M84,230 C86,236 87,244 87,252 C87,260 86,266 85,270" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="2.5"/>
+    <path d="M40,248 C42,247 44,247 46,248" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M84,248 C86,247 88,247 90,248" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M36,268 C35,271 34,273 34,275 C34,277 35,279 38,280 C41,281 45,281 48,280 C51,279 53,277 53,275 C53,273 52,271 51,269 L47,268 Z" fill="#181828"/>
+    <path d="M35,269 C37,272 41,273 47,273 C50,273 52,272 53,270" fill="none" stroke="rgba(255,255,255,0.11)" stroke-width="1"/>
+    <path d="M79,268 C78,271 77,273 77,275 C77,277 78,279 81,280 C84,281 88,281 91,280 C94,279 96,277 96,275 C96,273 95,271 93,269 L89,268 Z" fill="#181828"/>
+    <path d="M78,269 C80,272 84,273 89,273 C92,273 94,272 95,270" fill="none" stroke="rgba(255,255,255,0.11)" stroke-width="1"/>
+
+    <!-- Neck -->
+    <path d="M59,68 C58,72 57,76 57,80 C57,84 58,87 60,89 L70,89 C72,87 73,84 73,80 C73,76 72,72 71,68 Z" fill="#f0d0b0"/>
+    <path d="M59,70 C58,75 58,81 59,87" fill="none" stroke="rgba(0,0,0,0.13)" stroke-width="2.2"/>
+    <path d="M71,70 C72,75 72,81 71,87" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+
+    <!-- Head -->
+    <ellipse cx="65" cy="42" rx="22" ry="26" fill="url(#skinFaceF2)"/>
+    <path d="M80,40 C81,43 81,48 80,53" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M51,57 C54,63 58,67 65,68 C72,67 76,63 79,57" fill="none" stroke="rgba(0,0,0,0.09)" stroke-width="3.5"/>
+
+    <!-- Ears -->
+    <ellipse cx="43.5" cy="44" rx="3" ry="4" fill="#e8c8a0"/>
+    <path d="M44,41 C43.5,43 43.5,45 44,47" fill="none" stroke="rgba(0,0,0,0.16)" stroke-width="0.8"/>
+    <ellipse cx="86.5" cy="44" rx="3" ry="4" fill="#e8c8a0"/>
+    <path d="M86,41 C86.5,43 86.5,45 86,47" fill="none" stroke="rgba(0,0,0,0.16)" stroke-width="0.8"/>
+
+    <!-- Front hair + headband -->
+    <path d="M43,34 C44,20 50,12 65,10 C80,12 86,20 87,34 C88,42 86,50 84,52 C82,54 80,54 79,52 C78,49 78,44 79,40 C80,35 82,28 80,22 C78,17 72,13 65,12 C58,13 52,17 50,22 C48,28 50,35 51,40 C52,44 52,49 51,52 C50,54 48,54 46,52 C44,50 42,42 43,34 Z" fill="#0f0c14"/>
+    <path d="M43,34 C40,38 38,44 38,52 C38,58 40,62 43,65 C44,63 44,59 44,55 C44,48 44,42 46,36 Z" fill="#0c0a12"/>
+    <path d="M87,34 C90,38 92,44 92,52 C92,58 90,62 87,65 C86,63 86,59 86,55 C86,48 86,42 84,36 Z" fill="#0c0a12"/>
+    <path d="M47,30 C50,22 57,17 65,16 C73,17 80,22 83,30 C82,34 80,36 78,36 C75,35 72,31 70,29 C68,27 67,26 65,26 C63,26 62,27 60,29 C58,31 55,35 52,36 C50,36 48,34 47,30 Z" fill="#140f18"/>
+    <path d="M54,18 C57,20 61,22 65,22" fill="none" stroke="rgba(90,70,110,0.42)" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M60,14 C62,15 65,16 68,15" fill="none" stroke="rgba(90,70,110,0.28)" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M43,32 C48,28 56,26 65,26 C74,26 82,28 87,32" fill="none" stroke="#1a1e36" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="59" y="27.5" width="12" height="5.5" rx="1.2" fill="#2a2e50" stroke="#3a3e60" stroke-width="0.5"/>
+    <line x1="62" y1="28.5" x2="62" y2="32" stroke="#1e2240" stroke-width="0.6"/>
+    <line x1="65" y1="28.5" x2="65" y2="32" stroke="#1e2240" stroke-width="0.6"/>
+    <line x1="68" y1="28.5" x2="68" y2="32" stroke="#1e2240" stroke-width="0.6"/>
+    <path d="M60,28.5 L70,28.5" stroke="rgba(255,255,255,0.25)" stroke-width="0.6"/>
+
+    <!-- Eyes (right) -->
+    <ellipse cx="53" cy="43" rx="7.2" ry="8.2" fill="#f7f3ec"/>
+    <ellipse cx="53" cy="43.5" rx="5.6" ry="6.6" fill="#28335a"/>
+    <ellipse cx="53" cy="44"   rx="3.2" ry="3.8" fill="#141c30"/>
+    <ellipse cx="51.8" cy="42" rx="2" ry="1.6" fill="#364875" opacity="0.55"/>
+    <path d="M46,38.5 C48,37 51,36.5 53,36.5 C55,36.5 58,37 60,38.5" stroke="#181818" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+    <path d="M46.2,38.8 C45.2,38 44.5,37.5 44,37.2" stroke="#181818" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M59.8,38.8 C60.8,38 61.5,37.5 62,37.2" stroke="#181818" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M46.5,47 C48.5,48.5 51,49 53,49 C55,49 57.5,48.5 59.5,47" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="0.7"/>
+    <ellipse cx="50.2" cy="40" rx="2" ry="1.4" fill="rgba(255,255,255,0.90)"/>
+    <ellipse cx="55.5" cy="45.5" rx="1" ry="0.7" fill="rgba(255,255,255,0.52)"/>
+    <path d="M47,37.2 C49,36.2 51,35.8 53,35.8 C55,35.8 57,36.2 59,37.2" fill="none" stroke="rgba(255,255,255,0.26)" stroke-width="0.7"/>
+
+    <ellipse cx="77" cy="43" rx="7.2" ry="8.2" fill="#f7f3ec"/>
+    <ellipse cx="77" cy="43.5" rx="5.6" ry="6.6" fill="#28335a"/>
+    <ellipse cx="77" cy="44"   rx="3.2" ry="3.8" fill="#141c30"/>
+    <ellipse cx="75.8" cy="42" rx="2" ry="1.6" fill="#364875" opacity="0.55"/>
+    <path d="M70,38.5 C72,37 75,36.5 77,36.5 C79,36.5 82,37 84,38.5" stroke="#181818" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+    <path d="M70.2,38.8 C69.2,38 68.5,37.5 68,37.2" stroke="#181818" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M83.8,38.8 C84.8,38 85.5,37.5 86,37.2" stroke="#181818" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M70.5,47 C72.5,48.5 75,49 77,49 C79,49 81.5,48.5 83.5,47" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="0.7"/>
+    <ellipse cx="74.2" cy="40" rx="2" ry="1.4" fill="rgba(255,255,255,0.90)"/>
+    <ellipse cx="79.5" cy="45.5" rx="1" ry="0.7" fill="rgba(255,255,255,0.52)"/>
+    <path d="M71,37.2 C73,36.2 75,35.8 77,35.8 C79,35.8 81,36.2 83,37.2" fill="none" stroke="rgba(255,255,255,0.26)" stroke-width="0.7"/>
+
+    <!-- Face details -->
+    <path d="M46.5,34.5 C48.5,33 51,32.5 54,33 C55.5,33.5 56.5,34.2 57,35" stroke="#1c1520" stroke-width="2.0" fill="none" stroke-linecap="round"/>
+    <path d="M73,35 C73.5,34.2 74.5,33.5 76,33 C79,32.5 81.5,33 83.5,34.5" stroke="#1c1520" stroke-width="2.0" fill="none" stroke-linecap="round"/>
+    <path d="M64.5,52 C64,54 63.5,56 64,57 C64.5,58 65.5,58 66,57 C66.5,56 66,54 65.5,52" fill="none" stroke="rgba(0,0,0,0.16)" stroke-width="0.9" stroke-linecap="round"/>
+    <path d="M59.5,62 C61.5,63.5 63.5,64 65,64 C66.5,64 68.5,63.5 70.5,62" fill="none" stroke="#c49070" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M62,64 C63.5,65 66.5,65 68,64" fill="none" stroke="rgba(210,140,100,0.35)" stroke-width="1.2" stroke-linecap="round"/>
+    <ellipse cx="47" cy="51" rx="4.5" ry="2" fill="rgba(215,135,140,0.16)"/>
+    <ellipse cx="83" cy="51" rx="4.5" ry="2" fill="rgba(215,135,140,0.16)"/>
+
+  </svg>
+</div>
+
+</body>
+</html>

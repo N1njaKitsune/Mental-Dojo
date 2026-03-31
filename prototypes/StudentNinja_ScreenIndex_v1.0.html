@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudentNinja — Screen Index</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050508;
+    color: #F5F0E8;
+    font-family: 'Crimson Pro', serif;
+    min-height: 100vh;
+    padding: 48px 32px 64px;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(122,184,154,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(141,184,212,0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 56px; }
+  .header-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: rgba(245,240,232,0.25);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .header-title {
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #F5F0E8;
+    margin-bottom: 8px;
+  }
+  .header-title span { color: rgba(122,184,154,0.8); }
+  .header-sub {
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: rgba(245,240,232,0.4);
+    margin-bottom: 24px;
+  }
+  .header-divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(245,240,232,0.15), transparent);
+    margin: 0 auto;
+  }
+  .header-meta {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(245,240,232,0.18);
+    text-transform: uppercase;
+    margin-top: 16px;
+  }
+
+  /* Section heading */
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: rgba(245,240,232,0.2);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-left: 2px;
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  /* Card */
+  .card {
+    background: rgba(10,10,18,0.5);
+    border: 0.5px solid rgba(245,240,232,0.07);
+    border-radius: 10px;
+    border-top: 2px solid transparent;
+    padding: 18px 20px 16px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top left, rgba(245,240,232,0.03) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .card:hover { background: rgba(10,10,18,0.7); transform: translateY(-2px); }
+  .card:hover::after { opacity: 1; }
+
+  /* Colour accents */
+  .card.entry     { border-top-color: rgba(245,240,232,0.4); }
+  .card.home      { border-top-color: rgba(245,240,232,0.35); }
+  .card.profile   { border-top-color: rgba(245,240,232,0.5); }
+  .card.metsuke   { border-top-color: rgba(141,184,212,0.7); }
+  .card.mushin    { border-top-color: rgba(122,184,154,0.7); }
+  .card.tachi     { border-top-color: rgba(212,130,106,0.7); }
+  .card.shiho     { border-top-color: rgba(200,170,120,0.6); }
+  .card.breath    { border-top-color: rgba(141,184,212,0.5); }
+  .card.kaze      { border-top-color: rgba(140,200,185,0.7); }
+  .card.chi       { border-top-color: rgba(190,165,110,0.7); }
+  .card.mizu      { border-top-color: rgba(110,160,210,0.7); }
+  .card.hi        { border-top-color: rgba(215,130,100,0.7); }
+  .card.complete  { border-top-color: rgba(184,141,212,0.7); }
+  .card.component { border-top-color: rgba(245,240,232,0.15); }
+
+  .card-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .entry .card-tag    { color: rgba(245,240,232,0.4); }
+  .home .card-tag     { color: rgba(245,240,232,0.4); }
+  .profile .card-tag  { color: rgba(245,240,232,0.5); }
+  .metsuke .card-tag  { color: rgba(141,184,212,0.8); }
+  .mushin .card-tag   { color: rgba(122,184,154,0.8); }
+  .tachi .card-tag    { color: rgba(212,130,106,0.8); }
+  .shiho .card-tag    { color: rgba(200,170,120,0.7); }
+  .breath .card-tag   { color: rgba(141,184,212,0.6); }
+  .kaze .card-tag     { color: rgba(140,200,185,0.8); }
+  .chi .card-tag      { color: rgba(190,165,110,0.8); }
+  .mizu .card-tag     { color: rgba(110,160,210,0.8); }
+  .hi .card-tag       { color: rgba(215,130,100,0.8); }
+  .complete .card-tag { color: rgba(184,141,212,0.8); }
+  .component .card-tag { color: rgba(245,240,232,0.2); }
+
+  .card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #F5F0E8;
+    letter-spacing: 0.04em;
+  }
+  .card-desc {
+    font-family: 'Crimson Pro', serif;
+    font-size: 12px;
+    font-style: italic;
+    color: rgba(245,240,232,0.4);
+    line-height: 1.4;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(245,240,232,0.05);
+  }
+  .card-version {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: rgba(245,240,232,0.2);
+    text-transform: uppercase;
+  }
+  .card-status {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    padding: 2px 7px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .status-latest {
+    background: rgba(122,184,154,0.12);
+    border: 0.5px solid rgba(122,184,154,0.25);
+    color: rgba(122,184,154,0.8);
+  }
+  .status-active {
+    background: rgba(141,184,212,0.1);
+    border: 0.5px solid rgba(141,184,212,0.2);
+    color: rgba(141,184,212,0.7);
+  }
+  .status-ref {
+    background: rgba(245,240,232,0.05);
+    border: 0.5px solid rgba(245,240,232,0.1);
+    color: rgba(245,240,232,0.3);
+  }
+
+  /* Arrow icon */
+  .card-arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: rgba(245,240,232,0.12);
+    transition: all 0.2s ease;
+    pointer-events: none;
+  }
+  .card:hover .card-arrow {
+    color: rgba(245,240,232,0.35);
+    right: 12px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding-top: 32px;
+    border-top: 1px solid rgba(245,240,232,0.04);
+  }
+  .footer-text {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(245,240,232,0.15);
+    text-transform: uppercase;
+  }
+
+  canvas#bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="content">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-eyebrow">StudentNinja · Nendō Curriculum</div>
+    <div class="header-title">Screen <span>Index</span></div>
+    <div class="header-sub">v4.0 series — all 12 screens</div>
+    <div class="header-divider"></div>
+    <div class="header-meta">Updated 2026-03-31 &nbsp;·&nbsp; Stage 2 Active</div>
+  </div>
+
+  <!-- Core Student Journey -->
+  <div class="section-label">Core Student Journey</div>
+  <div class="grid">
+
+    <a class="card profile" href="StudentProfile_v4.1.html" target="_blank">
+      <div class="card-tag">Profile</div>
+      <div class="card-name">Student Profile</div>
+      <div class="card-desc">Belt level, full-frame Aura canvas, stripe badges, gender toggle, Nendō progress pill.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.1 · Safari-safe</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card home" href="Nendo_Home_v4.0.html" target="_blank">
+      <div class="card-tag">Home · Nendō MDH</div>
+      <div class="card-name">Nendō Home Hub</div>
+      <div class="card-desc">Three-door navigation hub — Metsuke, Tachi, Mushin. Sky + dojo frame composited layers.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card entry" href="Nendo_Entry_v4.0_PaintedLayers.html" target="_blank">
+      <div class="card-tag">Entry</div>
+      <div class="card-name">Entry Screen</div>
+      <div class="card-desc">First run & returning student entry. Painted layers composition. Nav to be added.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0 · Painted Layers</span>
+        <span class="card-status status-active">In Progress</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+  </div>
+
+  <!-- The Three Disciplines -->
+  <div class="section-label">The Three Disciplines</div>
+  <div class="grid">
+
+    <a class="card metsuke" href="Nendo_MetsukeHub_v4.0.html" target="_blank">
+      <div class="card-tag">Metsuke · The Reading Mind</div>
+      <div class="card-name">Metsuke Hub</div>
+      <div class="card-desc">Locked past entry — all 4 cards Coming Soon. Back button only. Perception training.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card mushin" href="Nendo_MushinHub_v4.0.html" target="_blank">
+      <div class="card-tag">Mushin · The Still Mind</div>
+      <div class="card-name">Mushin Hub</div>
+      <div class="card-desc">Mandala, discipline overview. Leads to Shiho check-in and Breath Techniques.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card tachi" href="Nendo_TachiHub_v4.0.html" target="_blank">
+      <div class="card-tag">Tachi · The Striking Mind</div>
+      <div class="card-name">Tachi Hub</div>
+      <div class="card-desc">Locked past entry — all 4 cards Coming Soon. Back button only. Strategy training.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+  </div>
+
+  <!-- Mushin Flow -->
+  <div class="section-label">Mushin · Session Flow</div>
+  <div class="grid">
+
+    <a class="card shiho" href="Nendo_Shiho_v4.0.html" target="_blank">
+      <div class="card-tag">Mushin · Check-in</div>
+      <div class="card-name">Shiho</div>
+      <div class="card-desc">2-phase screen: intention check-in → session build. Leads into element runners.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card breath" href="Nendo_BreathTechniques_v4.0.html" target="_blank">
+      <div class="card-tag">Mushin · Techniques</div>
+      <div class="card-name">Breath Techniques</div>
+      <div class="card-desc">Four element cards — Kaze, Chi, Mizu, Hi. Canonical entry point to breath runner flow.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card complete" href="Nendo_SessionComplete_v4.0.html" target="_blank">
+      <div class="card-tag">Mushin · Complete</div>
+      <div class="card-name">Session Complete</div>
+      <div class="card-desc">Post-session screen — Aura orb, XP earned, session quote, return to Mushin Hub.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+  </div>
+
+  <!-- Element Runners -->
+  <div class="section-label">Element Runners</div>
+  <div class="grid">
+
+    <a class="card kaze" href="Nendo_Runner_Kaze_v4.0.html" target="_blank">
+      <div class="card-tag">Runner · Kaze · Wind</div>
+      <div class="card-name">Kaze Runner</div>
+      <div class="card-desc">3-column layout, functional breathing circle. Teal-green palette.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card chi" href="Nendo_Runner_Chi_v4.0.html" target="_blank">
+      <div class="card-tag">Runner · Chi · Earth</div>
+      <div class="card-name">Chi Runner</div>
+      <div class="card-desc">3-column layout, functional breathing circle. Amber palette.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card mizu" href="Nendo_Runner_Mizu_v4.0.html" target="_blank">
+      <div class="card-tag">Runner · Mizu · Water</div>
+      <div class="card-name">Mizu Runner</div>
+      <div class="card-desc">3-column layout, functional breathing circle. Blue palette.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card hi" href="Nendo_Runner_Hi_v4.0.html" target="_blank">
+      <div class="card-tag">Runner · Hi · Fire</div>
+      <div class="card-name">Hi Runner</div>
+      <div class="card-desc">3-column layout, functional breathing circle. Orange-red palette.</div>
+      <div class="card-footer">
+        <span class="card-version">v4.0</span>
+        <span class="card-status status-latest">Latest</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+  </div>
+
+  <!-- Components -->
+  <div class="section-label">Components</div>
+  <div class="grid">
+
+    <a class="card component" href="Components/NavShell_v1.0.html" target="_blank">
+      <div class="card-tag">Component</div>
+      <div class="card-name">Nav Shell</div>
+      <div class="card-footer">
+        <span class="card-version">v1.0</span>
+        <span class="card-status status-ref">Component</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card component" href="Components/AuraOrb_v1.0.html" target="_blank">
+      <div class="card-tag">Component</div>
+      <div class="card-name">Aura Orb</div>
+      <div class="card-footer">
+        <span class="card-version">v1.0</span>
+        <span class="card-status status-ref">Component</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card component" href="Components/ShihoBreathing_v1.0.html" target="_blank">
+      <div class="card-tag">Component</div>
+      <div class="card-name">Shiho Breathing</div>
+      <div class="card-footer">
+        <span class="card-version">v1.0</span>
+        <span class="card-status status-ref">Component</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="card component" href="Components/ParticleSystem_v1.0.html" target="_blank">
+      <div class="card-tag">Component</div>
+      <div class="card-name">Particle System</div>
+      <div class="card-footer">
+        <span class="card-version">v1.0</span>
+        <span class="card-status status-ref">Component</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-text">StudentNinja · Stage 2 Nendō · v4.0 Series · 2026-03-31</div>
+  </div>
+
+</div>
+
+<script>
+  // Subtle particle canvas
+  const canvas = document.getElementById('bg');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function init() {
+    resize();
+    particles = Array.from({ length: 40 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.2 + 0.3,
+      dx: (Math.random() - 0.5) * 0.2,
+      dy: (Math.random() - 0.5) * 0.2,
+      alpha: Math.random() * 0.3 + 0.05
+    }));
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(245,240,232,${p.alpha})`;
+      ctx.fill();
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  init();
+  draw();
+</script>
+
+</body>
+</html>
